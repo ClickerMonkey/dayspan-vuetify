@@ -1,14 +1,17 @@
 <template>
+
   <div class="ds-month">
+
     <div class="ds-week-header">
       <div class="ds-week-header-day"
         v-for="weekday in weekdays" :key="weekday">
         {{ weekday }}
       </div>
     </div>
+
     <ds-day-row
       v-for="i in rows"
-      v-bind="{ scopedSlots: $scopedSlots }"
+      v-bind="{$scopedSlots}"
       :key="i"
       :days="daysAtRow( i, 7 )"
       :calendar="calendar"
@@ -16,46 +19,59 @@
       @add="add"
     ></ds-day-row>
   </div>
+
 </template>
 
 <script>
 import { Calendar } from 'dayspan';
 import * as moment from 'moment';
 
-import dsDayRow from './DayRow';
 
 export default {
+
   name: 'dsWeeksView',
-  components: {
-    dsDayRow
-  },
-  props: {
-    calendar: {
-      validator: function(x) {
-        return x instanceof Calendar;
-      }
+
+  props:
+  {
+    calendar:
+    {
+      required: true,
+      type: Calendar
     },
-    weekdays: {
+
+    weekdays:
+    {
       type: Array,
-      default: function() {
-        return moment.weekdaysShort();
+      default() {
+        return this.$dsDefaults().weekdays;
       }
     }
   },
-  computed: {
-    rows: function() {
+
+  computed:
+  {
+    rows()
+    {
       return Math.floor( this.calendar.days.length / 7 );
     }
   },
-  methods: {
-    edit: function(eventDay) {
+
+  methods:
+  {
+    edit(eventDay)
+    {
       this.$emit('edit', eventDay);
     },
-    add: function(day) {
+
+    add(day)
+    {
       this.$emit('add', day);
     },
-    daysAtRow: function(row, rowSize) {
+
+    daysAtRow(row, rowSize)
+    {
       var start = (row - 1) * rowSize;
+
       return this.calendar.days.slice( start, start + rowSize );
     }
   }
@@ -63,6 +79,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .ds-month {
   width: 100%;
   height: 100%;
@@ -80,4 +97,5 @@ export default {
     padding: 4px;
   }
 }
+
 </style>

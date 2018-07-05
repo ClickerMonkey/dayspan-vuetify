@@ -1,62 +1,121 @@
 <template>
+
   <div class="ds-day"
     :class="classesDay"
     @click.stop="add">
+
     <div :class="classesHeader">
+
       <span class="ds-first-day" v-if="showMonth">
-        {{ day.format('MMM') }}
+        {{ month }}
       </span>
+
       <span class="ds-dom" :class="classesDayOfMonth">
-        {{ day.dayOfMonth }}
+        {{ dayOfMonth }}
       </span>
+
     </div>
+
     <template v-for="(event, i) in day.events">
+
       <ds-event
-        v-bind="{ scopedSlots: $scopedSlots }"
+        v-bind="{$scopedSlots}"
         :key="event.id"
         :calendar-event="event"
         :calendar="calendar"
         :index="i"
         @edit="edit"
       ></ds-event>
+
     </template>
+
   </div>
+
 </template>
 
 <script>
-import dsEvent from './Event';
+import { Day, Calendar } from 'dayspan';
+
 
 export default {
+
   name: 'dsDay',
-  props: ['day', 'calendar'],
-  components: { dsEvent },
-  computed: {
-    classesDay: function() {
+
+  props:
+  {
+    day:
+    {
+      required: true,
+      type: Day
+    },
+
+    calendar:
+    {
+      required: true,
+      type: Calendar
+    },
+
+    formats:
+    {
+      validate(x) {
+        return this.$dsValidate( x, 'formats' );
+      },
+      default() {
+        return this.$dsDefaults().formats;
+      }
+    }
+  },
+
+  computed:
+  {
+    classesDay()
+    {
       return {
         'ds-today': this.day.currentDay,
         'ds-first-day-day': this.day.dayOfMonth === 1,
         'ds-out-calendar': !this.day.inCalendar
       };
     },
-    classesHeader: function() {
+
+    classesHeader()
+    {
       return {
         'ds-out-calendar': !this.day.inCalendar
       };
     },
-    classesDayOfMonth: function() {
+
+    classesDayOfMonth()
+    {
       return {
         'ds-today-dom': this.day.currentDay
       };
     },
-    showMonth: function() {
+
+    showMonth()
+    {
       return this.day.dayOfMonth === 1;
+    },
+
+    dayOfMonth()
+    {
+      return this.day.dayOfMonth;
+    },
+
+    month()
+    {
+      return this.day.format( this.formats.month );
     }
   },
-  methods: {
-    add: function() {
+
+  methods:
+  {
+    add()
+    {
       this.$emit('add', this.day);
     },
-    edit: function(event) {
+
+    edit(event)
+    {
       this.$emit('edit', {
         event: event,
         day: this.day

@@ -1,22 +1,24 @@
 <template>
+
   <div class="ds-day"
     :class="classesDay"
     @click.stop="add">
 
     <div class="ds-week-weekday">
-      {{ day.format('ddd') }}
+      {{ weekday }}
     </div>
 
     <div class="ds-week-date">
-      {{ day.dayOfMonth }}
+      {{ dayOfMonth }}
     </div>
 
     <div class="ds-all-events">
 
       <template v-for="(event, i) in day.events">
+
         <ds-event
           v-if="event.fullDay"
-          v-bind="{ scopedSlots: $scopedSlots }"
+          v-bind="{$scopedSlots}"
           :calendar-event="event"
           :key="event.id"
           :index="i"
@@ -28,27 +30,71 @@
     </div>
 
   </div>
+
 </template>
 
 <script>
-import dsEvent from './Event';
+import { CalendarDay, Calendar } from 'dayspan';
+
 
 export default {
+
   name: 'dsWeekDayHeader',
-  props: ['day', 'calendar'],
-  components: { dsEvent },
-  computed: {
-    classesDay: function() {
+
+  props:
+  {
+    day:
+    {
+      required: true,
+      type: CalendarDay
+    },
+    
+    calendar:
+    {
+      required: true,
+      type: Calendar
+    },
+
+    formats:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'formats');
+      },
+      default() {
+        return this.$dsDefaults().formats;
+      }
+    }
+  },
+
+  computed:
+  {
+    classesDay()
+    {
       return {
         'ds-today': this.day.currentDay
       };
+    },
+
+    dayOfMonth()
+    {
+      return this.day.dayOfMonth;
+    },
+
+    weekday()
+    {
+      return this.day.format( this.formats.weekday );
     }
   },
-  methods: {
-    add: function() {
+
+  methods:
+  {
+    add()
+    {
       this.$emit('add', this.day);
     },
-    edit: function(event) {
+
+    edit(event)
+    {
       this.$emit('edit', {
         day: this.day,
         event: event

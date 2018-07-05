@@ -1,12 +1,20 @@
 <template>
   <div class="ds-calendar">
 
-    <div class="ds-month-view"
-      v-if="isMonth || isYear"
-      :class="{ 'ds-year-view': isYear }">
+    <div v-if="isYear" class="ds-month-view ds-year-view">
 
       <ds-weeks-view class="ds-expand"
-        v-bind="{ scopedSlots: $scopedSlots }"
+        v-bind="{$scopedSlots}"
+        :calendar="calendar"
+        @add="add"
+        @edit="edit"></ds-weeks-view>
+
+    </div>
+
+    <div v-if="isMonth" class="ds-month-view">
+
+      <ds-weeks-view class="ds-expand"
+        v-bind="{$scopedSlots}"
         :calendar="calendar"
         @add="add"
         @edit="edit"></ds-weeks-view>
@@ -16,7 +24,7 @@
     <div v-if="isWeek || isDay" class="ds-week-view">
 
       <ds-days-view
-        v-bind="{ scopedSlots: $scopedSlots }"
+        v-bind="{$scopedSlots}"
         :calendar="calendar"
         :highlight="highlight"
         @add="add"
@@ -40,123 +48,191 @@
 <script>
 import { Calendar, Units, DaySpan, Day } from 'dayspan';
 
-import dsWeeksView from './WeeksView';
-import dsDaysView from './DaysView';
-
 export default {
-  name: 'dsDay',
-  props: {
-    calendar: {
-      validator: function(x) {
-        return x instanceof Calendar;
+
+  name: 'dsCalendar',
+
+  props:
+  {
+    calendar:
+    {
+      //required: true,
+      type: Calendar
+    },
+
+    highlight:
+    {
+      type: DaySpan,
+      default() {
+        return this.$dsDefaults().highlight;
       }
     },
-    highlight: {
-      validator: function(x) {
-        return !x || x instanceof DaySpan;
-      },
-      default: null
+
+    autoHighlight:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().autoHighlight;
+      }
     },
-    autoHighlight: Boolean,
-    autoDragging: Boolean
-  },
-  components: {
-    dsWeeksView,
-    dsDaysView
-  },
-  computed: {
-    isDay: function() {
-      return this.calendar && this.calendar.type === Units.DAY;
-    },
-    isWeek: function() {
-      return this.calendar && this.calendar.type === Units.WEEK;
-    },
-    isMonth: function() {
-      return this.calendar && this.calendar.type === Units.MONTH;
-    },
-    isYear: function() {
-      return this.calendar && this.calendar.type === Units.YEAR;
+
+    autoDragging:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().autoDragging;
+      }
     }
   },
-  methods: {
-    add: function(day) {
+
+  computed:
+  {
+    type()
+    {
+      return this.calendar ? this.calendar.type : null;
+    },
+
+    isDay()
+    {
+      return this.type === Units.DAY;
+    },
+
+    isWeek()
+    {
+      return this.type === Units.WEEK;
+    },
+
+    isMonth()
+    {
+      return this.type === Units.MONTH;
+    },
+
+    isYear()
+    {
+      return this.type === Units.YEAR;
+    }
+  },
+
+  methods:
+  {
+    add(day)
+    {
       this.$emit('add', day);
     },
-    addAt: function(dayHour) {
+
+    addAt(dayHour)
+    {
       this.$emit('add-at', dayHour);
     },
-    edit: function(eventDay) {
+
+    edit(eventDay)
+    {
       this.$emit('edit', eventDay);
     },
-    mouseEnterDay: function(day) {
+
+    mouseEnterDay(day)
+    {
       this.$emit('mouse-enter-day', day);
     },
-    mouseLeaveDay: function(day) {
+
+    mouseLeaveDay(day)
+    {
       this.$emit('mouse-leave-day', day);
     },
-    mouseMove: function(mouseEvent) {
+
+    mouseMove(mouseEvent)
+    {
       this.$emit('mouse-move', mouseEvent);
-      if (this.autoHighlight && mouseEvent.left && this.highlightStart) {
+
+      if (this.autoHighlight && mouseEvent.left && this.highlightStart)
+      {
         this.highlightEnd = mouseEvent.timeDrag;
         this.highlight.start = this.highlightStart.min( this.highlightEnd );
         this.highlight.end = this.highlightStart.max( this.highlightEnd );
       }
-      if (this.dragging) {
+
+      if (this.dragging)
+      {
         var start = mouseEvent.time;
         start = start.relative(-this.draggingEvent.offset);
-        start = this.$dayspan.roundTime( start, this.$dayspan.mouseDragRound );
+        start = this.$dayspan.roundTime( start, this.$dayspan.rounding.drag );
 
         this.highlight.start = start;
         this.highlight.end = start.relative(this.draggingEvent.calendarEvent.time.millis());
 
-        if (!mouseEvent.left) {
+        if (!mouseEvent.left)
+        {
           this.endDrag();
         }
       }
     },
-    mouseDown: function(mouseEvent) {
+
+    mouseDown(mouseEvent)
+    {
       this.$emit('mouse-down', mouseEvent);
-      if (this.autoHighlight && mouseEvent.left) {
+
+      if (this.autoHighlight && mouseEvent.left)
+      {
         this.highlightStart = mouseEvent.time;
         this.highlight.start = this.highlightStart;
         this.highlight.end = this.highlightStart;
       }
     },
-    mouseUp: function(mouseEvent) {
+
+    mouseUp(mouseEvent)
+    {
       this.$emit('mouse-up', mouseEvent);
-      if (this.highlightEnd) {
+
+      if (this.highlightEnd)
+      {
         this.$emit('highlighted', this.highlight);
+
         this.highlight.start = this.highlight.end = Day.unix(0);
         this.highlightStart = null;
         this.highlightEnd = null;
       }
-      if (this.dragging) {
+
+      if (this.dragging)
+      {
         this.$emit('moved', {
           calendarEvent: this.draggingEvent.calendarEvent,
           target: this.highlight
         });
+
         this.endDrag();
       }
     },
-    endDrag: function() {
+
+    endDrag()
+    {
       this.dragging = false;
       this.draggingEvent = null;
       this.highlight.start = this.highlight.end = Day.unix(0);
     },
-    mouseEnterEvent: function(mouseEvent) {
+
+    mouseEnterEvent(mouseEvent)
+    {
       this.$emit('mouse-enter-event', mouseEvent);
     },
-    mouseLeaveEvent: function(mouseEvent) {
+
+    mouseLeaveEvent(mouseEvent)
+    {
       this.$emit('mouse-leave-event', mouseEvent);
     },
-    mouseDownEvent: function(mouseEvent) {
+
+    mouseDownEvent(mouseEvent)
+    {
       this.$emit('mouse-down-event', mouseEvent);
-      if (this.autoDragging && mouseEvent.left) {
+
+      if (this.autoDragging && mouseEvent.left)
+      {
         this.dragging = true;
         this.draggingEvent = mouseEvent;
       }
     },
-    mouseUpEvent: function(mouseEvent) {
+
+    mouseUpEvent(mouseEvent)
+    {
       this.$emit('mouse-up-event', mouseEvent);
     }
   }

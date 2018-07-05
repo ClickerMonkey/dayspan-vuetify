@@ -1,11 +1,13 @@
 <template>
+
   <div class="ds-week-header">
 
     <div class="ds-hour-list"></div>
 
     <template v-for="day in days">
+
       <ds-week-day-header
-        v-bind="{ scopedSlots: $scopedSlots }"
+        v-bind="{$scopedSlots}"
         :day="day"
         :calendar="calendar"
         @edit="edit"
@@ -14,20 +16,40 @@
     </template>
 
   </div>
+
 </template>
 
 <script>
-import dsWeekDayHeader from './WeekDayHeader';
+import { CalendarDay, Calendar } from 'dayspan';
 
 export default {
+
   name: 'dsWeekHeader',
-  props: ['days', 'calendar'],
-  components: { dsWeekDayHeader },
-  methods: {
-    edit: function(eventDay) {
+
+  props:
+  {
+    day:
+    {
+      required: true,
+      type: CalendarDay
+    },
+    
+    calendar:
+    {
+      required: true,
+      type: Calendar
+    }
+  },
+
+  methods:
+  {
+    edit(eventDay)
+    {
       this.$emit('edit', eventDay);
     },
-    add: function(day) {
+
+    add(day)
+    {
       this.$emit('add', day);
     }
   }
@@ -35,6 +57,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .ds-week-header {
   flex: none;
   display: flex;
@@ -46,4 +69,5 @@ export default {
     border-right: #e0e0e0 1px solid;
   }
 }
+
 </style>

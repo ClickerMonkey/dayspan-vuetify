@@ -1,68 +1,123 @@
 <template>
-<div class="ds-expand">
-  <v-navigation-drawer :clipped="$vuetify.breakpoint.lgAndUp" v-model="drawer" fixed app>
-    <div class="pa-3" v-if="calendar">
-      <ds-day-picker :span="calendar.span" @picked="rebuild"></ds-day-picker>
-    </div>
+<div class="ds-expand ds-google">
+
+  <v-navigation-drawer fixed app
+    v-model="drawer"
+    :clipped="$vuetify.breakpoint.lgAndUp">
+
+    <slot name="drawerTop"></slot>
+
+    <slot name="drawerPicker" :calendar="calendar" :picked="rebuild">
+      <div class="pa-3" v-if="calendar">
+        <ds-day-picker :span="calendar.span" @picked="rebuild"></ds-day-picker>
+      </div>
+    </slot>
+
+    <slot name="drawerBottom"></slot>
+
   </v-navigation-drawer>
-  <v-toolbar :clipped-left="$vuetify.breakpoint.lgAndUp" color="white" app flat fixed>
+
+  <v-toolbar app flat fixed
+    class="ds-app-calendar-toolbar"
+    color="white"
+    :clipped-left="$vuetify.breakpoint.lgAndUp">
 
     <v-toolbar-title class="ml-0 pl-3" :style="toolbarStyle">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
-      <span class="hidden-sm-and-down">DaySpan</span>
+      <span class="hidden-sm-and-down">
+
+        <slot name="title" :calendar="calendar"></slot>
+
+      </span>
     </v-toolbar-title>
 
-    <v-tooltip bottom>
-      <v-btn depressed @click="setToday" slot="activator">TODAY</v-btn>
-      <span>{{ todayDate }}</span>
-    </v-tooltip>
+    <slot name="today"
+      :setToday="setToday"
+      :todayDate="todayDate"
+      :calendar="calendar">
 
-    <v-tooltip bottom>
-      <v-btn slot="activator" icon depressed @click="prev" class="grey--text text--darken-1">
-        <v-icon>keyboard_arrow_left</v-icon>
-      </v-btn>
-      <span>{{ prevLabel }}</span>
-    </v-tooltip>
-    <v-tooltip bottom>
-      <v-btn slot="activator" icon depressed @click="next" class="grey--text text--darken-1">
-        <v-icon>keyboard_arrow_right</v-icon>
-      </v-btn>
-      <span>{{ nextLabel }}</span>
-    </v-tooltip>
+      <v-tooltip bottom>
+        <v-btn depressed @click="setToday" slot="activator">TODAY</v-btn>
+        <span>{{ todayDate }}</span>
+      </v-tooltip>
 
-    <h1 class="title grey--text text--darken-1">
-      {{ summary }}
-    </h1>
+    </slot>
+
+    <slot name="prev"
+      :prev="prev"
+      :prevLabel="prevLabel"
+      :calendar="calendar">
+
+      <v-tooltip bottom>
+        <v-btn slot="activator"
+          icon depressed class="ds-light-forecolor"
+          @click="prev" >
+          <v-icon>keyboard_arrow_left</v-icon>
+        </v-btn>
+        <span>{{ prevLabel }}</span>
+      </v-tooltip>
+
+    </slot>
+    <slot name="next"
+      :next="next"
+      :nextLabel="nextLabel"
+      :calendar="calendar">
+
+      <v-tooltip bottom>
+        <v-btn slot="activator"
+          icon depressed
+          class="ds-light-forecolor"
+          @click="next">
+          <v-icon>keyboard_arrow_right</v-icon>
+        </v-btn>
+        <span>{{ nextLabel }}</span>
+      </v-tooltip>
+
+    </slot>
+
+    <slot name="summary"
+      :summary="summary"
+      :calendar="calendar">
+
+      <h1 class="title ds-light-forecolor">
+        {{ summary }}
+      </h1>
+
+    </slot>
 
     <v-spacer></v-spacer>
-    <v-menu>
-      <v-btn flat slot="activator">
-        {{ currentType.label }}
-        <v-icon>arrow_drop_down</v-icon>
-      </v-btn>
-      <v-list>
-        <v-list-tile v-for="type in types"
-          :key="type.id"
-          @click="currentType = type">
-          <v-list-tile-content>
-            <v-list-tile-title>{{ type.label }}</v-list-tile-title>
-          </v-list-tile-content>
-          <v-list-tile-action>{{ type.shortcut }}</v-list-tile-action>
-        </v-list-tile>
-      </v-list>
-    </v-menu>
-    <v-btn icon large href="https://github.com/ClickerMonkey/dayspan" target="_blank">
-      <v-avatar size="32px" tile>
-        <img src="https://simpleicons.org/icons/github.svg" alt="Github">
-      </v-avatar>
-    </v-btn>
+
+    <slot name="view"
+      :currentType="currentType"
+      :types="types">
+
+      <v-menu>
+        <v-btn flat slot="activator">
+          {{ currentType.label }}
+          <v-icon>arrow_drop_down</v-icon>
+        </v-btn>
+        <v-list>
+          <v-list-tile v-for="type in types"
+            :key="type.id"
+            @click="currentType = type">
+            <v-list-tile-content>
+              <v-list-tile-title>{{ type.label }}</v-list-tile-title>
+            </v-list-tile-content>
+            <v-list-tile-action>{{ type.shortcut }}</v-list-tile-action>
+          </v-list-tile>
+        </v-list>
+      </v-menu>
+
+    </slot>
+
+    <slot name="menuRight"></slot>
+
   </v-toolbar>
   <v-content class="ds-expand">
     <v-container fluid fill-height class="ds-calendar-container">
 
       <ds-calendar
-        auto-highlight
-        auto-dragging
+        v-bind="{$scopedSlots}"
         :calendar="calendar"
         :highlight="highlight"
         @add="add"
@@ -72,13 +127,12 @@
         @moved="handleMove"
       ></ds-calendar>
 
-      <ds-scheduler ref="scheduler"
-        has-appearance
+      <ds-schedule-dialog ref="scheduler"
+        v-bind="{$scopedSlots}"
+        :calendar="calendar"
         @save="eventSave"
-        @remove="eventRemove"
-        @exclude="eventRemoveOccurrence"
-        @cancel="eventCancel"
-        @move="eventMove"></ds-scheduler>
+        @finish="eventFinish"
+      ></ds-schedule-dialog>
 
       <v-dialog v-model="viewingOptions" max-width="500px">
         <v-card>
@@ -105,122 +159,162 @@
 <script>
 import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap } from 'dayspan';
 
-import dsDayPicker from './DayPicker';
-import dsScheduler from './Scheduler';
-import dsCalendar from './Calendar';
-
 export default {
+
   name: 'dsGoogle',
-  components: {
-    dsDayPicker,
-    dsScheduler,
-    dsCalendar
-  },
-  data: function() {
-    return {
-      drawer: null,
-      calendar: null,
-      currentType: null,
-      loading: false,
-      highlight: DaySpan.point(Day.unix(0)),
-      viewingOptions: false,
-      options: [],
-      selectedOption: null,
-      types: [
+
+  props:
+  {
+    defaultEvents:
+    {
+      type: Array
+    },
+    types:
+    {
+      type: Array,
+      default: () => ([
         {id: 'D', label: 'Day', shortcut: 'D', type: Units.DAY, size: 1},
         {id: 'W', label: 'Week', shortcut: 'W', type: Units.WEEK, size: 1},
         {id: 'M', label: 'Month', shortcut: 'M', type: Units.MONTH, size: 1},
         {id: 'Y', label: 'Year', shortcut: 'Y', type: Units.YEAR, size: 1},
         {id: 'X', label: '4 days', shortcut: 'X', type: Units.DAY, size: 4}
-      ],
-      defaultEvents: [
-        {
-          data: {name: 'Weekly Meeting', color: '#3F51B5'},
-          schedule: {
-            dayOfWeek: [Weekday.MONDAY],
-            times: [9],
-            duration: 30,
-            durationUnit: 'minutes'
-          }
-        },
-        {
-          data: {name: 'Mother\'s Day', color: '#2196F3'},
-          schedule: {
-            month: [Month.MAY],
-            dayOfWeek: [Weekday.SUNDAY],
-            weekspanOfMonth: [1]
-          }
-        },
-        {
-          data: {name: 'First Weekend', color: '#4CAF50'},
-          schedule: {
-            weekspanOfMonth: [0],
-            dayOfWeek: [Weekday.FRIDAY],
-            duration: 3,
-            durationUnit: 'days'
-          }
-        }
-      ]
-    };
+      ])
+    },
+    storeLocally:
+    {
+      type: Boolean,
+      default: false
+    },
+    storeKey:
+    {
+      type: String,
+      default: 'dayspanState'
+    },
+    parseMeta:
+    {
+      type: Function
+    },
+    parseData:
+    {
+      type: Function
+    }
   },
-  watch: {
-    currentType: function() {
-      if (!this.loading) {
+
+  data: vm => ({
+    drawer: null,
+    calendar: null,
+    currentType: vm.types[0],
+    loading: false,
+    highlight: DaySpan.point(Day.unix(0)),
+    viewingOptions: false,
+    options: [],
+    selectedOption: null
+  }),
+
+  watch:
+  {
+    currentType()
+    {
+      if (!this.loading)
+      {
         this.rebuild();
       }
     }
   },
-  computed: {
-    summary: function() {
+
+  computed:
+  {
+    summary()
+    {
       var large = this.$vuetify.breakpoint.lgAndUp;
 
       return this.calendar ? this.calendar.summary(false, !large, false, !large) : '';
     },
-    todayDate: function() {
+
+    todayDate()
+    {
       return this.$dayspan.today.format('dddd, MMMM D');
     },
-    nextLabel: function() {
+
+    nextLabel()
+    {
       return this.currentType ? 'Next ' + this.currentType.label.toLowerCase() : 'Next';
     },
-    prevLabel: function() {
+
+    prevLabel()
+    {
       return this.currentType ? 'Previous ' + this.currentType.label.toLowerCase() : 'Previous';
     },
-    toolbarStyle: function() {
+
+    toolbarStyle()
+    {
       return {
         width: this.$vuetify.breakpoint.lgAndUp ? '300px' : 'auto'
       };
     }
   },
-  created: function() {
-    // Initialize types
-    if (!this.currentType) {
-      this.currentType = this.types[2];
-    }
-  },
-  mounted: function() {
+
+  mounted()
+  {
     this.loadState();
   },
-  methods: {
-    saveState: function() {
-      localStorage.setItem('dayspanState', JSON.stringify(
+
+  methods:
+  {
+    saveState()
+    {
+      if (!this.storeLocally)
+      {
+        return;
+      }
+
+      localStorage.setItem(this.storeKey, JSON.stringify(
         this.calendar.toInput(true)
       ));
     },
-    loadState: function() {
-      var state = JSON.parse(localStorage.getItem('dayspanState'));
-      this.loading = true;
-      if (state) {
-        this.currentType = this.types.find(function(type) {
-          return type.type === state.type && type.size === state.size;
-        });
-        state.eventSorter = state.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start;
-        this.calendar = Calendar.fromInput(state);
-      } else {
-        this.rebuild(Day.today(), this.defaultEvents);
+
+    loadState()
+    {
+      if (!this.storeLocally)
+      {
+        return;
       }
-      this.loading = false;
+
+      try
+      {
+        this.loading = true;
+
+        var state = JSON.parse(localStorage.getItem(this.storeKey));
+
+        if (state)
+        {
+          this.currentType = this.types.find((type) =>
+            type.type === state.type && type.size === state.size
+          );
+
+          state.eventSorter = state.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start;
+          state.parseMeta = this.parseMeta;
+          state.parseData = this.parseData;
+
+          this.calendar = Calendar.fromInput(state);
+        }
+        else
+        {
+          this.rebuild( Day.today(), this.defaultEvents );
+        }
+      }
+      catch (e)
+      {
+        this.$emit('error', e);
+      }
+      finally
+      {
+        this.loading = false;
+      }
     },
-    rebuild: function(aroundDay, events) {
+
+    rebuild(aroundDay, events)
+    {
       var cal = this.calendar;
       var type = this.currentType || this.types[ 2 ];
 
@@ -245,35 +339,52 @@ export default {
         events: events
       };
 
-      if (cal) {
+      if (cal)
+      {
         cal.set(input);
-      } else {
+      }
+      else
+      {
         this.calendar = Calendar.fromInput(input);
       }
 
       this.saveState();
     },
-    next: function() {
+
+    next()
+    {
       this.calendar.unselect().next();
       this.saveState();
     },
-    prev: function() {
+
+    prev()
+    {
       this.calendar.unselect().prev();
       this.saveState();
     },
-    setToday: function() {
+
+    setToday()
+    {
       this.rebuild(this.$dayspan.today);
     },
-    edit: function(eventDay) {
+
+    edit(eventDay)
+    {
       this.$refs.scheduler.edit(eventDay.day, eventDay.event);
     },
-    add: function(day) {
+
+    add(day)
+    {
       this.$refs.scheduler.add(day);
     },
-    addAt: function(dayHour) {
+
+    addAt(dayHour)
+    {
       this.$refs.scheduler.addAt(dayHour.day, dayHour.hour);
     },
-    addHighlighted: function(span) {
+
+    addHighlighted(span)
+    {
       var minutes = span.minutes();
       var isDay = minutes % 1440 === 0;
       var isHour = minutes % 60 === 0;
@@ -284,7 +395,9 @@ export default {
         durationUnit: isDay ? 'days' : (isHour ? 'hours' : 'minutes')
       });
     },
-    handleMove: function(moveEvent) {
+
+    handleMove(moveEvent)
+    {
       var google = this;
       var calendarEvent = moveEvent.calendarEvent;
       var target = moveEvent.target;
@@ -344,50 +457,57 @@ export default {
       this.selectedOption = options[0];
       this.viewingOptions = true;
     },
-    chooseOption: function() {
-      if (this.selectedOption) {
+
+    chooseOption()
+    {
+      if (this.selectedOption)
+      {
         this.selectedOption.callback();
         this.selectedOption = null;
       }
+
       this.viewingOptions = false;
     },
-    eventSave: function(data) {
-      var calendarEvent = data.event;
-      if (calendarEvent) {
+
+    eventSave(ev)
+    {
+      var calendarEvent = ev.event;
+      var details = ev.details;
+
+      if (calendarEvent)
+      {
         var event = calendarEvent.event;
-        event.data.name = data.name;
-        event.data.color = data.color;
-        event.schedule.set( data.schedule );
+        var data = event.data;
+
+        this.$dayspan.setEventDetails( details, data, event, calendarEvent );
+
+        event.schedule.set( ev.schedule );
 
         this.calendar.refreshEvents();
-      } else {
+      }
+      else
+      {
         this.calendar.addEvent({
-          data: { name: data.name, color: data.color },
-          schedule: data.schedule
+          data: details,
+          schedule: ev.schedule
         });
       }
 
       this.saveState();
       this.$forceUpdate();
     },
-    eventRemove: function(calendarEvent) {
-      this.calendar.removeEvent( calendarEvent.event );
-      this.saveState();
-      this.$forceUpdate();
+
+    eventFinish(ev)
+    {
+      if (ev.handled)
+      {
+        this.saveState();
+        this.$forceUpdate();
+      }
     },
-    eventRemoveOccurrence: function(data) {
-      data.event.exclude();
-      this.eventsRefresh();
-    },
-    eventCancel: function(data) {
-      data.event.cancel(data.cancel);
-      this.eventsRefresh();
-    },
-    eventMove: function(data) {
-      data.event.move(data.moveTo);
-      this.eventsRefresh();
-    },
-    eventsRefresh: function() {
+
+    eventsRefresh()
+    {
       this.calendar.refreshEvents();
       this.saveState();
       this.$forceUpdate();
@@ -397,15 +517,22 @@ export default {
 </script>
 
 <style lang="scss">
-  nav.toolbar .toolbar__content {
+
+.ds-app-calendar-toolbar {
+
+  .v-toolbar__content {
     border-bottom: 1px solid rgb(224, 224, 224);
   }
-  .ds-expand {
-    width: 100%;
-    height: 100%;
-  }
-  .ds-calendar-container {
-    padding: 0px !important;
-    position: relative;
-  }
+}
+
+.ds-expand {
+  width: 100%;
+  height: 100%;
+}
+
+.ds-calendar-container {
+  padding: 0px !important;
+  position: relative;
+}
+
 </style>

@@ -1,4 +1,5 @@
 <template>
+
   <div class="ds-day" :class="classesDay"
     @mouseenter.stop="mouseEnterDay"
     @mouseleave.stop="mouseLeaveDay"
@@ -7,13 +8,15 @@
     @mouseup.stop="mouseUp"
     @dragstart.prevent>
 
-    <div class="ds-hour" v-for="h in 24" @click.stop="addAt( h )"></div>
+    <div class="ds-hour"
+      v-for="h in 24"
+      @click.stop="addAt( h )"></div>
 
     <template v-for="(event, i) in day.events">
 
       <ds-event-time
         v-if="!event.fullDay"
-        v-bind="{ scopedSlots: $scopedSlots }"
+        v-bind="{$scopedSlots}"
         :calendar-event="event"
         :key="event.id"
         :calendar="calendar"
@@ -26,113 +29,160 @@
 
     </template>
 
-    <div v-if="day.currentDay" :style="nowLine"></div>
+    <div v-if="day.currentDay"
+      :style="nowLine"></div>
 
-    <div v-if="highlighted" :style="highlightBounds"></div>
+    <div v-if="highlighted"
+      :style="highlightBounds"></div>
 
   </div>
+
 </template>
 
 <script>
-import { Constants, Day, Calendar, DaySpan } from 'dayspan';
+import { Constants, CalendarDay, Calendar, DaySpan, Functions as fn } from 'dayspan';
 
-import dsEventTime from './EventTime';
 
 export default {
+
   name: 'dsDayTimes',
-  props: {
-    day: {
-      validator: function(x) {
-        return x instanceof Day;
-      }
+
+  props:
+  {
+    day:
+    {
+      required: true,
+      type: CalendarDay
     },
-    calendar: {
-      validator: function(x) {
-        return x instanceof Calendar;
-      }
+
+    calendar:
+    {
+      required: true,
+      type: Calendar
     },
-    highlight: {
-      validator: function(x) {
-        return !x || x instanceof DaySpan;
-      }
+
+    highlight:
+    {
+      type: DaySpan
     }
   },
-  components: {
-    dsEventTime
-  },
-  computed: {
-    classesDay: function() {
+
+  computed:
+  {
+    classesDay()
+    {
       return {
         'ds-today': this.day.currentDay
       };
     },
-    nowLine: function() {
+
+    nowLine()
+    {
       return this.$dayspan.getStyleNow();
     },
-    highlighted: function() {
+
+    highlighted()
+    {
       return this.highlight && this.highlight.matchesDay( this.day );
     },
-    highlightBounds: function() {
+
+    highlightBounds()
+    {
       return this.$dayspan.getStyleHighlight( this.highlight, this.day );
     }
   },
-  methods: {
-    edit: function(event) {
+
+  methods:
+  {
+    edit(event)
+    {
       this.$emit('edit', {
         day: this.day,
         event: event
       });
     },
-    addAt: function(hour) {
+
+    addAt(hour)
+    {
       this.$emit('add-at', {
         day: this.day,
         hour: hour - 1
       });
     },
-    mouseEnterEvent: function(mouseEvent) {
+
+    mouseEnterEvent(mouseEvent)
+    {
       this.$emit('mouse-enter-event', mouseEvent);
     },
-    mouseLeaveEvent: function(mouseEvent) {
+
+    mouseLeaveEvent(mouseEvent)
+    {
       this.$emit('mouse-leave-event', mouseEvent);
     },
-    mouseDownEvent: function(mouseEvent) {
+
+    mouseDownEvent(mouseEvent)
+    {
       this.$emit('mouse-down-event', mouseEvent);
     },
-    mouseUpEvent: function(mouseEvent) {
+
+    mouseUpEvent(mouseEvent)
+    {
       this.$emit('mouse-up-event', mouseEvent);
     },
-    mouseEnterDay: function($event) {
+
+    mouseEnterDay($event)
+    {
       this.$emit('mouse-enter-day', this.day);
     },
-    mouseLeaveDay: function($event) {
+
+    mouseLeaveDay($event)
+    {
       this.$emit('mouse-leave-day', this.day);
     },
-    mouseMove: function($event) {
-      this.$emit('mouse-move', this.getMouseEvent($event, {
-        time: this.getTimeAt($event, this.$dayspan.mouseMoveRound),
-        timeDrag: this.getTimeAt($event, this.$dayspan.mouseAddRound, true)
-      }));
+
+    mouseMove($event)
+    {
+      var time = this.getTimeAt($event, this.$dayspan.rounding.move);
+      var timeDrag = this.getTimeAt($event, this.$dayspan.rounding.add, true);
+      var ev = this.getEvent('mouse-move', $event, { time, timeDrag });
+
+      this.$emit('mouse-move', ev);
     },
-    mouseDown: function($event) {
-      this.$emit('mouse-down', this.getMouseEvent($event, {
-        time: this.getTimeAt($event, this.$dayspan.mouseAddRound)
-      }));
+
+    mouseDown($event)
+    {
+      var time = this.getTimeAt($event, this.$dayspan.rounding.add);
+      var ev = this.getEvent('mouse-down', $event, { time });
+
+      this.$emit('mouse-down', ev);
     },
-    mouseUp: function($event) {
-      this.$emit('mouse-up', this.getMouseEvent($event, {
-        time: this.getTimeAt($event, this.$dayspan.mouseAddRound, true)
-      }));
+
+    mouseUp($event)
+    {
+      var time = this.getTimeAt($event, this.$dayspan.rounding.add, true);
+      var ev = this.getEvent('mouse-up', $event, { time });
+
+      this.$emit('mouse-up', ev);
     },
-    getMouseEvent: function($event, additional) {
-      var out = additional || {};
-      out.day = this.day;
-      out.left = $event.button === 0 && $event.buttons > 0;
-      out.right = $event.button === 1 && $event.buttons > 0;
-      out.$event = $event;
-      out.$element = this.$el;
-      return out;
+
+    getEvent(type, $event, extra = {})
+    {
+      return fn.extend({
+
+        type: type,
+        day: this.day,
+        left: $event.button === 0 && $event.buttons > 0,
+        right: $event.button === 1 && $event.buttons > 0,
+        handled: false,
+        $event: $event,
+        $vm: this,
+        $element: this.$el
+
+      }, extra);
     },
-    getTimeAt: function($event, roundTo, roundUp) {
+
+    getTimeAt($event, roundTo, roundUp)
+    {
       var bounds = this.$el.getBoundingClientRect();
       var y = ($event.clientY - bounds.y) / bounds.height;
       var millis = Math.round(Constants.MILLIS_IN_DAY * y);
