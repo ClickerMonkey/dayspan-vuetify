@@ -158,10 +158,10 @@ export default {
 
 .ds-event-menu {
   width: 100%;
+  height: 18px;
 }
 
 .ds-event {
-  width: 100%;
   margin: 1px;
   color: white;
   overflow: hidden;
@@ -170,9 +170,10 @@ export default {
   padding-left: 0.5em;
   font-size: 12px;
   cursor: pointer;
-  position: relative;
+  position: absolute;
   user-select: none;
   display: block;
+  margin: 0;
 }
 
 </style>

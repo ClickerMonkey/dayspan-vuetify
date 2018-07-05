@@ -28,12 +28,12 @@ export default {
 
   props:
   {
-    day:
+    days:
     {
       required: true,
-      type: CalendarDay
+      type: Array
     },
-    
+
     calendar:
     {
       required: true,
@@ -61,7 +61,7 @@ export default {
 .ds-week-header {
   flex: none;
   display: flex;
-  flex: 1;
+  // flex: 1;
 
   .ds-hour-list {
     flex: none;

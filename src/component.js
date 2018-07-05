@@ -16,7 +16,7 @@ export default {
     dayPadding:       5,
     dayHeight:        960,
     columnOffset:     14,
-    eventHeight:      19,
+    eventHeight:      21,
     hourHeight:       40,
 
     rounding: {
@@ -151,8 +151,8 @@ export default {
         top: ((calendarEvent.row - (index || 0)) * this.eventHeight) + 'px',
         backgroundColor: stateColor,
         color: details.forecolor,
-        marginLeft: calendarEvent.starting ? 0 : '-5px',
-        marginRight: calendarEvent.ending ? 0 : '-5px',
+        left: calendarEvent.starting ? '0px' : '-5px',
+        right: calendarEvent.ending ? '0px' : '-6px',
         textDecoration: cancelled ? 'line-through' : 'inherit',
         textDecorationColor: cancelled ? color : 'inherit'
       };
