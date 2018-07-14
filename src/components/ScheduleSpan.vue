@@ -8,7 +8,7 @@
       v-model="startMenu">
 
       <v-btn flat
-        class="ds-button-tall ma-0"
+        class="ds-button-tall ma-0 mb-2"
         slot="activator">
         {{ startText }}
       </v-btn>
@@ -39,7 +39,7 @@
       v-model="endMenu">
 
       <v-btn flat
-        class="ds-button-tall ma-0"
+        class="ds-button-tall ma-0 mb-2"
         slot="activator">
         {{ endText }}
       </v-btn>

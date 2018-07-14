@@ -107,7 +107,7 @@ export default {
     edit(schedule, day)
     {
       this.original = schedule;
-      this.copy = new Schedule(schedule.toInput());
+      this.copy = schedule.clone();
       this.day = day;
       this.visible = true;
 

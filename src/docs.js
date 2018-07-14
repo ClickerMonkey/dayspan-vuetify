@@ -9,21 +9,38 @@ Vue.config.productionTip = false
 
 Vue.use(Vuetify);
 
-Vue.use(DaySpanVuetify, {
-  methods: {
-    getEventDetails(data, event, calendarEvent) {
-      let {name, title, color, description, location, calendar} = (data || {});
+Vue.use(DaySpanVuetify,
+{
+  methods:
+  {
+    getEventDetails(data, event, calendarEvent)
+    {
+      let {title, color, description, location, calendar, busy} = (data || {});
+
       return {
-        title: title || name || '',
+        title: title || '',
         description: description || '',
         color: color || '#757575',
         forecolor: '#ffffff',
         location: location || '',
-        calendar: calendar || 'My Calendar'
+        calendar: calendar || 'My Calendar',
+        busy: busy !== false
       };
     },
-    setEventDetails(newData, data, event, calendarEvent) {
-      return Vue.util.extend(data || {}, newData);
+
+    setEventDetails(details, data, event, calendarEvent)
+    {
+      Vue.util.extend(data, details);
+    },
+
+    createEventData(details, schedule)
+    {
+      return details;
+    },
+
+    getDefaultEventColor()
+    {
+      return '#1976d2';
     }
   }
 });
@@ -31,8 +48,5 @@ Vue.use(DaySpanVuetify, {
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
-  render: h => h(App),
-  mounted() {
-    this.$dayspan.startRefreshTimes();
-  }
+  render: h => h(App)
 })

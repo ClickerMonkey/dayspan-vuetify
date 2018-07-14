@@ -1,25 +1,20 @@
 <template>
 
   <v-menu
-    class="ds-event"
-    :close-on-content-click="false"
-    :nudge-width="200"
+    class="ds-calendar-event"
     :disabled="!hasPopover"
     :style="style"
-    offset-overflow
-    offset-x
-    max-width="500"
     v-model="menu"
     v-bind="popoverProps">
 
     <div
+      class="ds-calendar-event-span"
       slot="activator"
-
-      @click.stop="editCheck"
-      @mouseenter.stop="mouseEnterEvent"
-      @mouseleave.stop="mouseLeaveEvent"
-      @mousedown.stop="mouseDownEvent"
-      @mouseup.stop="mouseUpEvent">
+      @click="editCheck"
+      @mouseenter="mouseEnterEvent"
+      @mouseleave="mouseLeaveEvent"
+      @mousedown="mouseDownEvent"
+      @mouseup="mouseUpEvent">
 
       <span v-if="showName">
         <slot name="eventTimeTitle" v-bind="{calendarEvent, details}">
@@ -43,11 +38,11 @@
 </template>
 
 <script>
-import { Constants, CalendarEvent, Calendar, Functions as fn } from 'dayspan';
+import { Day, Constants, CalendarEvent, Calendar, Functions as fn } from 'dayspan';
 
 export default {
 
-  name: 'dsEventTime',
+  name: 'dsCalendarEventTime',
 
   props:
   {
@@ -71,6 +66,11 @@ export default {
       default() {
         return this.$dsDefaults().popoverProps;
       }
+    },
+
+    isPlaceholderWithDay:
+    {
+      type: Day
     }
   },
 
@@ -78,7 +78,9 @@ export default {
   {
     style()
     {
-      return this.$dayspan.getStyleTimed( this.details, this.calendarEvent );
+      return this.isPlaceholderWithDay ?
+        this.$dayspan.getStylePlaceholderTimed( this.details, this.calendarEvent, this.isPlaceholderWithDay ) :
+        this.$dayspan.getStyleTimed( this.details, this.calendarEvent );
     },
 
     showName()
@@ -92,60 +94,94 @@ export default {
     hasPopover()
     {
       return !!this.$scopedSlots.eventPopover;
+    },
+
+    details()
+    {
+      return this.$dayspan.getEventDetails(
+        this.calendarEvent.event.data,
+        this.calendarEvent.event,
+        this.calendarEvent
+      );
     }
   },
 
   data: vm => ({
-    menu: false,
-    details: vm.$dayspan.getEventDetails(
-      vm.calendarEvent.event.data,
-      vm.calendarEvent.event,
-      vm.calendarEvent
-    )
+    menu: false
   }),
 
   methods:
   {
-    edit()
-    {
-      this.$emit('edit', this.calendarEvent);
-    },
-
     close()
     {
       this.menu = false;
     },
 
-    editCheck()
+    edit()
     {
-      if (!this.hasPopover)
+      if (this.handlesEvents())
       {
-        this.edit()
+        this.$emit('edit', this.calendarEvent);
       }
-      else
+    },
+
+    editCheck($event)
+    {
+      if (this.handlesEvents($event))
       {
-        this.menu = !this.menu;
+        if (!this.hasPopover)
+        {
+          this.edit()
+        }
+        else
+        {
+          this.menu = !this.menu;
+        }
       }
     },
 
     mouseEnterEvent($event)
     {
-      this.$emit('mouse-enter-event', this.getEvent('mouse-enter-event', $event));
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-enter-event', this.getEvent('mouse-enter-event', $event));
+      }
     },
 
     mouseLeaveEvent($event)
     {
-      this.$emit('mouse-leave-event', this.getEvent('mouse-leave-event', $event));
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-leave-event', this.getEvent('mouse-leave-event', $event));
+      }
     },
 
     mouseDownEvent($event)
     {
-      this.$emit('mouse-down-event', this.getEvent('mouse-down-event', $event));
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-down-event', this.getEvent('mouse-down-event', $event));
+      }
     },
 
     mouseUpEvent($event)
     {
-      this.$emit('mouse-up-event', this.getEvent('mouse-up-event', $event));
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-up-event', this.getEvent('mouse-up-event', $event));
+      }
+    },
+
+    handlesEvents($event)
+    {
+      var handles = !this.isPlaceholderWithDay;
+
+      if (handles && $event)
+      {
+        $event.stopPropagation();
+      }
+
+      return handles;
     },
 
     getEvent(type, $event, extra = {})
@@ -181,12 +217,11 @@ export default {
 
 <style scoped lang="scss">
 
-.ds-event-menu {
+.ds-calendar-event-menu {
   width: 100%;
 }
 
-.ds-event {
-  width: 100%;
+.ds-calendar-event {
   margin: 1px;
   color: white;
   overflow: hidden;
@@ -198,6 +233,16 @@ export default {
   position: absolute;
   right: 0px;
   user-select: none;
+  border-radius: 2px;
+
+  /deep/ .v-menu__activator {
+    align-items: end;
+  }
+
+  .ds-calendar-event-span {
+    width: 100%;
+    height: 100%;
+  }
 }
 
 </style>

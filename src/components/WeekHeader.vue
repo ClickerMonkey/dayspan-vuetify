@@ -8,11 +8,12 @@
 
       <ds-week-day-header
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :day="day"
         :calendar="calendar"
-        @edit="edit"
-        @add="add"
+        :placeholder="placeholder"
       ></ds-week-day-header>
+
     </template>
 
   </div>
@@ -20,7 +21,7 @@
 </template>
 
 <script>
-import { CalendarDay, Calendar } from 'dayspan';
+import { CalendarDay, Calendar, CalendarEvent } from 'dayspan';
 
 export default {
 
@@ -38,20 +39,16 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    placeholder:
+    {
+      type: CalendarEvent
     }
   },
 
   methods:
   {
-    edit(eventDay)
-    {
-      this.$emit('edit', eventDay);
-    },
-
-    add(day)
-    {
-      this.$emit('add', day);
-    }
   }
 }
 </script>
@@ -61,12 +58,12 @@ export default {
 .ds-week-header {
   flex: none;
   display: flex;
-  // flex: 1;
 
   .ds-hour-list {
     flex: none;
     width: 44px;
     border-right: #e0e0e0 1px solid;
+    // background-color: #fafafa;
   }
 }
 

@@ -1,11 +1,11 @@
 <template>
 
   <div class="ds-day" :class="classesDay"
-    @mouseenter.stop="mouseEnterDay"
-    @mouseleave.stop="mouseLeaveDay"
+    @mouseenter="mouseEnterDay"
+    @mouseleave="mouseLeaveDay"
     @mousemove.stop="mouseMove"
-    @mousedown.stop="mouseDown"
-    @mouseup.stop="mouseUp"
+    @mousedown="mouseDown"
+    @mouseup="mouseUp"
     @dragstart.prevent>
 
     <div class="ds-hour"
@@ -14,33 +14,38 @@
 
     <template v-for="(event, i) in day.events">
 
-      <ds-event-time
+      <ds-calendar-event-time
         v-if="!event.fullDay"
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :calendar-event="event"
         :key="event.id"
         :calendar="calendar"
-        @edit="edit"
-        @mouse-enter-event="mouseEnterEvent"
-        @mouse-leave-event="mouseLeaveEvent"
-        @mouse-down-event="mouseDownEvent"
-        @mouse-up-event="mouseUpEvent"
-      ></ds-event-time>
+      ></ds-calendar-event-time>
 
     </template>
 
     <div v-if="day.currentDay"
       :style="nowLine"></div>
 
-    <div v-if="highlighted"
-      :style="highlightBounds"></div>
+    <div v-if="hasPlaceholder">
+
+      <ds-calendar-event-time-placeholder
+        v-bind="{$scopedSlots}"
+        v-on="$listeners"
+        :day="day"
+        :placeholder="placeholder"
+        :calendar="calendar"
+      ></ds-calendar-event-time-placeholder>
+
+    </div>
 
   </div>
 
 </template>
 
 <script>
-import { Constants, CalendarDay, Calendar, DaySpan, Functions as fn } from 'dayspan';
+import { Constants, CalendarDay, CalendarEvent, Calendar, DaySpan, Functions as fn } from 'dayspan';
 
 
 export default {
@@ -61,9 +66,9 @@ export default {
       type: Calendar
     },
 
-    highlight:
+    placeholder:
     {
-      type: DaySpan
+      type: CalendarEvent
     }
   },
 
@@ -81,53 +86,22 @@ export default {
       return this.$dayspan.getStyleNow();
     },
 
-    highlighted()
+    hasPlaceholder()
     {
-      return this.highlight && this.highlight.matchesDay( this.day );
-    },
-
-    highlightBounds()
-    {
-      return this.$dayspan.getStyleHighlight( this.highlight, this.day );
+      return this.placeholder &&
+        !this.placeholder.fullDay &&
+        this.placeholder.time.matchesDay( this.day );
     }
   },
 
   methods:
   {
-    edit(event)
-    {
-      this.$emit('edit', {
-        day: this.day,
-        event: event
-      });
-    },
-
     addAt(hour)
     {
       this.$emit('add-at', {
         day: this.day,
         hour: hour - 1
       });
-    },
-
-    mouseEnterEvent(mouseEvent)
-    {
-      this.$emit('mouse-enter-event', mouseEvent);
-    },
-
-    mouseLeaveEvent(mouseEvent)
-    {
-      this.$emit('mouse-leave-event', mouseEvent);
-    },
-
-    mouseDownEvent(mouseEvent)
-    {
-      this.$emit('mouse-down-event', mouseEvent);
-    },
-
-    mouseUpEvent(mouseEvent)
-    {
-      this.$emit('mouse-up-event', mouseEvent);
     },
 
     mouseEnterDay($event)
@@ -199,14 +173,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.v-menu__activator {
+  align-items: end;
+}
+
 .ds-day {
   flex: 1;
   width: 0;
   border-right: #e0e0e0 1px solid;
   border-bottom: #e0e0e0 1px solid;
 }
+
 .ds-hour {
   height: 40px;
   border-bottom: #e0e0e0 1px solid;
 }
+
 </style>

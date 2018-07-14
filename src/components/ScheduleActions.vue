@@ -89,6 +89,9 @@
 
         </v-menu>
       </v-list-tile>
+
+      <slot name="scheduleActionsAdditional" v-bind="{schedule, calendarEvent, calendar}"></slot>
+
     </v-list>
 
   </v-menu>
@@ -97,6 +100,8 @@
 
 <script>
 import { Day, Time, Schedule, Calendar, CalendarEvent, Functions as fn } from 'dayspan';
+
+
 
 
 export default {
@@ -260,7 +265,7 @@ export default {
       if (!ev.handled && ev.calendarEvent)
       {
         ev.calendarEvent.exclude();
-        ev.calendar && ev.calendar.refreshEvents();
+        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
         ev.handled = true;
       }
 
@@ -276,7 +281,7 @@ export default {
       if (!ev.handled && ev.calendarEvent)
       {
         ev.calendarEvent.cancel( true );
-        ev.calendar && ev.calendar.refreshEvents();
+        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
         ev.handled = true;
       }
 
@@ -292,7 +297,7 @@ export default {
       if (!ev.handled && ev.calendarEvent)
       {
         ev.calendarEvent.cancel( false );
-        ev.calendar && ev.calendar.refreshEvents();
+        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
         ev.handled = true;
       }
 
@@ -429,6 +434,7 @@ export default {
         calendarEvent: this.calendarEvent,
         event: this.event,
         handled: false,
+        refresh: true,
         $vm: this,
         $element: this.$el
 

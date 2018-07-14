@@ -16,7 +16,7 @@
 
       <template v-for="(event, i) in day.events">
 
-        <ds-event
+        <ds-calendar-event
           v-if="event.fullDay"
           v-bind="{$scopedSlots}"
           :calendar-event="event"
@@ -24,8 +24,22 @@
           :index="i"
           :calendar="calendar"
           @edit="edit"
-        ></ds-event>
+        ></ds-calendar-event>
+
       </template>
+
+      <div v-if="hasPlaceholder">
+
+        <ds-calendar-event-placeholder
+          v-bind="{$scopedSlots}"
+          v-on="$listeners"
+          :day="day"
+          :placeholder="placeholder"
+          :calendar="calendar"
+          :index="day.events.length"
+        ></ds-calendar-event-placeholder>
+
+      </div>
 
     </div>
 
@@ -34,7 +48,7 @@
 </template>
 
 <script>
-import { CalendarDay, Calendar } from 'dayspan';
+import { CalendarDay, Calendar, CalendarEvent } from 'dayspan';
 
 
 export default {
@@ -48,11 +62,16 @@ export default {
       required: true,
       type: CalendarDay
     },
-    
+
     calendar:
     {
       required: true,
       type: Calendar
+    },
+
+    placeholder:
+    {
+      type: CalendarEvent
     },
 
     formats:
@@ -83,6 +102,13 @@ export default {
     weekday()
     {
       return this.day.format( this.formats.weekday );
+    },
+
+    hasPlaceholder()
+    {
+      return this.placeholder &&
+        this.placeholder.time.matchesDay( this.day ) &&
+        this.placeholder.fullDay;
     }
   },
 
@@ -105,6 +131,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
 .ds-day {
   flex: 1;
   width: 0;
@@ -131,4 +158,5 @@ export default {
     }
   }
 }
+
 </style>

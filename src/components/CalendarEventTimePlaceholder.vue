@@ -1,0 +1,115 @@
+<template>
+
+  <v-menu
+    class="ds-calendar-event-placeholder"
+    :disabled="!hasPopover"
+    v-model="menu"
+    v-bind="popoverProps">
+
+    <ds-calendar-event-time
+      slot="activator"
+      v-bind="{$scopedSlots}"
+      :is-placeholder-with-day="day"
+      :calendar-event="placeholder"
+      :calendar="calendar"
+    ></ds-calendar-event-time>
+
+    <slot name="eventCreatePopover" v-bind="{placeholder, calendar, day, close}"></slot>
+
+  </v-menu>
+
+</template>
+
+<script>
+import { CalendarEvent, Calendar, Day } from 'dayspan';
+
+
+export default {
+
+  name: 'dsCalendarEventTimePlaceholder',
+
+  props:
+  {
+    placeholder:
+    {
+      required: true,
+      type: CalendarEvent
+    },
+
+    calendar:
+    {
+      required: true,
+      type: Calendar
+    },
+
+    day:
+    {
+      type: Day
+    },
+
+    popoverProps:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'popoverProps');
+      },
+      default() {
+        return this.$dsDefaults().popoverProps;
+      }
+    }
+  },
+
+  computed:
+  {
+    hasPopover()
+    {
+      return !!this.$scopedSlots.eventCreatePopover;
+    }
+  },
+
+  data: vm => ({
+    menu: false
+  }),
+
+  watch:
+  {
+    menu: 'triggerClearPlaceholder'
+  },
+
+  mounted()
+  {
+    if (this.hasPopover)
+    {
+      this.menu = true;
+    }
+  },
+
+  methods:
+  {
+    close()
+    {
+      this.menu = false;
+    },
+
+    triggerClearPlaceholder(open)
+    {
+      if (!open)
+      {
+        this.$emit('clear-placeholder');
+      }
+    }
+  }
+}
+</script>
+
+<style scoped lang="scss">
+
+.ds-calendar-event-placeholder {
+  position: absolute;
+  right: 0px;
+  left: 0px;
+  top: 0px;
+  padding: 0;
+  margin: 0;
+}
+
+</style>

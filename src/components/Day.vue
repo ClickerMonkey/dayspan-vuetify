@@ -10,31 +10,46 @@
         {{ month }}
       </span>
 
-      <span class="ds-dom" :class="classesDayOfMonth">
+      <a class="ds-dom" href
+        :class="classesDayOfMonth"
+        @click.prevent.stop="viewDay">
         {{ dayOfMonth }}
-      </span>
+      </a>
 
     </div>
 
     <template v-for="(event, i) in day.events">
 
-      <ds-event
+      <ds-calendar-event
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :key="event.id"
         :calendar-event="event"
         :calendar="calendar"
         :index="i"
-        @edit="edit"
-      ></ds-event>
+      ></ds-calendar-event>
 
     </template>
+
+    <div v-if="hasPlaceholder">
+
+      <ds-calendar-event-placeholder
+        v-bind="{$scopedSlots}"
+        v-on="$listeners"
+        :day="day"
+        :placeholder="placeholder"
+        :calendar="calendar"
+        :index="day.events.length"
+      ></ds-calendar-event-placeholder>
+
+    </div>
 
   </div>
 
 </template>
 
 <script>
-import { Day, Calendar } from 'dayspan';
+import { Day, Calendar, CalendarEvent } from 'dayspan';
 
 
 export default {
@@ -53,6 +68,11 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    placeholder:
+    {
+      type: CalendarEvent
     },
 
     formats:
@@ -104,6 +124,12 @@ export default {
     month()
     {
       return this.day.format( this.formats.month );
+    },
+
+    hasPlaceholder()
+    {
+      return this.placeholder &&
+        this.placeholder.time.matchesDay( this.day );
     }
   },
 
@@ -114,41 +140,48 @@ export default {
       this.$emit('add', this.day);
     },
 
-    edit(event)
+    viewDay(event)
     {
-      this.$emit('edit', {
-        event: event,
-        day: this.day
-      });
+      this.$emit('view-day', this.day);
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+
 .ds-day {
   flex: 1;
   width: 0;
   border-right: #e0e0e0 1px solid;
   border-bottom: #e0e0e0 1px solid;
   padding: 4px;
+
+  .ds-dom {
+    text-decoration: none;
+    color: #212121;
+    width: 24px;
+    height: 24px;
+    line-height: 24px;
+    text-align: center;
+
+    &:hover {
+      text-decoration: underline;
+    }
+
+    &.ds-today-dom {
+      border-radius: 12px;
+      background-color: #4285f4;
+      color: white;
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+  }
 }
-.ds-day .ds-today-dom {
-  margin: -7px;
-  padding: 10px;
-  border-radius: 20px;
-  background-color: #4285f4;
-  color: white;
-  width: 36px;
-  height: 36px;
-  display: block;
-  text-align: center;
-  line-height: 16px;
-  position: relative;
-  z-index: 1;
-  top: -4px;
-}
+
 .ds-out-calendar {
   color: #757575;
 }
+
 </style>

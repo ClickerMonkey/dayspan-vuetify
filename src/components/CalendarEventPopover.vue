@@ -1,6 +1,8 @@
 <template>
 
-  <v-card class="ds-event-popover-card">
+  <v-card class="ds-calendar-event-popover-card"
+    :class="classes">
+
    <v-toolbar extended flat
     :style="styleHeader">
 
@@ -32,7 +34,7 @@
             <v-icon>more_vert</v-icon>
           </v-btn>
         </ds-schedule-actions>
-        <span>Options</span>
+        <span>{{ labels.options }}</span>
        </v-tooltip>
 
      </slot>
@@ -43,13 +45,16 @@
          <v-btn icon slot="activator" @click="close" :style="styleButton">
            <v-icon>close</v-icon>
          </v-btn>
-         <span>Close</span>
+         <span>{{ labels.close }}</span>
        </v-tooltip>
 
      </slot>
 
    </v-toolbar>
    <v-card-text>
+
+     <slot name="eventPopoverBodyTop" v-bind="slotData"></slot>
+
      <v-list dense>
 
        <v-list-tile>
@@ -116,7 +121,7 @@
          </v-list-tile-content>
        </v-list-tile>
 
-       <v-list-tile v-if="details.busy">
+       <v-list-tile v-if="hasBusy">
          <v-list-tile-avatar>
            <v-icon>work</v-icon>
          </v-list-tile-avatar>
@@ -128,7 +133,13 @@
        </v-list-tile>
 
      </v-list>
+
+     <slot name="eventPopoverBodyBottom" v-bind="slotData"></slot>
+
    </v-card-text>
+
+   <slot name="eventPopoverActions" v-bind="slotData"></slot>
+
   </v-card>
 
 </template>
@@ -139,7 +150,7 @@ import { CalendarEvent, Calendar, Pattern } from 'dayspan';
 
 export default {
 
-  name: 'dsEventPopover',
+  name: 'dsCalendarEventPopover',
 
   props:
   {
@@ -199,9 +210,11 @@ export default {
       };
     },
 
-    sameDayEvents()
+    classes()
     {
-      return this.calendarEvent.event.schedule.iterateSpans(this.calendarEvent.day, true).list();
+      return {
+        'ds-event-cancelled': this.calendarEvent.cancelled
+      };
     },
 
     styleHeader()
@@ -221,12 +234,17 @@ export default {
 
     startDate()
     {
-      return this.calendarEvent.start.format(this.formats.start);
+      return this.calendarEvent.start.format( this.formats.start );
     },
 
     busyness()
     {
       return this.details.busy ? this.labels.busy : this.labels.free;
+    },
+
+    hasBusy()
+    {
+      return typeof this.details.busy === 'boolean';
     },
 
     duration()
@@ -276,15 +294,20 @@ export default {
       let described = schedule.describe('event', false);
 
       return described.substring( 20 ) + ' (' + this.duration + ')';
+    },
+
+    details()
+    {
+      return this.$dayspan.getEventDetails(
+        this.calendarEvent.event.data,
+        this.calendarEvent.event,
+        this.calendarEvent
+      );
     }
   },
 
   data: vm => ({
-    details: vm.$dayspan.getEventDetails(
-      vm.calendarEvent.event.data,
-      vm.calendarEvent.event,
-      vm.calendarEvent
-    )
+
   }),
 
   methods:
@@ -297,7 +320,7 @@ export default {
 <style scoped lang="scss">
 
 .v-btn--floating.v-btn--left {
-  margin-left: 0px;
+  margin-left: 0px !important;
 
   .v-icon {
     height: auto;

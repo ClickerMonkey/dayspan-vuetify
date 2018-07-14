@@ -1,7 +1,8 @@
 
-import { Day, Constants, Functions as fn } from 'dayspan';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
+import Vue from 'vue';
 
 export default {
 
@@ -15,7 +16,7 @@ export default {
 
     dayPadding:       5,
     dayHeight:        960,
-    columnOffset:     14,
+    columnOffset:     10,
     eventHeight:      21,
     hourHeight:       40,
 
@@ -30,12 +31,29 @@ export default {
     },
 
     supports: {
+      title:          true,
       description:    true,
       color:          true,
       location:       true,
       calendar:       true,
       busy:           true,
       guests:         false
+    },
+
+    features: {
+      exclude:        true,
+      include:        true,
+      cancel:         true,
+      move:           true,
+      drag:           true,
+      forecast:       true,
+      addDay:         true,
+      addTime:        true,
+      addSelection:   true
+    },
+
+    prompt: {
+
     },
 
     colors: Colors,
@@ -45,16 +63,6 @@ export default {
 
   methods:
   {
-
-    parseMeta(m)
-    {
-      return m;
-    },
-
-    parseData(d)
-    {
-      return d;
-    },
 
     /**
      * details = {
@@ -106,27 +114,57 @@ export default {
      *    print event
      *    change owner
      */
-    getEventDetails: function(data, event, calendarEvent)
+    getEventDetails(data, event, calendarEvent)
     {
       throw 'getEventDetails(data, event, calendarEvent?) must be passed to options of Vue.use';
     },
 
-    setEventDetails: function(newData, data, event, calendarEvent)
+    setEventDetails(details, data, event, calendarEvent)
     {
-      throw 'setEventDetails(newData, data, event, calendarEvent?) must be passed to options of Vue.use';
+      throw 'setEventDetails(details, data, event, calendarEvent?) must be passed to options of Vue.use';
     },
 
-    getDefaultEventDetails: function()
+    createEventData(details, schedule)
+    {
+      throw 'createEventData(details, schedule?) must be passed to options of Vue.use';
+    },
+
+    createEvent(details, schedule, forPlaceholder)
+    {
+      let eventInput = {
+        schedule: schedule,
+        data: this.createEventData( details, schedule )
+      };
+
+      return Parse.event( eventInput, this.parseData, this.parseMeta );
+    },
+
+    getDefaultEventDetails()
     {
       return {
         title: '',
-        descripton: '',
+        description: '',
         location: '',
-        color: this.colors[Math.floor(this.colors.length * Math.random())].value,
+        color: this.getDefaultEventColor(),
         forecolor: '#ffffff',
         calendar: '',
         busy: true
       };
+    },
+
+    getDefaultEventColor()
+    {
+      return this.colors[Math.floor(this.colors.length * Math.random())].value;
+    },
+
+    parseMeta(m)
+    {
+      return m;
+    },
+
+    parseData(d)
+    {
+      return d;
     },
 
     isValidEvent(details, schedule, calendarEvent)
@@ -134,18 +172,59 @@ export default {
       return !!details.title;
     },
 
-    getScheduleDescription: function(schedule)
+    getPrefix(calendarEvent, sameDay)
+    {
+      return sameDay.length === 1 ? sameDay[0].start.format('ha') : '(' + sameDay.length + ')';
+    },
+
+    getScheduleDescription(schedule)
     {
       return schedule.describe('event', false, false, false, false)
     },
 
-    getStyleFull: function(details, calendarEvent, index)
+    getPlaceholderEventDetails()
     {
-      var past = calendarEvent.time.start.isBefore( this.today );
-      var cancelled = calendarEvent.cancelled;
+      let details = this.getDefaultEventDetails();
 
-      var color = this.getStyleColor( details, calendarEvent );
-      var stateColor = this.getStyleColor( details, calendarEvent, past, cancelled );
+      details.title = '(no title)';
+
+      return details;
+    },
+
+    getPlaceholderEventForAdd(time)
+    {
+      let details = this.getPlaceholderEventDetails();
+      let schedule = new Schedule({});
+      let id = time.timeIdentifier;
+      let event = this.createEvent( details, schedule, true );
+      let span = DaySpan.point( time );
+      let day = time.start();
+      let placeholder = new CalendarEvent( id, event, span, day );
+
+      return placeholder;
+    },
+
+    getPlaceholderEventForMove(original)
+    {
+      let placeholder = new CalendarEvent(
+        original.id,
+        original.event,
+        original.time,
+        original.day
+      );
+
+      placeholder.time = new DaySpan( original.start, original.end );
+
+      return placeholder;
+    },
+
+    getStyleFull(details, calendarEvent, index)
+    {
+      let past = calendarEvent.time.start.isBefore( this.today );
+      let cancelled = calendarEvent.cancelled;
+
+      let color = this.getStyleColor( details, calendarEvent );
+      let stateColor = this.getStyleColor( details, calendarEvent, past, cancelled );
 
       return {
         top: ((calendarEvent.row - (index || 0)) * this.eventHeight) + 'px',
@@ -158,42 +237,43 @@ export default {
       };
     },
 
-    getStyleTimed: function(details, calendarEvent)
+    getStyleTimed(details, calendarEvent)
     {
-      var past = calendarEvent.time.end.isBefore( this.now );
-      var cancelled = calendarEvent.cancelled;
-      var bounds = calendarEvent.getTimeBounds( this.dayHeight, 1, this.columnOffset );
+      let past = calendarEvent.time.end.isBefore( this.now );
+      let cancelled = calendarEvent.cancelled;
+      let bounds = calendarEvent.getTimeBounds( this.dayHeight, 1, this.columnOffset );
 
-      var color = this.getStyleColor( details, calendarEvent );
-      var stateColor = this.getStyleColor( details, calendarEvent, past, cancelled );
+      let color = this.getStyleColor( details, calendarEvent );
+      let stateColor = this.getStyleColor( details, calendarEvent, past, cancelled );
 
       return {
         top: bounds.top + 'px',
         height: bounds.height + 'px',
-        left: bounds.left + 'px',
+        left: bounds.left + '%',
+        width: (100 - bounds.left) + '%',
         backgroundColor: stateColor,
         marginLeft: calendarEvent.starting ? 0 : '-5px',
         marginRight: calendarEvent.ending ? 0 : '-5px',
         textDecoration: cancelled ? 'line-through' : 'inherit',
-        textDecorationColor: cancelled ? color : 'inherit'
+        textDecorationColor: cancelled ? stateColor : 'inherit'
       };
     },
 
-    getPrefix: function(calendarEvent, sameDay)
+    getStylePopover(details, calendarEvent)
     {
-      return sameDay.length === 1 ? sameDay[0].start.format('ha') : '(' + sameDay.length + ')';
+
     },
 
-    getStyleNowBorder: function()
+    getStyleNowBorder()
     {
-      return '#db4437 solid 2px';
+      return 'black solid 3px';
     },
 
-    getStyleNow: function()
+    getStyleNow()
     {
-      var now = this.now.asTime().toMilliseconds();
-      var delta = now / Constants.MILLIS_IN_DAY;
-      var top = delta * this.dayHeight;
+      let now = this.now.asTime().toMilliseconds();
+      let delta = now / Constants.MILLIS_IN_DAY;
+      let top = delta * this.dayHeight;
 
       return {
         position: 'absolute',
@@ -204,9 +284,9 @@ export default {
       };
     },
 
-    getStyleColor: function(details, calendarEvent, past, cancelled)
+    getStyleColor(details, calendarEvent, past, cancelled)
     {
-      var color = details.color;
+      let color = details.color;
 
       if (past || cancelled) {
         color = this.blend( color, 0.5, this.colorMap.WHITE );
@@ -215,33 +295,42 @@ export default {
       return color;
     },
 
-    getStyleHighlightColor: function()
+    getStylePlaceholderTimed(details, placeholder, forDay)
     {
-      return 'rgba(230,230,230,0.7)';
-    },
-
-    getStyleHighlight: function(highlight, day)
-    {
-      var bounds = highlight.getBounds( day, this.dayHeight );
+      let bounds = placeholder.time.getBounds( forDay, this.dayHeight );
+      let stateColor = this.getStyleColor( details, placeholder );
 
       return {
-        position: 'absolute',
         top: bounds.top + 'px',
         height: bounds.height + 'px',
         left: '0px',
         right: '0px',
-        backgroundColor: this.getStyleHighlightColor(),
-        marginRight: '-1px'
+        marginRight: '-1px',
+        backgroundColor: this.blend( stateColor, 0.5, this.colorMap.WHITE )
       };
     },
 
-    parseColor: function(color)
+    getStylePlaceholderFull(details, calendarEvent, index, forDay)
+    {
+      let color = this.getStyleColor( details, calendarEvent );
+      let stateColor = this.getStyleColor( details, calendarEvent );
+
+      return {
+        top: ((calendarEvent.row - (index || 0)) * this.eventHeight) + 'px',
+        color: details.forecolor,
+        left: calendarEvent.starting ? '0px' : '-5px',
+        right: calendarEvent.ending ? '0px' : '-6px',
+        backgroundColor: this.blend( stateColor, 0.5, this.colorMap.WHITE )
+      };
+    },
+
+    parseColor(color)
     {
       if (fn.isObject(color)) {
         return color;
       }
 
-      var match = /#(\w\w)(\w\w)(\w\w)/.exec(color);
+      let match = /#(\w\w)(\w\w)(\w\w)/.exec(color);
       return {
         r: parseInt( match[1], 16 ),
         g: parseInt( match[2], 16 ),
@@ -249,27 +338,27 @@ export default {
       };
     },
 
-    clampComponent: function(c)
+    clampComponent(c)
     {
       return Math.max( 0, Math.min( 255, Math.floor( c ) ) );
     },
 
-    clampColor: function(color, out)
+    clampColor(color, out)
     {
-      var target = out || color;
+      let target = out || color;
       target.r = this.clampComponent( color.r );
       target.g = this.clampComponent( color.g );
       target.b = this.clampComponent( color.b );
       return target;
     },
 
-    formatComponent: function(c)
+    formatComponent(c)
     {
-      var x = c.toString( 16 );
+      let x = c.toString( 16 );
       return x.length === 1 ? '0' + x : x;
     },
 
-    formatColor: function(color)
+    formatColor(color)
     {
       return '#' +
         this.formatComponent( color.r ) +
@@ -277,12 +366,12 @@ export default {
         this.formatComponent( color.b );
     },
 
-    blend: function(from, delta, to)
+    blend(from, delta, to)
     {
-      var parsedFrom = this.parseColor( from );
-      var parsedTo = this.parseColor( to );
+      let parsedFrom = this.parseColor( from );
+      let parsedTo = this.parseColor( to );
 
-      var blended = {
+      let blended = {
         r: parsedTo.r + (parsedFrom.r - parsedTo.r) * delta,
         g: parsedTo.g + (parsedFrom.g - parsedTo.g) * delta,
         b: parsedTo.b + (parsedFrom.b - parsedTo.b) * delta
@@ -293,11 +382,11 @@ export default {
       return this.formatColor( blended );
     },
 
-    roundTime: function(day, millis, up)
+    roundTime(day, millis, up)
     {
-      var time = day.time;
-      var over = time % millis;
-      var relative = -over;
+      let time = day.time;
+      let over = time % millis;
+      let relative = -over;
 
       if (up && relative !== 0) {
         relative += millis;
@@ -306,9 +395,9 @@ export default {
       return day.relative( relative );
     },
 
-    startRefreshTimes: function()
+    startRefreshTimes()
     {
-      var $dayspan = this;
+      let $dayspan = this;
 
       this.timeout = setTimeout(
         function()
@@ -320,14 +409,14 @@ export default {
       );
     },
 
-    stopRefreshTimes: function()
+    stopRefreshTimes()
     {
       clearTimeout( this.timeout );
 
       this.timeout = null;
     },
 
-    refreshTimes: function()
+    refreshTimes()
     {
       this.today = Day.today();
       this.now = Day.now();

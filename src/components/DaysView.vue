@@ -4,48 +4,51 @@
 
     <ds-week-header
       v-bind="{$scopedSlots}"
+      v-on="$listeners"
       :calendar="calendar"
+      :placeholder="placeholder"
       :days="calendar.days"
-      @add="add"
-      @edit="edit"
     ></ds-week-header>
 
     <div class="ds-week-view-bottom">
+
       <div class="ds-week-view-scrollable">
+
         <div class="ds-week-view-pane" :style="dayHeight">
+
           <div class="ds-week">
 
             <div class="ds-hour-list">
-              <div class="ds-hour" v-for="hour in hours">
+
+              <div class="ds-hour"
+                v-for="(hour, i) in hours"
+                :class="hourClasses[ i ]">
+
                 <div class="ds-hour-text">{{ hour }}</div>
+
               </div>
+
             </div>
 
             <template v-for="day in calendar.days">
 
               <ds-day-times
                 v-bind="{$scopedSlots}"
+                v-on="$listeners"
                 :key="day.dayIdentifier"
                 :day="day"
-                :highlight="highlight"
+                :placeholder="placeholder"
                 :calendar="calendar"
-                @edit="edit"
-                @add-at="addAt"
-                @mouse-enter-day="mouseEnterDay"
-                @mouse-leave-day="mouseLeaveDay"
-                @mouse-move="mouseMove"
-                @mouse-down="mouseDown"
-                @mouse-up="mouseUp"
-                @mouse-enter-event="mouseEnterEvent"
-                @mouse-leave-event="mouseLeaveEvent"
-                @mouse-down-event="mouseDownEvent"
-                @mouse-up-event="mouseUpEvent"
               ></ds-day-times>
+
             </template>
 
           </div>
+
         </div>
+
       </div>
+
     </div>
 
   </div>
@@ -53,7 +56,7 @@
 </template>
 
 <script>
-import { Calendar, DaySpan } from 'dayspan';
+import { Calendar, CalendarEvent } from 'dayspan';
 
 
 export default {
@@ -68,9 +71,9 @@ export default {
       type: Calendar
     },
 
-    highlight:
+    placeholder:
     {
-      type: DaySpan
+      type: CalendarEvent
     }
   },
 
@@ -81,6 +84,19 @@ export default {
       return {
         height: this.$dayspan.dayHeight + 'px'
       };
+    },
+
+    hourClasses()
+    {
+      var currentHour = this.$dayspan.now.hour;
+
+      return this.hours.map((hour, index) =>
+      {
+        return {
+          'ds-same-hour': index === currentHour,
+          'ds-past-hour': index < currentHour
+        };
+      });
     }
   },
 
@@ -93,65 +109,6 @@ export default {
 
   methods:
   {
-    edit(eventDay)
-    {
-      this.$emit('edit', eventDay);
-    },
-
-    add(day)
-    {
-      this.$emit('add', day);
-    },
-
-    addAt(dayHour)
-    {
-      this.$emit('add-at', dayHour);
-    },
-
-    mouseEnterDay(day)
-    {
-      this.$emit('mouse-enter-day', day);
-    },
-
-    mouseLeaveDay(day)
-    {
-      this.$emit('mouse-leave-day', day);
-    },
-
-    mouseMove(mouseEvent)
-    {
-      this.$emit('mouse-move', mouseEvent);
-    },
-
-    mouseDown(mouseEvent)
-    {
-      this.$emit('mouse-down', mouseEvent);
-    },
-
-    mouseUp(mouseEvent)
-    {
-      this.$emit('mouse-up', mouseEvent);
-    },
-
-    mouseEnterEvent(mouseEvent)
-    {
-      this.$emit('mouse-enter-event', mouseEvent);
-    },
-
-    mouseLeaveEvent(mouseEvent)
-    {
-      this.$emit('mouse-leave-event', mouseEvent);
-    },
-
-    mouseDownEvent(mouseEvent)
-    {
-      this.$emit('mouse-down-event', mouseEvent);
-    },
-
-    mouseUpEvent(mouseEvent)
-    {
-      this.$emit('mouse-up-event', mouseEvent);
-    }
   }
 }
 </script>
@@ -212,6 +169,17 @@ export default {
         font-size: 10px;
         color: #212121;
       }
+
+      /*
+      &.ds-same-hour {
+        border-right: 3px solid #4285f4;
+        background-color: #f5f5f5;
+      }
+
+      &.ds-past-hour {
+        background-color: #fafafa;
+      }
+      */
     }
   }
 }

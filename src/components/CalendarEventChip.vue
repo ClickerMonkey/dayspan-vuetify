@@ -16,7 +16,7 @@ import { Day, Schedule, Functions as fn } from 'dayspan';
 
 export default {
 
-  name: 'dsEventChip',
+  name: 'dsCalendarEventChip',
 
   props:
   {
@@ -48,7 +48,7 @@ export default {
         return this.$dsDefaults().colors;
       }
     },
-    
+
     formats:
     {
       validate(x) {

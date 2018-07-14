@@ -6,11 +6,13 @@
 
       <ds-day
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :key="i"
         :day="day"
         :calendar="calendar"
-        @edit="edit"
-        @add="add"></ds-day>
+        :placeholder="placeholder"
+      ></ds-day>
+
     </template>
 
   </div>
@@ -18,7 +20,7 @@
 </template>
 
 <script>
-import { Calendar } from 'dayspan';
+import { Calendar, CalendarEvent } from 'dayspan';
 
 
 export default {
@@ -37,20 +39,16 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    placeholder:
+    {
+      type: CalendarEvent
     }
   },
 
   methods:
   {
-    edit: function(eventDay)
-    {
-      this.$emit('edit', eventDay);
-    },
-
-    add: function(day)
-    {
-      this.$emit('add', day);
-    }
   }
 }
 </script>

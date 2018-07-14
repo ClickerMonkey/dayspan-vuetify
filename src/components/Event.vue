@@ -1,47 +1,216 @@
 <template>
 
-  <v-menu
-    class="ds-event-menu"
-    :close-on-content-click="false"
-    :nudge-width="200"
-    :disabled="!hasPopover"
-    offset-overflow
-    offset-x
-    max-width="500"
-    v-model="menu"
-    v-bind="popoverProps">
+  <span>
+    <v-layout row>
+      <v-flex xs1 v-if="hasCancel">
 
-    <div class="ds-event"
-      slot="activator"
-      :style="style"
-      @click.stop="editCheck">
+        <!-- Cancel -->
+        <slot name="scheduleCancel" v-bind="{cancel, labels}">
 
-      <span v-if="showName">
-        <slot name="eventTitle" v-bind="{calendarEvent, hasPrefix, getPrefix, details}">
-
-          <span v-if="hasPrefix">
-            {{ getPrefix }}
-          </span>
-          <strong class="ds-ev-title">{{ details.title }}</strong>
-          <span class="ds-ev-description">{{ details.description }}</span>
+          <v-tooltip bottom>
+            <v-btn slot="activator" icon class="ds-button" @click="cancel">
+              <v-icon dark>clear</v-icon>
+            </v-btn>
+            <span v-html="labels.cancel"></span>
+          </v-tooltip>
 
         </slot>
-      </span>
 
-      <span v-else>
-        <slot name="eventEmpty" v-bind="{calendarEvent, details}">&nbsp;</slot>
-      </span>
+      </v-flex>
+      <v-flex xs6 v-if="showTitle">
 
-    </div>
+        <!-- Title -->
+        <slot name="scheduleTitle" v-bind="{copy, schedule, calendarEvent, details}">
 
-    <slot name="eventPopover" v-bind="{calendarEvent, calendar, edit, details, close}"></slot>
+          <!-- class="ds-textfield ds-calendar-event-title" -->
+          <v-text-field single-line hide-details solo flat
+            :label="labels.title"
+            v-model="details.title"
+          ></v-text-field>
 
-  </v-menu>
+        </slot>
+
+      </v-flex>
+      <v-flex xs5 v-if="hasSave">
+
+        <v-spacer></v-spacer>
+
+        <!-- Save -->
+        <slot name="scheduleSave" v-bind="{hasSave, save, labels}">
+
+          <v-btn
+            class="ds-button-tall ml-3" depressed
+            color="primary"
+            :disabled="!canSave"
+            @click.stop="save">
+
+            <span v-html="labels.save"></span>
+
+          </v-btn>
+
+        </slot>
+
+        <!-- More Actions -->
+        <slot name="scheduleActions" v-bind="{calendarEvent, schedule, calendar, actioned}">
+
+          <ds-schedule-actions
+            v-if="calendarEvent"
+            v-bind="{$scopedSlots}"
+            v-on="$listeners"
+            :schedule="schedule"
+            :calendar-event="calendarEvent"
+            :calendar="calendar"
+            @finish="actioned">
+            <v-btn flat class="ds-button-tall ml-0">
+              More actions...
+            </v-btn>
+          </ds-schedule-actions>
+
+        </slot>
+
+      </v-flex>
+    </v-layout>
+
+    <!-- Schedule -->
+    <v-layout row>
+      <v-flex xs1 v-if="hasCancel"></v-flex>
+      <v-flex xs11>
+        <ds-schedule
+          :schedule="copy"
+          :day="day"
+        ></ds-schedule>
+      </v-flex>
+    </v-layout>
+
+    <!-- Tabs -->
+    <v-layout row v-if="hasTabs">
+      <v-flex xs12 class="mt-2">
+        <v-tabs class="text--primary" v-model="tab">
+
+          <v-tab href="#details" v-if="hasDetails">
+            {{ labels.tabs.details }}
+          </v-tab>
+
+          <v-tab href="#forecast" v-if="showForecast">
+            {{ labels.tabs.forecast }}
+          </v-tab>
+
+          <v-tab href="#exclusions" v-if="showExclusions">
+            {{ labels.tabs.removed }}
+          </v-tab>
+
+          <v-tab href="#inclusions" v-if="showInclusions">
+            {{ labels.tabs.added }}
+          </v-tab>
+
+          <v-tab href="#cancelled" v-if="showCancels">
+            {{ labels.tabs.cancelled }}
+          </v-tab>
+
+          <!-- Details -->
+          <v-tab-item id="details" v-if="hasDetails">
+            <v-card flat>
+              <v-card-text>
+
+                <!-- Location -->
+                <v-text-field v-if="$dayspan.supports.location"
+                  single-line hide-details solo flat
+                  prepend-icon="location_on"
+                  :label="labels.location"
+                  v-model="details.location"
+                ></v-text-field>
+
+                <!-- Description -->
+                <v-textarea v-if="$dayspan.supports.description"
+                  hide-details single-line solo flat
+                  prepend-icon="subject"
+                  :label="labels.description"
+                  v-model="details.description"
+                ></v-textarea>
+
+                <!-- Color -->
+                <v-select v-if="$dayspan.supports.color"
+                  single-line hide-details solo flat
+                  prepend-icon="invert_colors"
+                  :items="$dayspan.colors"
+                  :color="details.color"
+                  v-model="details.color">
+                  <template slot="item" slot-scope="{ item }">
+                    <v-list-tile-content>
+                      <div class="ds-color-option" :style="{backgroundColor: item.value}" v-text="item.text"></div>
+                    </v-list-tile-content>
+                  </template>
+                </v-select>
+
+                <!-- Calendar -->
+                <v-text-field v-if="$dayspan.supports.calendar"
+                  single-line hide-details solo flat readonly
+                  prepend-icon="event"
+                  :label="labels.calendar"
+                  v-model="details.calendar"
+                ></v-text-field>
+
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+
+          <!-- Forecast -->
+          <v-tab-item id="forecast" lazy v-if="showForecast">
+            <v-card flat>
+              <v-card-text>
+                <ds-schedule-forecast
+                  :schedule="copy"
+                  :day="day"
+                ></ds-schedule-forecast>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+
+          <!-- Exclusions -->
+          <v-tab-item id="exclusions" lazy v-if="showExclusions">
+            <v-card flat>
+              <v-card-text>
+                <ds-schedule-modifier
+                  :description="labels.exclusions"
+                  :modifier="copy.exclude"
+                ></ds-schedule-modifier>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+
+          <!-- Inclusions -->
+          <v-tab-item id="inclusions" lazy v-if="showInclusions">
+            <v-card flat>
+              <v-card-text>
+                <ds-schedule-modifier
+                  :description="labels.inclusions"
+                  :modifier="copy.include"
+                ></ds-schedule-modifier>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+
+          <!-- Cancelled -->
+          <v-tab-item id="cancelled" lazy v-if="showCancels">
+            <v-card flat>
+              <v-card-text>
+                <ds-schedule-modifier
+                  :description="labels.cancelled"
+                  :modifier="copy.cancel"
+                ></ds-schedule-modifier>
+              </v-card-text>
+            </v-card>
+          </v-tab-item>
+
+        </v-tabs>
+      </v-flex>
+    </v-layout>
+  </span>
 
 </template>
 
 <script>
-import { CalendarEvent, Calendar } from 'dayspan';
+import { Day, Calendar, CalendarEvent, Schedule, Functions as fn } from 'dayspan';
 
 
 export default {
@@ -50,130 +219,307 @@ export default {
 
   props:
   {
-    calendarEvent:
+    schedule:
     {
       required: true,
+      type: Schedule
+    },
+
+    calendarEvent:
+    {
       type: CalendarEvent
     },
 
     calendar:
     {
-      required: true,
       type: Calendar
     },
 
-    index:
+    day:
     {
-      type: Number,
+      type: Day
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'labels');
+      },
       default() {
-        return this.$dsDefaults().index;
+        return this.$dsDefaults().labels;
       }
     },
 
-    popoverProps:
+    hasTitle:
     {
-      validate(x) {
-        return this.$dsValidate(x, 'popoverProps');
-      },
+      type: Boolean,
       default() {
-        return this.$dsDefaults().popoverProps;
+        return this.$dsDefaults().hasTitle;
       }
+    },
+
+    hasCancel:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasCancel;
+      }
+    },
+
+    hasSave:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasSave;
+      }
+    },
+
+    hasTabs:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasTabs;
+      }
+    },
+
+    hasDetails:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasDetails;
+      }
+    },
+
+    hasForecast:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasForecast;
+      }
+    },
+
+    hasExclusions:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasExclusions;
+      }
+    },
+
+    hasInclusions:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasInclusions;
+      }
+    },
+
+    hasCancelled:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().hasCancelled;
+      }
+    }
+  },
+
+  data: vm => ({
+    tab: 'details',
+    details: {},
+    copy: new Schedule(),
+    type: ''
+  }),
+
+  watch:
+  {
+    calendarEvent:
+    {
+      handler: 'updateDetails',
+      immediate: true
+    },
+
+    schedule:
+    {
+      handler: 'updateCopy',
+      immediate: true
     }
   },
 
   computed:
   {
-    style()
+    canSave()
     {
-      return this.$dayspan.getStyleFull( this.details, this.calendarEvent, this.index );
+      return this.details && this.$dayspan.isValidEvent( this.details, this.copy, this.calenderEvent );
     },
 
-    sameDayEvents()
+    repeats()
     {
-      return this.calendarEvent.event.schedule.iterateSpans(this.calendarEvent.day, true).list();
+      return !this.copy.isSingleEvent();
     },
 
-    hasPrefix()
+    showTitle()
     {
-      return !this.calendarEvent.fullDay && this.sameDayEvents.length > 0;
+      return this.$dayspan.supports.title &&
+        this.hasTitle;
     },
 
-    getPrefix()
+    showCancels()
     {
-      return this.$dayspan.getPrefix( this.calendarEvent, this.sameDayEvents );
+      return this.$dayspan.features.cancel &&
+        this.repeats &&
+        this.hasCancelled &&
+        !this.copy.cancel.isEmpty();
     },
 
-    showName()
+    showForecast()
     {
-      return this.calendarEvent.starting || (
-        this.calendar &&
-        !this.calendar.filled.contains( this.calendarEvent.time.start ) &&
-        this.calendar.filled.start.sameDay( this.calendarEvent.day )
-      );
+      return this.$dayspan.features.forecast &&
+        this.repeats &&
+        this.hasForecast;
     },
 
-    hasPopover()
+    showExclusions()
     {
-      return !!this.$scopedSlots.eventPopover;
+      return this.$dayspan.features.exclude &&
+        this.repeats &&
+        this.hasExclusions &&
+        !this.copy.exclude.isEmpty();
+    },
+
+    showInclusions()
+    {
+      return this.$dayspan.features.include &&
+        this.repeats &&
+        this.hasInclusions &&
+        !this.copy.include.isEmpty();
     }
   },
 
-  data: vm => ({
-    menu: false,
-    details: vm.$dayspan.getEventDetails(
-      vm.calendarEvent.event.data,
-      vm.calendarEvent.event,
-      vm.calendarEvent
-    )
-  }),
-
   methods:
   {
-    edit()
+    save()
     {
-      this.$emit('edit', this.calendarEvent);
-    },
+      var ev = this.getEvent('save')
 
-    close()
-    {
-      this.menu = false;
-    },
+      this.$emit('save', ev);
 
-    editCheck()
-    {
-      if (!this.hasPopover)
+      if (!ev.handled)
       {
-        this.edit()
+        if (ev.target && ev.schedule)
+        {
+          ev.target.set( ev.schedule.toInput() );
+        }
+
+        if (ev.calendarEvent)
+        {
+          this.$dayspan.setEventDetails(
+            ev.details,
+            ev.calendarEvent.event.data,
+            ev.calendarEvent.event,
+            ev.calendarEvent
+          );
+
+          this.$emit('update', ev);
+        }
+        else if (ev.create)
+        {
+          ev.created = this.$dayspan.createEvent( ev.details, ev.schedule );
+
+          if (ev.calendar)
+          {
+            ev.calendar.addEvent( ev.created );
+            ev.added = true;
+          }
+
+          this.$emit('create', ev);
+        }
+
+        if (ev.calendar && ev.refresh)
+        {
+          ev.calendar.refreshEvents();
+        }
+
+        ev.handled = true;
+      }
+
+      this.$emit('saved', ev);
+    },
+
+    actioned(ev)
+    {
+      this.$emit('actioned', ev);
+    },
+
+    cancel()
+    {
+      this.$emit('cancel', this.getEvent('cancel'));
+    },
+
+    updateCopy(schedule)
+    {
+      this.copy = schedule.clone();
+      this.updateDetails();
+    },
+
+    updateDetails(newEvent)
+    {
+      var calendarEvent = newEvent || this.calendarEvent;
+
+      this.tab = 'details';
+
+      if (calendarEvent)
+      {
+        this.details = this.$dayspan.getEventDetails(
+          calendarEvent.event.data,
+          calendarEvent.event,
+          calendarEvent
+        );
+
+        this.$emit('details', this.getEvent('details'));
       }
       else
       {
-        this.menu = !this.menu;
+        this.details = this.$dayspan.getDefaultEventDetails();
       }
+    },
+
+    getEvent(type, extra = {})
+    {
+      return fn.extend({
+
+        type: type,
+        day: this.day,
+        schedule: this.copy,
+        target: this.schedule,
+        calendar: this.calendar,
+        calendarEvent: this.calendarEvent,
+        details: this.details,
+        handled: false,
+        refresh: true,
+        create: true,
+        added: false,
+        $vm: this,
+        $element: this.$el
+
+      }, extra);
     }
+
   }
 }
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
 
-.ds-event-menu {
-  width: 100%;
-  height: 18px;
+.ds-calendar-event-title {
+  font-size: 18px;
+  padding-right: 8px;
+  padding-top: 4px;
 }
 
-.ds-event {
-  margin: 1px;
+.ds-color-option {
+  width: 100%;
   color: white;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  padding-left: 0.5em;
-  font-size: 12px;
-  cursor: pointer;
-  position: absolute;
-  user-select: none;
-  display: block;
-  margin: 0;
+  padding: 4px;
 }
 
 </style>

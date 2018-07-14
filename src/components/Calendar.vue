@@ -5,9 +5,11 @@
 
       <ds-weeks-view class="ds-expand"
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :calendar="calendar"
-        @add="add"
-        @edit="edit"></ds-weeks-view>
+        :placeholder="placeholder"
+        @clear-placeholder="clearPlaceholder"
+      ></ds-weeks-view>
 
     </div>
 
@@ -15,30 +17,33 @@
 
       <ds-weeks-view class="ds-expand"
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :calendar="calendar"
-        @add="add"
-        @edit="edit"></ds-weeks-view>
+        :placeholder="placeholder"
+        @clear-placeholder="clearPlaceholder"
+      ></ds-weeks-view>
 
     </div>
 
-    <div v-if="isWeek || isDay" class="ds-week-view">
+    <div v-if="isWeek || isDaySpan" class="ds-week-view">
 
       <ds-days-view
         v-bind="{$scopedSlots}"
+        v-on="$listeners"
         :calendar="calendar"
-        :highlight="highlight"
-        @add="add"
-        @add-at="addAt"
-        @edit="edit"
-        @mouse-enter-day="mouseEnterDay"
-        @mouse-leave-day="mouseLeaveDay"
+        :placeholder="placeholder"
         @mouse-move="mouseMove"
         @mouse-down="mouseDown"
         @mouse-up="mouseUp"
-        @mouse-enter-event="mouseEnterEvent"
-        @mouse-leave-event="mouseLeaveEvent"
         @mouse-down-event="mouseDownEvent"
-        @mouse-up-event="mouseUpEvent"></ds-days-view>
+        @clear-placeholder="clearPlaceholder"
+      ></ds-days-view>
+
+    </div>
+
+    <div v-if="isAgenda">
+
+      Agenda
 
     </div>
 
@@ -46,7 +51,8 @@
 </template>
 
 <script>
-import { Calendar, Units, DaySpan, Day } from 'dayspan';
+import { Calendar, Schedule, CalendarEvent, Units, DaySpan, Day, Functions as fn } from 'dayspan';
+
 
 export default {
 
@@ -56,34 +62,29 @@ export default {
   {
     calendar:
     {
-      //required: true,
       type: Calendar
     },
 
-    highlight:
-    {
-      type: DaySpan,
-      default() {
-        return this.$dsDefaults().highlight;
-      }
-    },
-
-    autoHighlight:
+    handleAdd:
     {
       type: Boolean,
       default() {
-        return this.$dsDefaults().autoHighlight;
+        return this.$dsDefaults().handleAdd;
       }
     },
 
-    autoDragging:
+    handleMove:
     {
       type: Boolean,
       default() {
-        return this.$dsDefaults().autoDragging;
+        return this.$dsDefaults().handleMove;
       }
     }
   },
+
+  data: vm => ({
+    placeholder: null
+  }),
 
   computed:
   {
@@ -92,9 +93,19 @@ export default {
       return this.calendar ? this.calendar.type : null;
     },
 
-    isDay()
+    size()
     {
-      return this.type === Units.DAY;
+      return this.calendar ? this.calendar.size : null;
+    },
+
+    isDaySpan()
+    {
+      return this.type === Units.DAY && this.size > 1;
+    },
+
+    isAgenda()
+    {
+      return this.type === Units.DAY && this.size === 1;
     },
 
     isWeek()
@@ -115,141 +126,215 @@ export default {
 
   methods:
   {
-    add(day)
+    mouseDown(mouseEvent)
     {
-      this.$emit('add', day);
-    },
-
-    addAt(dayHour)
-    {
-      this.$emit('add-at', dayHour);
-    },
-
-    edit(eventDay)
-    {
-      this.$emit('edit', eventDay);
-    },
-
-    mouseEnterDay(day)
-    {
-      this.$emit('mouse-enter-day', day);
-    },
-
-    mouseLeaveDay(day)
-    {
-      this.$emit('mouse-leave-day', day);
-    },
-
-    mouseMove(mouseEvent)
-    {
-      this.$emit('mouse-move', mouseEvent);
-
-      if (this.autoHighlight && mouseEvent.left && this.highlightStart)
+      if (this.handleAdd && mouseEvent.left)
       {
-        this.highlightEnd = mouseEvent.timeDrag;
-        this.highlight.start = this.highlightStart.min( this.highlightEnd );
-        this.highlight.end = this.highlightStart.max( this.highlightEnd );
-      }
+        var time = mouseEvent.time;
 
-      if (this.dragging)
-      {
-        var start = mouseEvent.time;
-        start = start.relative(-this.draggingEvent.offset);
-        start = this.$dayspan.roundTime( start, this.$dayspan.rounding.drag );
+        var ev = this.getEvent('adding', {
+          mouseEvent: mouseEvent,
+          placeholder: this.$dayspan.getPlaceholderEventForAdd( time )
+        });
 
-        this.highlight.start = start;
-        this.highlight.end = start.relative(this.draggingEvent.calendarEvent.time.millis());
+        this.$emit('adding', ev);
 
-        if (!mouseEvent.left)
+        if (!ev.handled && ev.placeholder)
         {
-          this.endDrag();
+          this.addStart = time;
+          this.placeholder = ev.placeholder;
         }
       }
     },
 
-    mouseDown(mouseEvent)
+    mouseDownEvent(mouseEvent)
     {
-      this.$emit('mouse-down', mouseEvent);
-
-      if (this.autoHighlight && mouseEvent.left)
+      if (this.handleMove && mouseEvent.left)
       {
-        this.highlightStart = mouseEvent.time;
-        this.highlight.start = this.highlightStart;
-        this.highlight.end = this.highlightStart;
+        this.readyToMove = true;
+        this.movingEvent = mouseEvent;
       }
     },
 
     mouseUp(mouseEvent)
     {
-      this.$emit('mouse-up', mouseEvent);
-
-      if (this.highlightEnd)
+      if (this.addEnd)
       {
-        this.$emit('highlighted', this.highlight);
-
-        this.highlight.start = this.highlight.end = Day.unix(0);
-        this.highlightStart = null;
-        this.highlightEnd = null;
-      }
-
-      if (this.dragging)
-      {
-        this.$emit('moved', {
-          calendarEvent: this.draggingEvent.calendarEvent,
-          target: this.highlight
+        var ev = this.getEvent('added', {
+          mouseEvent: mouseEvent,
+          placeholder: this.placeholder,
+          span: this.placeholder.time
         });
 
-        this.endDrag();
+        this.$emit('added', ev);
+
+        if (!ev.handled)
+        {
+          ev.clearPlaceholder();
+        }
+
+        this.endAdd();
       }
-    },
 
-    endDrag()
-    {
-      this.dragging = false;
-      this.draggingEvent = null;
-      this.highlight.start = this.highlight.end = Day.unix(0);
-    },
-
-    mouseEnterEvent(mouseEvent)
-    {
-      this.$emit('mouse-enter-event', mouseEvent);
-    },
-
-    mouseLeaveEvent(mouseEvent)
-    {
-      this.$emit('mouse-leave-event', mouseEvent);
-    },
-
-    mouseDownEvent(mouseEvent)
-    {
-      this.$emit('mouse-down-event', mouseEvent);
-
-      if (this.autoDragging && mouseEvent.left)
+      if (this.moving)
       {
-        this.dragging = true;
-        this.draggingEvent = mouseEvent;
+        var ev = this.getEvent('moved', {
+          mouseEvent: mouseEvent,
+          movingEvent: this.movingEvent,
+          calendarEvent: this.movingEvent.calendarEvent,
+          target: this.placeholder.time
+        });
+
+        this.$emit('moved', ev);
+
+        if (!ev.handled)
+        {
+          ev.clearPlaceholder();
+        }
+
+        this.endMove();
+      }
+
+      this.readyToMove = false;
+    },
+
+    mouseMove(mouseEvent)
+    {
+      if (this.handleAdd && mouseEvent.left && this.addStart)
+      {
+        this.addEnd = mouseEvent.timeDrag;
+
+        var min = this.addStart.min( this.addEnd );
+        var max = this.addStart.max( this.addEnd );
+
+        this.placeholder.time.start = min;
+        this.placeholder.time.end = max;
+        this.placeholder.day = min.start();
+      }
+
+      if (this.readyToMove)
+      {
+        var moveEvent = this.movingEvent;
+        var calendarEvent = moveEvent.calendarEvent;
+
+        var ev = this.getEvent('moving', {
+          calendarEvent: calendarEvent,
+          moveEvent: moveEvent,
+          placeholder: this.$dayspan.getPlaceholderEventForMove( calendarEvent )
+        });
+
+        this.$emit('moving', ev);
+
+        if (!ev.handled && ev.placeholder)
+        {
+          this.moving = true;
+          this.movingDuration = calendarEvent.time.millis();
+          this.placeholder = ev.placeholder;
+        }
+
+        this.readyToMove = false;
+      }
+
+      if (this.moving)
+      {
+        var time = mouseEvent.time;
+        time = time.relative(-this.movingEvent.offset);
+        time = this.$dayspan.roundTime( time, this.$dayspan.rounding.drag );
+
+        this.placeholder.day = time.start();
+        this.placeholder.time.start = time;
+        this.placeholder.time.end = time.relative( this.movingDuration );
+
+        if (!mouseEvent.left)
+        {
+          this.endMove();
+          this.clearPlaceholder();
+        }
       }
     },
 
-    mouseUpEvent(mouseEvent)
+    endMove()
     {
-      this.$emit('mouse-up-event', mouseEvent);
+      this.moving = false;
+      this.movingEvent = null;
+    },
+
+    endAdd()
+    {
+      this.addStart = null;
+      this.addEnd = null;
+    },
+
+    addPlaceholder(day, fullDay)
+    {
+      let placeholder = this.$dayspan.getPlaceholderEventForAdd( day );
+      let time = placeholder.time;
+
+      if (fullDay)
+      {
+        time.end = time.end.end();
+
+        placeholder.event.schedule = Schedule.forDay( time.start );
+        placeholder.fullDay = true;
+
+        let calendarDay = this.calendar.getDay( day );
+
+        if (calendarDay)
+        {
+          placeholder.row = calendarDay.iterateEvents().reduce( 0, (e, x) => Math.max( x, e.row + 1 ) );
+        }
+      }
+      else
+      {
+        time.end = time.end.nextHour();
+
+        placeholder.event.schedule = Schedule.forSpan( time );
+        placeholder.fullDay = false;
+      }
+
+      this.placeholder = placeholder;
+    },
+
+    clearPlaceholder()
+    {
+      this.placeholder = null;
+    },
+
+    getEvent(type, extra = {})
+    {
+      return fn.extend({
+
+        type: type,
+        calendar: this.calendar,
+        clearPlaceholder: this.clearPlaceholder,
+        handled: false,
+        $vm: this,
+        $element: this.$el
+
+      }, extra);
     }
   }
 }
 </script>
 
 <style scoped lang="scss">
+
 .ds-calendar {
   width: 100%;
   height: 100%;
   position: relative;
   padding: 0px !important;
 }
+
 .ds-month-view {
   width: 100%;
   height: 100%;
+
+  .ds-today {
+    background-color: rgba(0,0,0,0.04);
+  }
 }
+
 .ds-week-view {
   position: absolute;
   top: 0;
@@ -260,13 +345,15 @@ export default {
   outline: none;
   background-color: white;
 }
-.ds-month-view .ds-today {
-  background-color: rgba(0,0,0,0.04);
+
+.ds-year-view {
+
+  .ds-first-day {
+    font-weight: bold;
+  }
+  .ds-first-day-day {
+    background-color: rgba(0,0,0,0.08);
+  }
 }
-.ds-year-view .ds-first-day {
-  font-weight: bold;
-}
-.ds-year-view .ds-first-day-day {
-  background-color: rgba(0,0,0,0.08);
-}
+
 </style>

@@ -3,27 +3,34 @@
   <div class="ds-month">
 
     <div class="ds-week-header">
+
       <div class="ds-week-header-day"
-        v-for="weekday in weekdays" :key="weekday">
+        v-for="(weekday, i) in weekdays"
+        :key="weekday"
+        :class="weekdayClasses(i)">
+
         {{ weekday }}
+
       </div>
+
     </div>
 
     <ds-day-row
       v-for="i in rows"
       v-bind="{$scopedSlots}"
+      v-on="$listeners"
       :key="i"
       :days="daysAtRow( i, 7 )"
       :calendar="calendar"
-      @edit="edit"
-      @add="add"
+      :placeholder="placeholder"
     ></ds-day-row>
+
   </div>
 
 </template>
 
 <script>
-import { Calendar } from 'dayspan';
+import { Calendar, CalendarEvent } from 'dayspan';
 import * as moment from 'moment';
 
 
@@ -37,6 +44,11 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    placeholder:
+    {
+      type: CalendarEvent
     },
 
     weekdays:
@@ -58,21 +70,18 @@ export default {
 
   methods:
   {
-    edit(eventDay)
-    {
-      this.$emit('edit', eventDay);
-    },
-
-    add(day)
-    {
-      this.$emit('add', day);
-    },
-
     daysAtRow(row, rowSize)
     {
       var start = (row - 1) * rowSize;
 
       return this.calendar.days.slice( start, start + rowSize );
+    },
+
+    weekdayClasses(weekday)
+    {
+      return {
+        'ds-week-header-today': this.$dayspan.today.dayOfWeek === weekday
+      };
     }
   }
 }
@@ -90,11 +99,18 @@ export default {
   .ds-week-header {
     display: flex;
   }
+
   .ds-week-header-day {
     flex: 1 0 20px;
     border-right: #e0e0e0 1px solid;
     color: #757575;
     padding: 4px;
+    padding-bottom: 0px;
+
+    &.ds-week-header-today {
+      color: #4285f4;
+      font-weight: 500;
+    }
   }
 }
 

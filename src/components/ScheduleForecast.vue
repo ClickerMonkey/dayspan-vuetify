@@ -19,13 +19,13 @@
 
     <template v-for="time in forecast">
 
-      <ds-event-chip
+      <ds-calendar-event-chip
         :key="time.time"
         :day="aroundDay"
         :time="time"
         :can-exclude="canExclude"
         @exclude="exclude"
-      ></ds-event-chip>
+      ></ds-calendar-event-chip>
 
     </template>
 

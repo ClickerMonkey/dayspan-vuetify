@@ -6,6 +6,7 @@ export default [
   { text: 'Deep Purple', value: '#673AB7' },
   { text: 'Indigo', value: '#3F51B5' },
   { text: 'Blue', value: '#2196F3' },
+  { text: 'Glue', value: '#1976d2' },
   { text: 'Light Blue', value: '#03A9F4' },
   { text: 'Cyan', value: '#00BCD4' },
   { text: 'Teal', value: '#009688' },

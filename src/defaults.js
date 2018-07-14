@@ -1,13 +1,13 @@
 
+import { Units } from 'dayspan';
 import * as moment from 'moment';
 
 
 export default {
 
   dsCalendar: {
-    highlight: null,
-    autoHighlight: true,
-    autoDragging: true
+    handleAdd: true,
+    handleMove: true
   },
 
   dsDay: {
@@ -16,12 +16,46 @@ export default {
     }
   },
 
-  dsEvent: {
-    index: 0,
-    popoverProps: {}
+  dsCalendarApp: {
+    allowsAddToday: true,
+    types: [
+      {id: 'D', label: 'Day',     shortcut: 'D', type: Units.DAY,   size: 1},
+      {id: 'W', label: 'Week',    shortcut: 'W', type: Units.WEEK,  size: 1},
+      {id: 'M', label: 'Month ',  shortcut: 'M', type: Units.MONTH, size: 1},
+      {id: 'Y', label: 'Year',    shortcut: 'Y', type: Units.YEAR,  size: 1},
+      {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4}
+    ],
+    formats: {
+      today: 'dddd, MMMM D'
+    },
+    labels: {
+      next: (type) => type ? 'Next ' + type.label.toLowerCase() : 'Next',
+      prev: (type) => type ? 'Previous ' + type.label.toLowerCase() : 'Previous',
+      moveCancel: 'Cancel move',
+      moveSingleEvent: 'Move event',
+      moveOccurrence: 'Move just this event occurrence',
+      moveAll: 'Move all event occurrences'
+    },
+    styles: {
+      toolbar: {
+        small: { width: 'auto' },
+        large: { width: '300px' }
+      }
+    }
   },
 
-  dsEventChip: {
+  dsCalendarEvent: {
+    index: 0,
+    popoverProps: {
+      nudgeWidth: 200,
+      closeOnContentClick: false,
+      offsetOverflow: true,
+      offsetX: true,
+      maxWidth: 500
+    }
+  },
+
+  dsCalendarEventChip: {
     canExclude: true,
     colors: {
       sameForeground:   'white',
@@ -33,13 +67,15 @@ export default {
     }
   },
 
-  dsEventPopover: {
+  dsCalendarEventPopover: {
     formats: {
       start:    'dddd, MMMM D',
       time:     'h:mm a'
     },
     labels: {
       allDay:   'All day',
+      options:  'Options',
+      close:    'Close',
       day:      ['day', 'days'],
       days:     ['day', 'days'],
       minute:   ['minute', 'minutes'],
@@ -53,8 +89,81 @@ export default {
     }
   },
 
-  dsEventTime: {
-    popoverProps: {}
+  dsCalendarEventCreatePopover: {
+    prompts: {
+      description:  true,
+      color:        true,
+      location:     true,
+      calendar:     true,
+      busy:         true,
+      guests:       false
+    },
+    formats: {
+      start:    'dddd, MMMM D',
+      time:     'h:mm a'
+    },
+    icons: {
+      save:     'save',
+      close:    'close',
+      edit:     'edit'
+    },
+    labels: {
+      title:    'Add title',
+      allDay:   'All day',
+      close:    'Close',
+      save:     'Save',
+      day:      ['day', 'days'],
+      days:     ['day', 'days'],
+      minute:   ['minute', 'minutes'],
+      minutes:  ['minute', 'minutes'],
+      hour:     ['hour', 'hours'],
+      hours:    ['hour', 'hours'],
+      week:     ['week', 'weeks'],
+      weeks:    ['week', 'weeks'],
+      busy:     'Busy',
+      free:     'Free',
+      location: 'Add location',
+      description: 'Add description',
+      calendar: 'Calendar',
+    },
+    busyOptions: [
+      {value: true, text: 'Busy'},
+      {value: false, text: 'Free'}
+    ]
+  },
+
+  dsCalendarEventPlaceholder: {
+    popoverProps: {
+      nudgeWidth: 200,
+      closeOnContentClick: false,
+      closeOnClick: true,
+      offsetOverflow: true,
+      offsetX: true,
+      maxWidth: 500
+    }
+  },
+
+  dsCalendarEventTimePlaceholder: {
+    popoverProps: {
+      nudgeWidth: 200,
+      closeOnContentClick: false,
+      closeOnClick: true,
+      offsetOverflow: true,
+      offsetX: true,
+      maxWidth: 500
+    }
+  },
+
+  dsCalendarEventTime: {
+    placeholderStyle: false,
+    disabled: false,
+    popoverProps: {
+      nudgeWidth: 200,
+      closeOnContentClick: false,
+      offsetOverflow: true,
+      offsetX: true,
+      maxWidth: 500
+    }
   },
 
   dsIdentifierChip: {
@@ -65,15 +174,41 @@ export default {
 
   dsSchedule: {
     allowsRange: true,
+    labels: {
+      editCustom:   'Edit'
+    }
+  },
+
+  dsEvent: {
     hasTitle: true,
     hasCancel: true,
     hasSave: true,
     canSave: true,
+    hasTabs: true,
+    hasDetails: true,
+    hasForecast: true,
+    hasExclusions: true,
+    hasInclusions: true,
+    hasCancelled: true,
     labels: {
       cancel:       'Cancel event changes',
       save:         'Save',
-      editCustom:   'Edit',
-      title:        'Title'
+      title:        'Title',
+      exclusions:   'These are events or spans of time where a normally occurring event was excluded from the schedule. Events are excluded here if an event occurrence is moved.',
+      inclusions:   'These are events or spans of time where events were added outside the normally occurring schedule. Events are added here if an event occurrence is moved.',
+      cancelled:    'These are events or spans of time where events were cancelled.',
+      edit:         'Edit event',
+      add:          'Add event',
+      location:     'Add location',
+      description:  'Add description',
+      calendar:     'Calendar',
+      tabs: {
+        details:    'Event Details',
+        forecast:   'Forecast',
+        removed:    'Removed',
+        added:      'Added',
+        cancelled:  'Cancelled'
+      }
     }
   },
 
@@ -94,32 +229,11 @@ export default {
     }
   },
 
-  dsScheduleDialog: {
-    hasDetails: true,
-    hasForecast: true,
-    hasExclusions: true,
-    hasInclusions: true,
-    hasCancelled: true,
+  dsEventDialog: {
     dialogProps: {
       persistent: true,
       lazy: true,
       maxWidth: '800px'
-    },
-    labels: {
-      exclusions:   'These are events or spans of time where a normally occurring event was excluded from the schedule. Events are excluded here if an event occurrence is moved.',
-      inclusions:   'These are events or spans of time where events were added outside the normally occurring schedule. Events are added here if an event occurrence is moved.',
-      cancelled:    'These are events or spans of time where events were cancelled.',
-      edit:         'Edit event',
-      add:          'Add event',
-      location:     'Add location',
-      description:  'Add description',
-      tabs: {
-        details:    'Event Details',
-        forecast:   'Forecast',
-        removed:    'Removed',
-        added:      'Added',
-        cancelled:  'Cancelled'
-      }
     }
   },
 
