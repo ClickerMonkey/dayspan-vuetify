@@ -100,6 +100,16 @@ export default {
       var sh = calendarEvent.start.format('h');
       var eh = calendarEvent.end.format('h');
 
+      if (calendarEvent.start.minute !== 0)
+      {
+        sh += calendarEvent.start.format(':mm');
+      }
+
+      if (calendarEvent.end.minute !== 0)
+      {
+        eh += calendarEvent.end.format(':mm');
+      }
+
       return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
     },
 

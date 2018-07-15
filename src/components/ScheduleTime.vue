@@ -30,19 +30,7 @@
     </v-tooltip>
 
   </div>
-  <!--
-  <v-layout row wrap>
-    <v-flex xs4 class="time-container">
 
-
-
-    </v-flex>
-    <v-flex xs6 class="action-container">
-
-    </v-flex>
-
-  </v-layout>
-  -->
 </template>
 
 <script>

@@ -35,6 +35,7 @@
         v-on="$listeners"
         :day="day"
         :placeholder="placeholder"
+        :placeholder-for-create="placeholderForCreate"
         :calendar="calendar"
       ></ds-calendar-event-time-placeholder>
 
@@ -69,6 +70,12 @@ export default {
     placeholder:
     {
       type: CalendarEvent
+    },
+
+    placeholderForCreate:
+    {
+      type: Boolean,
+      default: false
     }
   },
 

@@ -11,6 +11,7 @@
         :day="day"
         :calendar="calendar"
         :placeholder="placeholder"
+        :placeholder-for-create="placeholderForCreate"
       ></ds-day>
 
     </template>
@@ -44,6 +45,12 @@ export default {
     placeholder:
     {
       type: CalendarEvent
+    },
+
+    placeholderForCreate:
+    {
+      type: Boolean,
+      default: false
     }
   },
 

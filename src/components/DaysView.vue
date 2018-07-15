@@ -7,6 +7,7 @@
       v-on="$listeners"
       :calendar="calendar"
       :placeholder="placeholder"
+      :placeholder-for-create="placeholderForCreate"
       :days="calendar.days"
     ></ds-week-header>
 
@@ -38,6 +39,7 @@
                 :key="day.dayIdentifier"
                 :day="day"
                 :placeholder="placeholder"
+                :placeholder-for-create="placeholderForCreate"
                 :calendar="calendar"
               ></ds-day-times>
 
@@ -74,6 +76,12 @@ export default {
     placeholder:
     {
       type: CalendarEvent
+    },
+
+    placeholderForCreate:
+    {
+      type: Boolean,
+      default: false
     }
   },
 

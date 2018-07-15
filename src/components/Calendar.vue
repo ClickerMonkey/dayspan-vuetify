@@ -8,6 +8,7 @@
         v-on="$listeners"
         :calendar="calendar"
         :placeholder="placeholder"
+        :placeholder-for-create="placeholderForCreate"
         @clear-placeholder="clearPlaceholder"
       ></ds-weeks-view>
 
@@ -20,6 +21,7 @@
         v-on="$listeners"
         :calendar="calendar"
         :placeholder="placeholder"
+        :placeholder-for-create="placeholderForCreate"
         @clear-placeholder="clearPlaceholder"
       ></ds-weeks-view>
 
@@ -32,6 +34,7 @@
         v-on="$listeners"
         :calendar="calendar"
         :placeholder="placeholder"
+        :placeholder-for-create="placeholderForCreate"
         @mouse-move="mouseMove"
         @mouse-down="mouseDown"
         @mouse-up="mouseUp"
@@ -83,7 +86,8 @@ export default {
   },
 
   data: vm => ({
-    placeholder: null
+    placeholder: null,
+    placeholderForCreate: false
   }),
 
   computed:
@@ -142,7 +146,10 @@ export default {
         if (!ev.handled && ev.placeholder)
         {
           this.addStart = time;
+          this.placeholderForCreate = false;
           this.placeholder = ev.placeholder;
+          this.placeholder.event.schedule = Schedule.forTime( time, time.asTime() );
+          this.placeholder.fullDay = false;
         }
       }
     },
@@ -210,6 +217,7 @@ export default {
         this.placeholder.time.start = min;
         this.placeholder.time.end = max;
         this.placeholder.day = min.start();
+        this.placeholder.event.schedule.times = [ min.asTime() ];
       }
 
       if (this.readyToMove)
@@ -229,6 +237,7 @@ export default {
         {
           this.moving = true;
           this.movingDuration = calendarEvent.time.millis();
+          this.placeholderForCreate = false;
           this.placeholder = ev.placeholder;
         }
 
@@ -265,7 +274,7 @@ export default {
       this.addEnd = null;
     },
 
-    addPlaceholder(day, fullDay)
+    addPlaceholder(day, fullDay, forUpdate)
     {
       let placeholder = this.$dayspan.getPlaceholderEventForAdd( day );
       let time = placeholder.time;
@@ -293,11 +302,13 @@ export default {
       }
 
       this.placeholder = placeholder;
+      this.placeholderForCreate = !forUpdate;
     },
 
     clearPlaceholder()
     {
       this.placeholder = null;
+      this.placeholderForCreate = false;
     },
 
     getEvent(type, extra = {})

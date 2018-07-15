@@ -396,10 +396,11 @@ export default {
     {
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
+      var useDialog = !this.hasCreatePopover;
 
-      calendar.addPlaceholder( day, true );
+      calendar.addPlaceholder( day, true, useDialog );
 
-      if (!this.hasCreatePopover)
+      if (useDialog)
       {
         eventDialog.add(day);
         eventDialog.$once('close', calendar.clearPlaceholder);
@@ -410,11 +411,12 @@ export default {
     {
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
+      var useDialog = !this.hasCreatePopover;
       var at = dayHour.day.withHour( dayHour.hour );
 
-      calendar.addPlaceholder( at, false );
+      calendar.addPlaceholder( at, false, useDialog );
 
-      if (!this.hasCreatePopover)
+      if (useDialog)
       {
         eventDialog.addAt(dayHour.day, dayHour.hour);
         eventDialog.$once('close', calendar.clearPlaceholder);
@@ -425,10 +427,11 @@ export default {
     {
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
+      var useDialog = !this.hasCreatePopover;
 
-      calendar.addPlaceholder( this.$dayspan.today, true );
+      calendar.addPlaceholder( this.$dayspan.today, true, useDialog );
 
-      if (!this.hasCreatePopover)
+      if (useDialog)
       {
         eventDialog.addToday();
         eventDialog.$once('close', calendar.clearPlaceholder);
@@ -438,11 +441,19 @@ export default {
     handleAdd(addEvent)
     {
       var eventDialog = this.$refs.eventDialog;
+      var calendar = this.$refs.calendar;
 
       addEvent.handled = true;
 
-      eventDialog.addSpan(addEvent.span);
-      eventDialog.$once('close', addEvent.clearPlaceholder);
+      if (!this.hasCreatePopover)
+      {
+        eventDialog.addSpan(addEvent.span);
+        eventDialog.$once('close', addEvent.clearPlaceholder);
+      }
+      else
+      {
+        calendar.placeholderForCreate = true;
+      }
     },
 
     handleMove(moveEvent)

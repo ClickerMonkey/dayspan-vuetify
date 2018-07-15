@@ -37,6 +37,12 @@ export default {
       type: CalendarEvent
     },
 
+    placeholderForCreate:
+    {
+      type: Boolean,
+      default: false
+    },
+
     calendar:
     {
       required: true,
@@ -78,12 +84,13 @@ export default {
 
   watch:
   {
-    menu: 'triggerClearPlaceholder'
+    menu: 'triggerClearPlaceholder',
+    placeholderForCreate: 'openPopover'
   },
 
   mounted()
   {
-    if (this.hasPopover)
+    if (this.hasPopover && this.placeholderForCreate)
     {
       this.menu = true;
     }
@@ -94,6 +101,11 @@ export default {
     close()
     {
       this.menu = false;
+    },
+
+    openPopover(open)
+    {
+      this.menu = open;
     },
 
     triggerClearPlaceholder(open)

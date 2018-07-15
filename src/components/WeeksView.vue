@@ -23,6 +23,7 @@
       :days="daysAtRow( i, 7 )"
       :calendar="calendar"
       :placeholder="placeholder"
+      :placeholder-for-create="placeholderForCreate"
     ></ds-day-row>
 
   </div>
@@ -49,6 +50,12 @@ export default {
     placeholder:
     {
       type: CalendarEvent
+    },
+
+    placeholderForCreate:
+    {
+      type: Boolean,
+      default: false
     },
 
     weekdays:

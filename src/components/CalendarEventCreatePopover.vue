@@ -454,7 +454,7 @@ export default {
   .v-toolbar__title {
     width: 100%;
     margin-left: 48px;
-    margin-right: 48px;
+    margin-right: -8px;
 
     /deep/ .v-input__slot {
       background-color: rgba(255,255,255,0.2) !important;
