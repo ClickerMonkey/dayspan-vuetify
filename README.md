@@ -2,6 +2,34 @@
 
 > A collection of components for Schedules and Calendars in DaySpan using Vuetify
 
+This library strives to offer all the functionality any modern calendar app could support, and more. Not only can this be used for calendar apps, but any application where the user wishes to control when events should occur within a system.
+
+Every feature of the library can be toggled with local and global settings, and all text can be localized.
+
+## Status
+
+This library is nearing functional completion (documentation on every component, prop, event, slot, method will have to wait) but is still subject to the occasional medium-size change in API. 
+
+## Usage
+
+Install with `npm install --save dayspan-vuetify`
+
+```babel
+import DaySpanVuetify from 'dayspan-vuetify'
+
+Vue.use( DaySpanVuetify, {
+  // options is vue definition
+  data: {
+    // properties to override
+  },
+  methods: {
+    // methods to override
+  }
+});
+```
+
+Once done, you can access components like `ds-event`, `ds-calendar`, and `ds-calendar-app` from any component (they are registered globally).
+
 ## Build Setup
 
 ``` bash
