@@ -18,7 +18,7 @@ Install with `npm install --save dayspan-vuetify`
 import DaySpanVuetify from 'dayspan-vuetify'
 
 Vue.use( DaySpanVuetify, {
-  // options is vue definition
+  // options is vue definition, the resulting reactive component is stored in components as this.$dayspan or Vue.$dayspan
   data: {
     // properties to override
   },
