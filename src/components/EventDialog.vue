@@ -88,9 +88,9 @@ export default {
       this.addSchedule( span.start, Schedule.forSpan( span ) );
     },
 
-    addPlaceholder(placeholder)
+    addPlaceholder(placeholder, details)
     {
-      this.addSchedule( placeholder.start, placeholder.schedule, placeholder.event.data );
+      this.addSchedule( placeholder.start, placeholder.schedule, details || placeholder.event.data );
     },
 
     addSchedule(day, schedule, details)

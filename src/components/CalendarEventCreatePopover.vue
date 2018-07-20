@@ -319,9 +319,11 @@ export default {
   {
     edit()
     {
-      this.$emit('edit', this.calendarEvent);
+      var ev = this.getEvent('create-edit');
 
-      this.close();
+      this.$emit('create-edit', ev);
+
+      this.finishEvent( ev );
     },
 
     save()
@@ -357,6 +359,11 @@ export default {
         ev.handled = true;
       }
 
+      this.finishEvent( ev );
+    },
+
+    finishEvent(ev)
+    {
       if (ev.close)
       {
         this.close();

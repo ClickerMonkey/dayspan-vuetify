@@ -26,7 +26,7 @@
           :calendar-event="placeholder"
           :calendar="calendar"
           :close="$refs.app.$refs.calendar.clearPlaceholder"
-          @edit="$refs.app.editPlaceholder"
+          @create-edit="$refs.app.editPlaceholder"
           @create-popover-closed="saveState"
         ></ds-calendar-event-create-popover>
       </template>

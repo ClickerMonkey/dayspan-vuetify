@@ -426,12 +426,14 @@ export default {
       eventDialog.edit(calendarEvent);
     },
 
-    editPlaceholder(placeholder)
+    editPlaceholder(createEdit)
     {
+      var placeholder = createEdit.calendarEvent;
+      var details = createEdit.details;
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
 
-      eventDialog.addPlaceholder(placeholder);
+      eventDialog.addPlaceholder( placeholder, details );
       eventDialog.$once('close', calendar.clearPlaceholder);
     },
 
