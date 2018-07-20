@@ -24,6 +24,8 @@ export default {
     inactiveBlendTarget: { r: 255, g: 255, b: 255 },
     inactiveBlendAmount: 0.5,
 
+    hideOnMove:       true,
+
     rounding: {
       move:           1,
       add:            Constants.MILLIS_IN_MINUTE * 15,
@@ -48,8 +50,7 @@ export default {
       drag:           true,
       forecast:       true,
       addDay:         true,
-      addTime:        true,
-      addSelection:   true
+      addTime:        true
     },
 
     prompt: {

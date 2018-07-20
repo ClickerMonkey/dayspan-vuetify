@@ -439,6 +439,11 @@ export default {
 
     add(day)
     {
+      if (!this.$dayspan.features.addDay)
+      {
+        return;
+      }
+
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
       var useDialog = !this.hasCreatePopover;
@@ -454,6 +459,11 @@ export default {
 
     addAt(dayHour)
     {
+      if (!this.$dayspan.features.addTime)
+      {
+        return;
+      }
+
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
       var useDialog = !this.hasCreatePopover;
@@ -470,6 +480,11 @@ export default {
 
     addToday()
     {
+      if (!this.$dayspan.features.addDay)
+      {
+        return;
+      }
+
       var eventDialog = this.$refs.eventDialog;
       var calendar = this.$refs.calendar;
       var useDialog = !this.hasCreatePopover;

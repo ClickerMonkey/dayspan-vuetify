@@ -87,7 +87,8 @@ export default {
 
   data: vm => ({
     placeholder: null,
-    placeholderForCreate: false
+    placeholderForCreate: false,
+    addStart: null
   }),
 
   computed:
@@ -129,7 +130,17 @@ export default {
 
     adding()
     {
-      return this.addStart && this.placeholder;
+      return !!(this.addStart && this.placeholder);
+    },
+
+    canAdd()
+    {
+      return this.$dayspan.features.drag && this.handleAdd;
+    },
+
+    canMove()
+    {
+      return this.$dayspan.features.move && this.handleMove;
     }
   },
 
@@ -137,7 +148,7 @@ export default {
   {
     mouseDown(mouseEvent)
     {
-      if (this.handleAdd && mouseEvent.left)
+      if (this.canAdd && mouseEvent.left)
       {
         var time = mouseEvent.time;
 
@@ -161,7 +172,7 @@ export default {
 
     mouseDownEvent(mouseEvent)
     {
-      if (this.handleMove && mouseEvent.left)
+      if (this.canMove && mouseEvent.left)
       {
         this.readyToMove = true;
         this.movingEvent = mouseEvent;
@@ -212,7 +223,7 @@ export default {
 
     mouseMove(mouseEvent)
     {
-      if (this.handleAdd && mouseEvent.left && this.adding)
+      if (this.adding && mouseEvent.left)
       {
         this.addEnd = mouseEvent.timeDrag;
 

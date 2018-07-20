@@ -15,7 +15,7 @@
     <template v-for="(event, i) in day.events">
 
       <ds-calendar-event-time
-        v-if="!event.fullDay"
+        v-if="isVisible( event )"
         v-bind="{$scopedSlots}"
         v-on="$listeners"
         :calendar-event="event"
@@ -105,6 +105,23 @@ export default {
 
   methods:
   {
+    isVisible(calendarEvent)
+    {
+      if (calendarEvent.fullDay)
+      {
+        return false;
+      }
+
+      if (this.$dayspan.hideOnMove &&
+          this.placeholder &&
+          this.placeholder.event === calendarEvent.event)
+      {
+        return false;
+      }
+
+      return true;
+    },
+
     addAt(hour)
     {
       this.$emit('add-at', {
