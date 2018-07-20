@@ -112,7 +112,7 @@ export default {
         return false;
       }
 
-      if (this.$dayspan.hideOnMove &&
+      if (this.$dayspan.features.hideOnMove &&
           this.placeholder &&
           this.placeholder.event === calendarEvent.event)
       {

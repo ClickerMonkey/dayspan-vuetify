@@ -24,8 +24,6 @@ export default {
     inactiveBlendTarget: { r: 255, g: 255, b: 255 },
     inactiveBlendAmount: 0.5,
 
-    hideOnMove:       true,
-
     rounding: {
       move:           1,
       add:            Constants.MILLIS_IN_MINUTE * 15,
@@ -47,10 +45,14 @@ export default {
       include:        true,
       cancel:         true,
       move:           true,
+      moveDuplicate:  true,
+      moveInstance:   true,
+      moveAll:        true,
       drag:           true,
       forecast:       true,
       addDay:         true,
-      addTime:        true
+      addTime:        true,
+      hideOnMove:     true
     },
 
     prompt: {
@@ -191,11 +193,21 @@ export default {
 
       if (pattern && pattern.name !== 'custom')
       {
-        let description = pattern.describe( start );
+        let description = '';
+
+        if (pattern.name !== 'none')
+        {
+          description = pattern.describe( start );
+        }
 
         if (!schedule.isFullDay())
         {
-          description += ' at ' + schedule.describeArray( schedule.times, x => x.format( formats.time ) );
+          if (description)
+          {
+            description += ' at ';
+          }
+
+          description += schedule.describeArray( schedule.times, x => x.format( formats.time ) );
         }
 
         description += ' (' + duration + ')';
@@ -203,7 +215,7 @@ export default {
         return description;
       }
 
-      let described = schedule.describe('event', false);
+      let described = schedule.describe( 'event', false );
 
       return described.substring( 20 ) + ' (' + duration + ')';
     },

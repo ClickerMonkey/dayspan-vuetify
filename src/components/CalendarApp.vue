@@ -541,6 +541,11 @@ export default {
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
         },
+        duplicate: () => {
+          schedule.setExcluded( targetStart, false );
+          this.eventsRefresh();
+          moveEvent.clearPlaceholder();
+        },
         all: () => {
           schedule.moveTime( sourceStart.asTime(), targetStart.asTime() );
           this.eventsRefresh();
@@ -559,15 +564,35 @@ export default {
           text: this.labels.moveSingleEvent,
           callback: callbacks.single
         });
+
+        if (this.$dayspan.features.moveDuplicate)
+        {
+          options.push({
+            text: this.labels.moveDuplicate,
+            callback: callbacks.duplicate
+          });
+        }
       }
       else
       {
-        options.push({
-          text: this.labels.moveOccurrence,
-          callback: callbacks.instance
-        });
+        if (this.$dayspan.features.moveInstance)
+        {
+          options.push({
+            text: this.labels.moveOccurrence,
+            callback: callbacks.instance
+          });
+        }
 
-        if (targetStart.sameDay(sourceStart))
+        if (this.$dayspan.features.moveDuplicate)
+        {
+          options.push({
+            text: this.labels.moveDuplicate,
+            callback: callbacks.duplicate
+          });
+        }
+
+        if (this.$dayspan.features.moveAll &&
+            targetStart.sameDay(sourceStart))
         {
           options.push({
             text: this.labels.moveAll,

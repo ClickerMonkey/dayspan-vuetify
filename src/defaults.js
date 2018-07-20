@@ -35,7 +35,8 @@ export default {
       moveCancel: 'Cancel move',
       moveSingleEvent: 'Move event',
       moveOccurrence: 'Move just this event occurrence',
-      moveAll: 'Move all event occurrences'
+      moveAll: 'Move all event occurrences',
+      moveDuplicate: 'Add event occurrence'
     },
     styles: {
       toolbar: {
