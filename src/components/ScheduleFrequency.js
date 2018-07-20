@@ -36,7 +36,10 @@ export default {
       },
       set(type)
       {
-        this.setFrequencyType( type );
+        this.$dayspan.getPermission('changeExistingType', () =>
+        {
+          this.setFrequencyType( type );
+        });
       }
     },
 

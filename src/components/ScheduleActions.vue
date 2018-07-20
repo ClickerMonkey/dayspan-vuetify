@@ -243,65 +243,77 @@ export default {
   {
     remove()
     {
-      var ev = this.getEvent('remove');
-
-      this.$emit('remove', ev);
-
-      if (!ev.handled && ev.calendar)
+      this.$dayspan.getPermission('actionRemove', () =>
       {
-        ev.calendar.removeEvent( ev.event );
-        ev.handled = true;
-      }
+        var ev = this.getEvent('remove');
 
-      this.$emit('finish', ev);
+        this.$emit('remove', ev);
+
+        if (!ev.handled && ev.calendar)
+        {
+          ev.calendar.removeEvent( ev.event );
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     exclude()
     {
-      var ev = this.getEvent('exclude');
-
-      this.$emit('exclude', ev);
-
-      if (!ev.handled && ev.calendarEvent)
+      this.$dayspan.getPermission('actionExclude', () =>
       {
-        ev.calendarEvent.exclude();
-        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
-        ev.handled = true;
-      }
+        var ev = this.getEvent('exclude');
 
-      this.$emit('finish', ev);
+        this.$emit('exclude', ev);
+
+        if (!ev.handled && ev.calendarEvent)
+        {
+          ev.calendarEvent.exclude();
+          ev.refresh && ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     cancel()
     {
-      var ev = this.getEvent('cancel');
-
-      this.$emit('cancel', ev);
-
-      if (!ev.handled && ev.calendarEvent)
+      this.$dayspan.getPermission('actionCancel', () =>
       {
-        ev.calendarEvent.cancel( true );
-        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
-        ev.handled = true;
-      }
+        var ev = this.getEvent('cancel');
 
-      this.$emit('finish', ev);
+        this.$emit('cancel', ev);
+
+        if (!ev.handled && ev.calendarEvent)
+        {
+          ev.calendarEvent.cancel( true );
+          ev.refresh && ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     uncancel()
     {
-      var ev = this.getEvent('uncancel');
-
-      this.$emit('uncancel', ev);
-
-      if (!ev.handled && ev.calendarEvent)
+      this.$dayspan.getPermission('actionUncancel', () =>
       {
-        ev.calendarEvent.cancel( false );
-        ev.refresh && ev.calendar && ev.calendar.refreshEvents();
-        ev.handled = true;
-      }
+        var ev = this.getEvent('uncancel');
 
-      this.$emit('finish', ev);
+        this.$emit('uncancel', ev);
+
+        if (!ev.handled && ev.calendarEvent)
+        {
+          ev.calendarEvent.cancel( false );
+          ev.refresh && ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     getTarget()
@@ -364,18 +376,21 @@ export default {
         return;
       }
 
-      var ev = this.getEvent('move', { target });
-
-      this.$emit('move', ev);
-
-      if (!ev.handled && ev.calendarEvent && ev.target)
+      this.$dayspan.getPermission('actionMove', () =>
       {
-        ev.calendarEvent.move( ev.target );
-        ev.calendar && ev.calendar.refreshEvents();
-        ev.handled = true;
-      }
+        var ev = this.getEvent('move', { target });
 
-      this.$emit('finish', ev);
+        this.$emit('move', ev);
+
+        if (!ev.handled && ev.calendarEvent && ev.target)
+        {
+          ev.calendarEvent.move( ev.target );
+          ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     includeStart()
@@ -410,18 +425,21 @@ export default {
         return;
       }
 
-      var ev = this.getEvent('include', { target });
-
-      this.$emit('include', ev);
-
-      if (!ev.handled && ev.schedule && ev.target)
+      this.$dayspan.getPermission('actionInclude', () =>
       {
-        ev.schedule.setExcluded( ev.target, false );
-        ev.calendar && ev.calendar.refreshEvents();
-        ev.handled = true;
-      }
+        var ev = this.getEvent('include', { target });
 
-      this.$emit('finish', ev);
+        this.$emit('include', ev);
+
+        if (!ev.handled && ev.schedule && ev.target)
+        {
+          ev.schedule.setExcluded( ev.target, false );
+          ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+      });
     },
 
     getEvent(type, extra = {})

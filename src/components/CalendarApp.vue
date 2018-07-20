@@ -144,10 +144,10 @@
 
       </slot>
 
-      <slot name="calendarAppOptions" v-bind="{viewingOptions, optionsDialog, options, chooseOption}">
+      <slot name="calendarAppOptions" v-bind="{optionsVisible, optionsDialog, options, chooseOption}">
 
         <v-dialog
-          v-model="viewingOptions"
+          v-model="optionsVisible"
           v-bind="optionsDialog">
           <v-list>
             <template v-for="option in options">
@@ -156,6 +156,27 @@
               </v-list-tile>
             </template>
           </v-list>
+        </v-dialog>
+
+      </slot>
+
+      <slot name="calendarAppPrompt" v-bind="{promptVisible, promptDialog, promptQuestion, choosePrompt}">
+
+        <v-dialog
+          v-model="promptVisible"
+          v-bind="promptDialog">
+          <v-card>
+            <v-card-title>{{ promptQuestion }}</v-card-title>
+            <v-card-actions>
+              <v-btn color="primary" flat @click="choosePrompt( true )">
+                {{ labels.promptConfirm }}
+              </v-btn>
+              <v-spacer></v-spacer>
+              <v-btn color="secondary" flat @click="choosePrompt( false )">
+                {{ labels.promptCancel }}
+              </v-btn>
+            </v-card-actions>
+          </v-card>
         </v-dialog>
 
       </slot>
@@ -251,6 +272,15 @@ export default {
       default() {
         return this.$dsDefaults().optionsDialog;
       }
+    },
+    promptDialog:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'promptDialog');
+      },
+      default() {
+        return this.$dsDefaults().promptDialog;
+      }
     }
   },
 
@@ -258,8 +288,11 @@ export default {
     drawer: null,
     currentType: vm.types[0],
     loading: false,
-    viewingOptions: false,
-    options: []
+    optionsVisible: false,
+    options: [],
+    promptVisible: false,
+    promptQuestion: '',
+    promptCallback: null
   }),
 
   watch:
@@ -327,6 +360,18 @@ export default {
         this.currentType = type;
         this.loading = false;
       }
+    }
+  },
+
+  mounted()
+  {
+    if (!this.$dayspan.promptOpen)
+    {
+      this.$dayspan.promptOpen = (question, callback) => {
+        this.promptQuestion = question;
+        this.promptCallback = callback;
+        this.promptVisible = true;
+      };
     }
   },
 
@@ -602,7 +647,7 @@ export default {
       }
 
       this.options = options;
-      this.viewingOptions = true;
+      this.optionsVisible = true;
     },
 
     chooseOption(option)
@@ -612,7 +657,13 @@ export default {
         option.callback();
       }
 
-      this.viewingOptions = false;
+      this.optionsVisible = false;
+    },
+
+    choosePrompt(yes)
+    {
+      this.promptCallback( yes );
+      this.promptVisible = false;
     },
 
     eventFinish(ev)

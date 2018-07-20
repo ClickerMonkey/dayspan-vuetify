@@ -2,11 +2,12 @@
   <v-layout row wrap>
     <v-flex xs2>
 
-      <v-checkbox hide-details
+      <v-checkbox
+        ref="allDayCheckbox"
+        hide-details
         class="ma-2"
         :label="labels.all"
         v-model="allDay"
-        @input="triggerChange"
       ></v-checkbox>
 
     </v-flex>
@@ -108,14 +109,25 @@ export default {
 
     allDay:
     {
-      set(allDay)
-      {
-        this.schedule.setFullDay(allDay);
-      },
-
       get()
       {
         return this.schedule.isFullDay();
+      },
+
+      set(allDay)
+      {
+        if (this.schedule.isFullDay() !== allDay)
+        {
+          this.$dayspan.getPermission('toggleAllDay',
+            (prompted) => {
+              this.schedule.setFullDay( allDay );
+              this.triggerChange();
+            },
+            () => {
+              this.$refs.allDayCheckbox.reset();
+            }
+          );
+        }
       }
     },
 
@@ -148,17 +160,20 @@ export default {
 
     removeTime(ev)
     {
-      ev.schedule = this.schedule;
-
-      this.$emit('remove', ev);
-
-      if (!ev.handled && ev.schedule)
+      this.$dayspan.getPermission('removeExistingTime', () =>
       {
-        ev.schedule.times.splice( ev.index, 1 );
-        ev.handled = true;
-      }
+        ev.schedule = this.schedule;
 
-      this.$emit('change', ev);
+        this.$emit('remove', ev);
+
+        if (!ev.handled && ev.schedule)
+        {
+          ev.schedule.times.splice( ev.index, 1 );
+          ev.handled = true;
+        }
+
+        this.$emit('change', ev);
+      });
     },
 
     isLastTime(index)

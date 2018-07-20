@@ -56,8 +56,30 @@ export default {
     },
 
     prompt: {
-
+      actionRemove:       true,
+      actionExclude:      true,
+      actionCancel:       true,
+      actionUncancel:     true,
+      actionMove:         true,
+      actionInclude:      true,
+      move:               true,
+      toggleAllDay:       true,
+      removeExistingTime: true
     },
+
+    promptLabels: {
+      actionRemove:       'Are you sure you want to remove this event?',
+      actionExclude:      'Are you sure you want to remove this event occurrence?',
+      actionCancel:       'Are you sure you want to cancel this event?',
+      actionUncancel:     'Are you sure you want to uncancel this event?',
+      actionMove:         'Are you sure you want to move this event?',
+      actionInclude:      'Are you sure you want to add an event occurrence?',
+      move:               'Are you sure you want to move this event?',
+      toggleAllDay:       'Are you sure you want to change whether this event occurs all day?',
+      removeExistingTime: 'Are you sure you want to remove all event occurrences at this time?'
+    },
+
+    promptOpen: null,
 
     colors: Colors,
 
@@ -161,6 +183,32 @@ export default {
     isValidEvent(details, schedule, calendarEvent)
     {
       return !!details.title;
+    },
+
+    requiresPermission(type)
+    {
+      return !!(this.prompt[ type ] && this.promptLabels[ type ] && this.promptOpen);
+    },
+
+    getPermission(type, granted, denied)
+    {
+      let prompt = this.prompt[ type ];
+      let promptLabel = this.promptLabels[ type ];
+
+      if (prompt && promptLabel && this.promptOpen)
+      {
+        this.promptOpen( promptLabel, (yes) => {
+          if (yes) {
+            granted(true);
+          } else if (denied) {
+            denied();
+          }
+        });
+      }
+      else
+      {
+        granted(false);
+      }
     },
 
     getPrefix(calendarEvent, sameDay)

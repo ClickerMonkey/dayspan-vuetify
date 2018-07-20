@@ -36,7 +36,9 @@ export default {
       moveSingleEvent: 'Move event',
       moveOccurrence: 'Move just this event occurrence',
       moveAll: 'Move all event occurrences',
-      moveDuplicate: 'Add event occurrence'
+      moveDuplicate: 'Add event occurrence',
+      promptConfirm: 'Yes',
+      promptCancel: 'No'
     },
     styles: {
       toolbar: {
@@ -45,6 +47,10 @@ export default {
       }
     },
     optionsDialog: {
+      maxWidth: '300px',
+      persistent: true
+    },
+    promptDialog: {
       maxWidth: '300px',
       persistent: true
     }
