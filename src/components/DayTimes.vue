@@ -84,7 +84,9 @@ export default {
     classesDay()
     {
       return {
-        'ds-today': this.day.currentDay
+        'ds-day-today': this.day.currentDay,
+        'ds-day-past': this.day.currentOffset < 0,
+        'ds-day-future': this.day.currentOffset > 0
       };
     },
 
@@ -190,6 +192,18 @@ export default {
   width: 0;
   border-right: #e0e0e0 1px solid;
   border-bottom: #e0e0e0 1px solid;
+
+  &.ds-day-today {
+    background-color: rgba(0,0,0,0.04);
+  }
+
+  &.ds-day-past {
+
+  }
+
+  &.ds-day-future {
+
+  }
 }
 
 .ds-hour {

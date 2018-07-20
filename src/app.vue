@@ -26,7 +26,7 @@
           :calendar-event="placeholder"
           :calendar="calendar"
           :close="$refs.app.$refs.calendar.clearPlaceholder"
-          @edit="$refs.app.edit"
+          @edit="$refs.app.editPlaceholder"
           @create-popover-closed="saveState"
         ></ds-calendar-event-create-popover>
       </template>
@@ -43,6 +43,7 @@
 
 <script>
 import { Calendar, Weekday, Month, Sorts } from 'dayspan';
+import Vue from 'vue';
 
 
 export default {
@@ -121,6 +122,11 @@ export default {
       localStorage.setItem(this.storeKey, json);
     },
 
+    parseData(d)
+    {
+      return Vue.util.extend( this.$dayspan.getDefaultEventDetails(), d );
+    },
+
     loadState()
     {
       var state = {};
@@ -133,8 +139,7 @@ export default {
         {
           state = savedState;
           state.eventSorter = state.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start;
-          state.parseMeta = this.$dayspan.parseMeta;
-          state.parseData = this.$dayspan.parseData;
+          state.parseData = this.parseData;
         }
       }
       catch (e)

@@ -4,17 +4,18 @@
     v-bind="dialogProps"
     v-model="open">
 
-    <v-card v-if="schedule">
+    <v-card v-if="schedule && details">
 
       <v-card-text>
 
         <ds-event
           v-bind="{$scopedSlots}"
-          :schedule="schedule"
+          :target-details="details"
+          :target-schedule="schedule"
           :calendar="calendar"
           :calendar-event="calendarEvent"
           :day="day"
-          @save="save"
+          @saved="saved"
           @cancel="cancel"
           @actioned="actioned"
         ></ds-event>
@@ -56,6 +57,7 @@ export default {
   data: vm => ({
     open: false,
     calendarEvent: null,
+    details: null,
     schedule: null,
     day: null
   }),
@@ -86,20 +88,17 @@ export default {
       this.addSchedule( span.start, Schedule.forSpan( span ) );
     },
 
-    addSchedule(day, schedule)
+    addPlaceholder(placeholder)
     {
-      this.day = day;
-      this.calendarEvent = null;
-      this.schedule = schedule;
-
-      this.finishOpen();
+      this.addSchedule( placeholder.start, placeholder.schedule, placeholder.event.data );
     },
 
-    addInput(day, input)
+    addSchedule(day, schedule, details)
     {
       this.day = day;
       this.calendarEvent = null;
-      this.schedule = input.clone();
+      this.details = details || this.$dayspan.getDefaultEventDetails();
+      this.schedule = schedule;
 
       this.finishOpen();
     },
@@ -108,6 +107,7 @@ export default {
     {
       this.day = calendarEvent.start;
       this.calendarEvent = calendarEvent;
+      this.details = calendarEvent.event.data || this.$dayspan.getDefaultEventDetails();
       this.schedule = calendarEvent.schedule;
 
       this.finishOpen();
@@ -141,10 +141,10 @@ export default {
       this.finishClose( ev );
     },
 
-    save(ev)
+    saved(ev)
     {
       ev.hide = true;
-      this.$emit('save', ev);
+      this.$emit('saved', ev);
       this.finishClose( ev );
     },
 
@@ -155,6 +155,9 @@ export default {
         this.open = false;
         this.$emit('close', ev);
       }
+
+      this.schedule = null;
+      this.details = null;
     },
 
     getEvent(type, extra = {})

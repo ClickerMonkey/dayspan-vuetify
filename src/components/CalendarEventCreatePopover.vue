@@ -300,53 +300,14 @@ export default {
       );
     },
 
-    duration()
-    {
-      let schedule = this.calendarEvent.schedule;
-      let units = this.labels[ schedule.durationUnit ];
-      let length = schedule.duration;
-      let chosenUnit = length === 1 ? units[ 0 ] : units[ 1 ];
-      let duration = length + ' ' + chosenUnit;
-
-      return duration;
-    },
-
     occurs()
     {
-      let calendarEvent = this.calendarEvent;
-      let schedule = calendarEvent.schedule;
-
-      if (schedule.isSingleEvent())
-      {
-        if (schedule.isFullDay())
-        {
-          return this.duration;
-        }
-        else
-        {
-          return calendarEvent.start.asTime().format( this.formats.time );
-        }
-      }
-
-      let pattern = Pattern.findMatch( schedule );
-
-      if (pattern && pattern.name !== 'custom')
-      {
-        let description = pattern.describe( calendarEvent.start );
-
-        if (!schedule.isFullDay())
-        {
-          description += ' at ' + schedule.describeArray( schedule.times, x => x.format( this.formats.time ) );
-        }
-
-        description += ' (' + this.duration + ')';
-
-        return description;
-      }
-
-      let described = schedule.describe('event', false);
-
-      return described.substring( 20 ) + ' (' + this.duration + ')';
+      return this.$dayspan.getEventOccurrence(
+        this.calendarEvent.schedule,
+        this.calendarEvent.start,
+        this.labels,
+        this.formats
+      );
     }
   },
 
@@ -406,11 +367,7 @@ export default {
 
     buildDetails()
     {
-      let details = this.$dayspan.getEventDetails(
-        this.calendarEvent.event.data,
-        this.calendarEvent.event,
-        this.calendarEvent
-      );
+      let details = this.$dayspan.copyEventDetails( this.calendarEvent.event.data );
 
       details.title = '';
 

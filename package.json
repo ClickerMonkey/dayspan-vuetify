@@ -1,8 +1,12 @@
 {
   "name": "dayspan-vuetify",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A collection of components for Schedules and Calendars in DaySpan using Vuetify",
   "author": "Philip Diffenderfer <pdiffenderfer@gmail.com>",
+  "repository" : {
+    "type" : "git",
+    "url" : "https://github.com/ClickerMonkey/dayspan-vuetify.git"
+  },
   "main": "dist/lib/dayspan-vuetify.min.js",
   "private": false,
   "license": "MIT",

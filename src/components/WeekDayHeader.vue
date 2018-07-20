@@ -8,9 +8,10 @@
       {{ weekday }}
     </div>
 
-    <div class="ds-week-date">
+    <a class="ds-week-date"
+      @click="viewDay">
       {{ dayOfMonth }}
-    </div>
+    </a>
 
     <div class="ds-all-events">
 
@@ -97,7 +98,9 @@ export default {
     classesDay()
     {
       return {
-        'ds-today': this.day.currentDay
+        'ds-day-today': this.day.currentDay,
+        'ds-day-past': this.day.currentOffset < 0,
+        'ds-day-future': this.day.currentOffset > 0
       };
     },
 
@@ -128,10 +131,12 @@ export default {
 
     edit(event)
     {
-      this.$emit('edit', {
-        day: this.day,
-        event: event
-      });
+      this.$emit('edit', event);
+    },
+
+    viewDay(event)
+    {
+      this.$emit('view-day', this.day);
     }
   }
 }
@@ -151,18 +156,36 @@ export default {
     line-height: 44px;
     color: black;
     padding-left: 8px;
+
+    &:hover {
+      text-decoration: underline;
+    }
   }
+
   .ds-week-weekday {
     color: black;
     padding-left: 8px;
   }
 
-  &.ds-today {
+  &.ds-day-today {
+    background-color: rgba(0,0,0,0.04);
 
     .ds-week-weekday,
     .ds-week-date {
       color: #4285f4;
     }
+  }
+
+  &.ds-day-past {
+
+    .ds-week-weekday,
+    .ds-week-date {
+      color: #9e9e9e;
+    }
+  }
+
+  &.ds-day-future {
+
   }
 }
 

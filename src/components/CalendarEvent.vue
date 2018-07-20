@@ -121,11 +121,7 @@ export default {
 
     details()
     {
-      return this.$dayspan.getEventDetails(
-        this.calendarEvent.event.data,
-        this.calendarEvent.event,
-        this.calendarEvent
-      );
+      return this.calendarEvent.event.data;
     }
   },
 

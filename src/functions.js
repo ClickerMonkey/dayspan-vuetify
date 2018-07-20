@@ -13,13 +13,15 @@ export function dsMerge(target, source)
   {
     for (let prop in source)
     {
+      let sourceValue = source[ prop ];
+
       if (prop in target)
       {
-        dsMerge( target[ prop ], source[ prop ] );
+        dsMerge( target[ prop ], sourceValue );
       }
       else
       {
-        target[ prop ] = source[ prop ];
+        target[ prop ] = sourceValue;
       }
     }
   }

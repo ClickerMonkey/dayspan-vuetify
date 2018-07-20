@@ -1,7 +1,8 @@
 
-import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Functions as fn } from 'dayspan';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
+import { dsMerge } from './functions';
 import Vue from 'vue';
 
 export default {
@@ -20,14 +21,13 @@ export default {
     eventHeight:      21,
     hourHeight:       40,
 
+    inactiveBlendTarget: { r: 255, g: 255, b: 255 },
+    inactiveBlendAmount: 0.5,
+
     rounding: {
       move:           1,
       add:            Constants.MILLIS_IN_MINUTE * 15,
       drag:           Constants.MILLIS_IN_MINUTE * 15
-    },
-
-    colorMap: {
-      WHITE: { r: 255, g: 255, b: 255 }
     },
 
     supports: {
@@ -114,29 +114,27 @@ export default {
      *    print event
      *    change owner
      */
-    getEventDetails(data, event, calendarEvent)
-    {
-      throw 'getEventDetails(data, event, calendarEvent?) must be passed to options of Vue.use';
-    },
-
     setEventDetails(details, data, event, calendarEvent)
     {
-      throw 'setEventDetails(details, data, event, calendarEvent?) must be passed to options of Vue.use';
+      event.data = Vue.util.extend( data, details );
+    },
+
+    copyEventDetails(details)
+    {
+      return dsMerge( {}, details );
     },
 
     createEventData(details, schedule)
     {
-      throw 'createEventData(details, schedule?) must be passed to options of Vue.use';
+      return dsMerge( {}, details );;
     },
 
     createEvent(details, schedule, forPlaceholder)
     {
-      let eventInput = {
+      return Parse.event({
         schedule: schedule,
         data: this.createEventData( details, schedule )
-      };
-
-      return Parse.event( eventInput, this.parseData, this.parseMeta );
+      });
     },
 
     getDefaultEventDetails()
@@ -157,16 +155,6 @@ export default {
       return this.colors[Math.floor(this.colors.length * Math.random())].value;
     },
 
-    parseMeta(m)
-    {
-      return m;
-    },
-
-    parseData(d)
-    {
-      return d;
-    },
-
     isValidEvent(details, schedule, calendarEvent)
     {
       return !!details.title;
@@ -180,6 +168,53 @@ export default {
     getScheduleDescription(schedule)
     {
       return schedule.describe('event', false, false, false, false)
+    },
+
+    getEventOccurrence(schedule, start, labels, formats)
+    {
+      let duration = this.getEventDuration(schedule, labels);
+
+      if (schedule.isSingleEvent())
+      {
+        if (schedule.isFullDay())
+        {
+          return duration;
+        }
+        else
+        {
+          return start.asTime().format( formats.time );
+        }
+      }
+
+      let pattern = Pattern.findMatch( schedule );
+
+      if (pattern && pattern.name !== 'custom')
+      {
+        let description = pattern.describe( start );
+
+        if (!schedule.isFullDay())
+        {
+          description += ' at ' + schedule.describeArray( schedule.times, x => x.format( formats.time ) );
+        }
+
+        description += ' (' + duration + ')';
+
+        return description;
+      }
+
+      let described = schedule.describe('event', false);
+
+      return described.substring( 20 ) + ' (' + duration + ')';
+    },
+
+    getEventDuration(schedule, labels)
+    {
+      let units = labels[ schedule.durationUnit ];
+      let length = schedule.duration;
+      let chosenUnit = length === 1 ? units[ 0 ] : units[ 1 ];
+      let duration = length + ' ' + chosenUnit;
+
+      return duration;
     },
 
     getPlaceholderEventDetails()
@@ -199,9 +234,8 @@ export default {
       let event = this.createEvent( details, schedule, true );
       let span = DaySpan.point( time );
       let day = time.start();
-      let placeholder = new CalendarEvent( id, event, span, day );
 
-      return placeholder;
+      return new CalendarEvent( id, event, span, day );
     },
 
     getPlaceholderEventForMove(original)
@@ -289,7 +323,7 @@ export default {
       let color = details.color;
 
       if (past || cancelled) {
-        color = this.blend( color, 0.5, this.colorMap.WHITE );
+        color = this.blend( color, this.inactiveBlendAmount, this.inactiveBlendTarget );
       }
 
       return color;
@@ -306,7 +340,7 @@ export default {
         left: '0px',
         right: '0px',
         marginRight: '-1px',
-        backgroundColor: this.blend( stateColor, 0.5, this.colorMap.WHITE )
+        backgroundColor: this.blend( stateColor, this.inactiveBlendAmount, this.inactiveBlendTarget )
       };
     },
 
@@ -320,7 +354,7 @@ export default {
         color: details.forecolor,
         left: calendarEvent.starting ? '0px' : '-5px',
         right: calendarEvent.ending ? '0px' : '-6px',
-        backgroundColor: this.blend( stateColor, 0.5, this.colorMap.WHITE )
+        backgroundColor: this.blend( stateColor, this.inactiveBlendAmount, this.inactiveBlendTarget )
       };
     },
 

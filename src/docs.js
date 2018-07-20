@@ -13,31 +13,6 @@ Vue.use(DaySpanVuetify,
 {
   methods:
   {
-    getEventDetails(data, event, calendarEvent)
-    {
-      let {title, color, description, location, calendar, busy} = (data || {});
-
-      return {
-        title: title || '',
-        description: description || '',
-        color: color || '#757575',
-        forecolor: '#ffffff',
-        location: location || '',
-        calendar: calendar || 'My Calendar',
-        busy: busy !== false
-      };
-    },
-
-    setEventDetails(details, data, event, calendarEvent)
-    {
-      Vue.util.extend(data, details);
-    },
-
-    createEventData(details, schedule)
-    {
-      return details;
-    },
-
     getDefaultEventColor()
     {
       return '#1976d2';

@@ -132,7 +132,7 @@ export default {
 
       if (!ev.handled && ev.target && ev.schedule)
       {
-        ev.target.set( ev.schedule.toInput(), this.$dayspan.parseMeta );
+        ev.target.set( ev.schedule.toInput() );
         ev.handled = true;
       }
 

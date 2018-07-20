@@ -26,7 +26,8 @@ export default {
       {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4}
     ],
     formats: {
-      today: 'dddd, MMMM D'
+      today: 'dddd, MMMM D',
+      xs: 'MMM'
     },
     labels: {
       next: (type) => type ? 'Next ' + type.label.toLowerCase() : 'Next',
@@ -41,6 +42,10 @@ export default {
         small: { width: 'auto' },
         large: { width: '300px' }
       }
+    },
+    optionsDialog: {
+      maxWidth: '300px',
+      persistent: true
     }
   },
 

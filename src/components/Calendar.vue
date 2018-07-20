@@ -125,6 +125,11 @@ export default {
     isYear()
     {
       return this.type === Units.YEAR;
+    },
+
+    adding()
+    {
+      return this.addStart && this.placeholder;
     }
   },
 
@@ -207,7 +212,7 @@ export default {
 
     mouseMove(mouseEvent)
     {
-      if (this.handleAdd && mouseEvent.left && this.addStart)
+      if (this.handleAdd && mouseEvent.left && this.adding)
       {
         this.addEnd = mouseEvent.timeDrag;
 
@@ -217,7 +222,7 @@ export default {
         this.placeholder.time.start = min;
         this.placeholder.time.end = max;
         this.placeholder.day = min.start();
-        this.placeholder.event.schedule.times = [ min.asTime() ];
+        this.placeholder.event.schedule = Schedule.forSpan( this.placeholder.time );
       }
 
       if (this.readyToMove)

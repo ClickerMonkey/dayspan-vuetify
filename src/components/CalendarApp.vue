@@ -22,7 +22,7 @@
     color="white"
     :clipped-left="$vuetify.breakpoint.lgAndUp">
 
-    <v-toolbar-title class="ml-0 pl-3" :style="toolbarStyle">
+    <v-toolbar-title class="ml-0" :style="toolbarStyle">
       <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
       <span class="hidden-sm-and-down">
 
@@ -116,46 +116,64 @@
   <v-content class="ds-expand">
     <v-container fluid fill-height class="ds-calendar-container">
 
-      <ds-calendar ref="calendar"
-        v-bind="{$scopedSlots}"
-        v-on="$listeners"
-        :calendar="calendar"
-        @add="add"
-        @add-at="addAt"
-        @edit="edit"
-        @view-day="viewDay"
-        @added="handleAdd"
-        @moved="handleMove"
-      ></ds-calendar>
+      <slot name="calendarAppCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
 
-      <ds-event-dialog ref="eventDialog"
-        v-bind="{$scopedSlots}"
-        v-on="$listeners"
-        :calendar="calendar"
-        @saved="eventFinish"
-        @actioned="eventFinish"
-      ></ds-event-dialog>
+        <ds-calendar ref="calendar"
+          v-bind="{$scopedSlots}"
+          v-on="$listeners"
+          :calendar="calendar"
+          @add="add"
+          @add-at="addAt"
+          @edit="edit"
+          @view-day="viewDay"
+          @added="handleAdd"
+          @moved="handleMove"
+        ></ds-calendar>
 
-      <v-dialog v-model="viewingOptions" max-width="300px">
-        <v-list>
-          <template v-for="option in options">
-            <v-list-tile :key="option.text" @click="chooseOption( option )">
-              {{ option.text }}
-            </v-list-tile>
-          </template>
-        </v-list>
-      </v-dialog>
+      </slot>
 
-      <v-fab-transition>
-        <v-btn
-          class="ds-add-event-today"
-          color="primary"
-          fixed bottom right fab
-          v-model="allowsAddToday"
-          @click="addToday">
-          <v-icon>add</v-icon>
-        </v-btn>
-      </v-fab-transition>
+      <slot name="calendarAppEventDialog" v-bind="{$scopedSlots, $listeners, calendar, eventFinish}">
+
+        <ds-event-dialog ref="eventDialog"
+          v-bind="{$scopedSlots}"
+          v-on="$listeners"
+          :calendar="calendar"
+          @saved="eventFinish"
+          @actioned="eventFinish"
+        ></ds-event-dialog>
+
+      </slot>
+
+      <slot name="calendarAppOptions" v-bind="{viewingOptions, optionsDialog, options, chooseOption}">
+
+        <v-dialog
+          v-model="viewingOptions"
+          v-bind="optionsDialog">
+          <v-list>
+            <template v-for="option in options">
+              <v-list-tile :key="option.text" @click="chooseOption( option )">
+                {{ option.text }}
+              </v-list-tile>
+            </template>
+          </v-list>
+        </v-dialog>
+
+      </slot>
+
+      <slot name="calendarAppAdd" v-bind="{allowsAddToday, addToday}">
+
+        <v-fab-transition>
+          <v-btn
+            class="ds-add-event-today"
+            color="primary"
+            fixed bottom right fab
+            v-model="allowsAddToday"
+            @click="addToday">
+            <v-icon>add</v-icon>
+          </v-btn>
+        </v-fab-transition>
+
+      </slot>
 
       <slot name="containerInside" v-bind="{events, calendar}"></slot>
 
@@ -224,6 +242,15 @@ export default {
       default() {
         return this.$dsDefaults().styles;
       }
+    },
+    optionsDialog:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'optionsDialog');
+      },
+      default() {
+        return this.$dsDefaults().optionsDialog;
+      }
     }
   },
 
@@ -248,6 +275,13 @@ export default {
   {
     summary()
     {
+      var small = this.$vuetify.breakpoint.xs;
+
+      if (small)
+      {
+        return this.calendar.start.format( this.formats.xs );
+      }
+
       var large = this.$vuetify.breakpoint.lgAndUp;
 
       return this.calendar.summary(false, !large, false, !large);
@@ -390,6 +424,15 @@ export default {
       var eventDialog = this.$refs.eventDialog;
 
       eventDialog.edit(calendarEvent);
+    },
+
+    editPlaceholder(placeholder)
+    {
+      var eventDialog = this.$refs.eventDialog;
+      var calendar = this.$refs.calendar;
+
+      eventDialog.addPlaceholder(placeholder);
+      eventDialog.$once('close', calendar.clearPlaceholder);
     },
 
     add(day)

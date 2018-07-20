@@ -20,7 +20,7 @@
       <v-flex xs6 v-if="showTitle">
 
         <!-- Title -->
-        <slot name="scheduleTitle" v-bind="{copy, schedule, calendarEvent, details}">
+        <slot name="scheduleTitle" v-bind="{schedule, schedule, calendarEvent, details}">
 
           <!-- class="ds-textfield ds-calendar-event-title" -->
           <v-text-field single-line hide-details solo flat
@@ -76,7 +76,7 @@
       <v-flex xs1 v-if="hasCancel"></v-flex>
       <v-flex xs11>
         <ds-schedule
-          :schedule="copy"
+          :schedule="schedule"
           :day="day"
         ></ds-schedule>
       </v-flex>
@@ -159,7 +159,7 @@
             <v-card flat>
               <v-card-text>
                 <ds-schedule-forecast
-                  :schedule="copy"
+                  :schedule="schedule"
                   :day="day"
                 ></ds-schedule-forecast>
               </v-card-text>
@@ -172,7 +172,7 @@
               <v-card-text>
                 <ds-schedule-modifier
                   :description="labels.exclusions"
-                  :modifier="copy.exclude"
+                  :modifier="schedule.exclude"
                 ></ds-schedule-modifier>
               </v-card-text>
             </v-card>
@@ -184,7 +184,7 @@
               <v-card-text>
                 <ds-schedule-modifier
                   :description="labels.inclusions"
-                  :modifier="copy.include"
+                  :modifier="schedule.include"
                 ></ds-schedule-modifier>
               </v-card-text>
             </v-card>
@@ -196,7 +196,7 @@
               <v-card-text>
                 <ds-schedule-modifier
                   :description="labels.cancelled"
-                  :modifier="copy.cancel"
+                  :modifier="schedule.cancel"
                 ></ds-schedule-modifier>
               </v-card-text>
             </v-card>
@@ -219,10 +219,16 @@ export default {
 
   props:
   {
-    schedule:
+    targetSchedule:
     {
       required: true,
       type: Schedule
+    },
+
+    targetDetails:
+    {
+      type: Object,
+      required: true
     },
 
     calendarEvent:
@@ -325,22 +331,21 @@ export default {
 
   data: vm => ({
     tab: 'details',
-    details: {},
-    copy: new Schedule(),
-    type: ''
+    schedule: new Schedule(),
+    details: vm.$dayspan.getDefaultEventDetails()
   }),
 
   watch:
   {
-    calendarEvent:
+    targetSchedule:
     {
-      handler: 'updateDetails',
+      handler: 'updateSchedule',
       immediate: true
     },
 
-    schedule:
+    targetDetails:
     {
-      handler: 'updateCopy',
+      handler: 'updateDetails',
       immediate: true
     }
   },
@@ -349,12 +354,12 @@ export default {
   {
     canSave()
     {
-      return this.details && this.$dayspan.isValidEvent( this.details, this.copy, this.calenderEvent );
+      return this.$dayspan.isValidEvent( this.details, this.schedule, this.calenderEvent );
     },
 
     repeats()
     {
-      return !this.copy.isSingleEvent();
+      return !this.schedule.isSingleEvent();
     },
 
     showTitle()
@@ -368,7 +373,7 @@ export default {
       return this.$dayspan.features.cancel &&
         this.repeats &&
         this.hasCancelled &&
-        !this.copy.cancel.isEmpty();
+        !this.schedule.cancel.isEmpty();
     },
 
     showForecast()
@@ -383,7 +388,7 @@ export default {
       return this.$dayspan.features.exclude &&
         this.repeats &&
         this.hasExclusions &&
-        !this.copy.exclude.isEmpty();
+        !this.schedule.exclude.isEmpty();
     },
 
     showInclusions()
@@ -391,7 +396,7 @@ export default {
       return this.$dayspan.features.include &&
         this.repeats &&
         this.hasInclusions &&
-        !this.copy.include.isEmpty();
+        !this.schedule.include.isEmpty();
     }
   },
 
@@ -414,7 +419,7 @@ export default {
         {
           this.$dayspan.setEventDetails(
             ev.details,
-            ev.calendarEvent.event.data,
+            ev.targetDetails,
             ev.calendarEvent.event,
             ev.calendarEvent
           );
@@ -447,6 +452,12 @@ export default {
 
     actioned(ev)
     {
+      if (ev.type === 'include')
+      {
+        this.targetSchedule.setExcluded( ev.target, false );
+        ev.calendar && ev.calendar.refreshEvents();
+      }
+
       this.$emit('actioned', ev);
     },
 
@@ -455,32 +466,16 @@ export default {
       this.$emit('cancel', this.getEvent('cancel'));
     },
 
-    updateCopy(schedule)
+    updateSchedule(schedule)
     {
-      this.copy = schedule.clone();
-      this.updateDetails();
+      this.schedule = schedule.clone();
+      this.tab = 'details';
     },
 
-    updateDetails(newEvent)
+    updateDetails(details)
     {
-      var calendarEvent = newEvent || this.calendarEvent;
-
+      this.details = this.$dayspan.copyEventDetails( details );
       this.tab = 'details';
-
-      if (calendarEvent)
-      {
-        this.details = this.$dayspan.getEventDetails(
-          calendarEvent.event.data,
-          calendarEvent.event,
-          calendarEvent
-        );
-
-        this.$emit('details', this.getEvent('details'));
-      }
-      else
-      {
-        this.details = this.$dayspan.getDefaultEventDetails();
-      }
     },
 
     getEvent(type, extra = {})
@@ -489,11 +484,12 @@ export default {
 
         type: type,
         day: this.day,
-        schedule: this.copy,
-        target: this.schedule,
+        schedule: this.schedule,
+        target: this.targetSchedule,
+        details: this.details,
+        targetDetails: this.targetDetails,
         calendar: this.calendar,
         calendarEvent: this.calendarEvent,
-        details: this.details,
         handled: false,
         refresh: true,
         create: true,
