@@ -93,15 +93,16 @@ export default {
   {
     durationOptions()
     {
-      var suffix = this.schedule.duration === 1 ? '' : 's';
+      var singular = this.schedule.duration === 1;
+
       var duringDay = [
-        { text: 'minute' + suffix, value: 'minutes' },
-        { text: 'hour' + suffix, value: 'hours' }
+        { text: singular ? this.labels.minute : this.labels.minutes, value: 'minutes' },
+        { text: singular ? this.labels.hour : this.labels.hours, value: 'hours' }
       ];
       var allDay = [
-        { text: 'day' + suffix, value: 'days' },
-        { text: 'week' + suffix, value: 'weeks' },
-        { text: 'month' + suffix, value: 'months' }
+        { text: singular ? this.labels.day : this.labels.days, value: 'days' },
+        { text: singular ? this.labels.week : this.labels.weeks, value: 'weeks' },
+        { text: singular ? this.labels.month : this.labels.months, value: 'months' }
       ];
 
       return this.allDay ? allDay : duringDay.concat( allDay );

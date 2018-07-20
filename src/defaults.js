@@ -359,7 +359,17 @@ export default {
   dsScheduleTimes: {
     defaultTime: '08:00',
     labels: {
-      all:        'All day'
+      all:        'All day',
+      minute:     'minute',
+      minutes:    'minutes',
+      hour:       'hour',
+      hours:      'hours',
+      day:        'day',
+      days:       'days',
+      week:       'week',
+      weeks:      'weeks',
+      month:      'month',
+      months:     'months'
     }
   },
 
