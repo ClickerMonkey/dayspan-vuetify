@@ -43,7 +43,7 @@
           :key="index"
           @add="addTime"
           @remove="removeTime"
-          @input="triggerChange"
+          @change="changeTime"
         ></ds-schedule-time>
 
       </template>
@@ -140,6 +140,22 @@ export default {
 
   methods:
   {
+    changeTime(ev)
+    {
+      ev.schedule = this.schedule;
+      ev.updated = false;
+
+      this.$emit('update', ev);
+
+      if (!ev.handled && ev.schedule)
+      {
+        ev.updated = ev.schedule.moveTime( ev.time, ev.next );
+        ev.handled = true;
+      }
+
+      this.$emit('change', ev);
+    },
+
     addTime(ev)
     {
       ev.time = Time.parse( this.defaultTime );

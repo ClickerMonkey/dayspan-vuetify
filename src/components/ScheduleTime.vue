@@ -126,22 +126,7 @@ export default {
       },
       set(time)
       {
-        var parsed = Time.parse(time);
-
-        if (parsed)
-        {
-          if (this.mutate)
-          {
-            this.value.hour = parsed.hour;
-            this.value.minute = parsed.minute;
-            this.value.second = parsed.second;
-            this.value.millisecond = parsed.millisecond;
-
-            parsed = this.value;
-          }
-
-          this.$emit('input', parsed);
-        }
+        this.setTime( time );
       }
     }
   },
@@ -158,6 +143,33 @@ export default {
       this.$emit('remove', this.getEvent('remove'));
     },
 
+    setTime(time)
+    {
+      var parsed = Time.parse(time);
+
+      if (parsed)
+      {
+        var ev = this.getEvent('change', { next: parsed });
+
+        this.$emit('change', ev);
+
+        if (!ev.handled)
+        {
+          if (ev.mutate)
+          {
+            ev.time.hour = ev.next.hour;
+            ev.time.minute = ev.next.minute;
+            ev.time.second = ev.next.second;
+            ev.time.millisecond = ev.next.millisecond;
+
+            parsed = ev.next;
+          }
+
+          this.$emit('input', parsed);
+        }
+      }
+    },
+
     getEvent(type, extra = {})
     {
       return fn.extend({
@@ -165,6 +177,7 @@ export default {
         type: type,
         time: this.value,
         index: this.index,
+        mutate: this.mutate,
         handled: false,
         $vm: this,
         $element: this.$el
