@@ -2,7 +2,8 @@
 
   <v-dialog
     v-bind="dialogProps"
-    v-model="visible">
+    v-model="visible"
+    :fullscreen="$dayspan.fullscreenDialogs">
 
     <v-card v-if="hasData">
 

@@ -2,7 +2,8 @@
 
   <v-dialog
     v-bind="dialogProps"
-    v-model="open">
+    v-model="open"
+    :fullscreen="$dayspan.fullscreenDialogs">
 
     <v-card v-if="schedule && details">
 

@@ -154,7 +154,8 @@
 
         <v-dialog
           v-model="optionsVisible"
-          v-bind="optionsDialog">
+          v-bind="optionsDialog"
+          :fullscreen="$dayspan.fullscreenDialogs">
           <v-list>
             <template v-for="option in options">
               <v-list-tile :key="option.text" @click="chooseOption( option )">
@@ -170,7 +171,8 @@
 
         <v-dialog
           v-model="promptVisible"
-          v-bind="promptDialog">
+          v-bind="promptDialog"
+          :fullscreen="$dayspan.fullscreenDialogs">
           <v-card>
             <v-card-title>{{ promptQuestion }}</v-card-title>
             <v-card-actions>

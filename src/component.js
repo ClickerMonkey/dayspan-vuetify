@@ -86,6 +86,19 @@ export default {
     defaults: Defaults
   },
 
+  computed:
+  {
+    fullscreenPopovers()
+    {
+      return this.$vuetify.breakpoint.xs;
+    },
+
+    fullscreenDialogs()
+    {
+      return this.$vuetify.breakpoint.xs;
+    }
+  },
+
   methods:
   {
 
