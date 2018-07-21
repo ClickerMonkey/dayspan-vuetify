@@ -314,14 +314,14 @@ export default {
   {
     summary()
     {
-      var small = this.$vuetify.breakpoint.xs;
+      let small = this.$vuetify.breakpoint.xs;
 
       if (small)
       {
         return this.calendar.start.format( this.formats.xs );
       }
 
-      var large = this.$vuetify.breakpoint.lgAndUp;
+      let large = this.$vuetify.breakpoint.lgAndUp;
 
       return this.calendar.summary(false, !large, false, !large);
     },
@@ -343,7 +343,7 @@ export default {
 
     toolbarStyle()
     {
-      var large = this.$vuetify.breakpoint.lgAndUp;
+      let large = this.$vuetify.breakpoint.lgAndUp;
 
       return large ? this.styles.toolbar.large : this.styles.toolbar.small;
     },
@@ -418,16 +418,16 @@ export default {
 
     rebuild(aroundDay)
     {
-      var cal = this.calendar;
-      var type = this.currentType || this.types[ 2 ];
+      let cal = this.calendar;
+      let type = this.currentType || this.types[ 2 ];
 
       if (this.isType( type, aroundDay ))
       {
         return;
       }
 
-      var listTimes = type.type === Units.DAY || type.type === Units.WEEK;
-      var input = {
+      let listTimes = type.type === Units.DAY || type.type === Units.WEEK;
+      let input = {
         type: type.type,
         size: type.size,
         around: aroundDay,
@@ -472,17 +472,17 @@ export default {
 
     edit(calendarEvent)
     {
-      var eventDialog = this.$refs.eventDialog;
+      let eventDialog = this.$refs.eventDialog;
 
       eventDialog.edit(calendarEvent);
     },
 
     editPlaceholder(createEdit)
     {
-      var placeholder = createEdit.calendarEvent;
-      var details = createEdit.details;
-      var eventDialog = this.$refs.eventDialog;
-      var calendar = this.$refs.calendar;
+      let placeholder = createEdit.calendarEvent;
+      let details = createEdit.details;
+      let eventDialog = this.$refs.eventDialog;
+      let calendar = this.$refs.calendar;
 
       eventDialog.addPlaceholder( placeholder, details );
       eventDialog.$once('close', calendar.clearPlaceholder);
@@ -495,9 +495,9 @@ export default {
         return;
       }
 
-      var eventDialog = this.$refs.eventDialog;
-      var calendar = this.$refs.calendar;
-      var useDialog = !this.hasCreatePopover;
+      let eventDialog = this.$refs.eventDialog;
+      let calendar = this.$refs.calendar;
+      let useDialog = !this.hasCreatePopover;
 
       calendar.addPlaceholder( day, true, useDialog );
 
@@ -515,10 +515,10 @@ export default {
         return;
       }
 
-      var eventDialog = this.$refs.eventDialog;
-      var calendar = this.$refs.calendar;
-      var useDialog = !this.hasCreatePopover;
-      var at = dayHour.day.withHour( dayHour.hour );
+      let eventDialog = this.$refs.eventDialog;
+      let calendar = this.$refs.calendar;
+      let useDialog = !this.hasCreatePopover;
+      let at = dayHour.day.withHour( dayHour.hour );
 
       calendar.addPlaceholder( at, false, useDialog );
 
@@ -536,23 +536,35 @@ export default {
         return;
       }
 
-      var eventDialog = this.$refs.eventDialog;
-      var calendar = this.$refs.calendar;
-      var useDialog = !this.hasCreatePopover;
+      let eventDialog = this.$refs.eventDialog;
+      let calendar = this.$refs.calendar;
+      let useDialog = !this.hasCreatePopover;
 
-      calendar.addPlaceholder( this.$dayspan.today, true, useDialog );
+      let day = this.$dayspan.today;
+
+      if (!this.calendar.filled.matchesDay( day ))
+      {
+        let first = this.calendar.days[ 0 ];
+        let last = this.calendar.days[ this.calendar.days.length - 1 ];
+        let firstDistance = Math.abs( first.currentOffset );
+        let lastDistance = Math.abs( last.currentOffset );
+
+        day = firstDistance < lastDistance ? first: last;
+      }
+
+      calendar.addPlaceholder( day, true, useDialog );
 
       if (useDialog)
       {
-        eventDialog.addToday();
+        eventDialog.add( day );
         eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
 
     handleAdd(addEvent)
     {
-      var eventDialog = this.$refs.eventDialog;
-      var calendar = this.$refs.calendar;
+      let eventDialog = this.$refs.eventDialog;
+      let calendar = this.$refs.calendar;
 
       addEvent.handled = true;
 
@@ -569,16 +581,16 @@ export default {
 
     handleMove(moveEvent)
     {
-      var calendarEvent = moveEvent.calendarEvent;
-      var target = moveEvent.target;
-      var targetStart = target.start;
-      var sourceStart = calendarEvent.time.start;
-      var schedule = calendarEvent.schedule;
-      var options = [];
+      let calendarEvent = moveEvent.calendarEvent;
+      let target = moveEvent.target;
+      let targetStart = target.start;
+      let sourceStart = calendarEvent.time.start;
+      let schedule = calendarEvent.schedule;
+      let options = [];
 
       moveEvent.handled = true;
 
-      var callbacks = {
+      let callbacks = {
         cancel: () => {
           moveEvent.clearPlaceholder()
         },
