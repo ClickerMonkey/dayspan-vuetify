@@ -393,6 +393,12 @@ export default {
 
   dsWeeksView: {
     weekdays: moment.weekdaysShort()
+  },
+
+  dsGestures: {
+    minDistance: 50,
+    maxDistance: 200,
+    maxWander: 0.1
   }
 
 };

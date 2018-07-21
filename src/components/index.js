@@ -1,4 +1,6 @@
 
+export { default as DsGestures } from './Gestures';
+
 export { default as DsDay } from './Day';
 export { default as DsDayRow } from './DayRow';
 export { default as DsDaysView } from './DaysView';

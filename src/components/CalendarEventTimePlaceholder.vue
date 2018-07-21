@@ -69,6 +69,16 @@ export default {
     hasPopover()
     {
       return !!this.$scopedSlots.eventCreatePopover;
+    },
+
+    isStart()
+    {
+      return this.placeholder.day.sameDay( this.day );
+    },
+
+    autoOpen()
+    {
+      return this.hasPopover && this.placeholderForCreate && this.isStart;
     }
   },
 
@@ -84,7 +94,7 @@ export default {
 
   mounted()
   {
-    if (this.hasPopover && this.placeholderForCreate)
+    if (this.autoOpen)
     {
       this.menu = true;
     }
@@ -99,7 +109,10 @@ export default {
 
     openPopover(open)
     {
-      this.menu = open;
+      if (this.isStart)
+      {
+        this.menu = open;
+      }
     },
 
     triggerClearPlaceholder(open)

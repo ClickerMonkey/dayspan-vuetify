@@ -116,21 +116,27 @@
   <v-content class="ds-expand">
     <v-container fluid fill-height class="ds-calendar-container">
 
-      <slot name="calendarAppCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
+      <ds-gestures
+        @swipeleft="next"
+        @swiperight="prev">
 
-        <ds-calendar ref="calendar"
-          v-bind="{$scopedSlots}"
-          v-on="$listeners"
-          :calendar="calendar"
-          @add="add"
-          @add-at="addAt"
-          @edit="edit"
-          @view-day="viewDay"
-          @added="handleAdd"
-          @moved="handleMove"
-        ></ds-calendar>
+        <slot name="calendarAppCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
 
-      </slot>
+          <ds-calendar ref="calendar"
+            v-bind="{$scopedSlots}"
+            v-on="$listeners"
+            :calendar="calendar"
+            @add="add"
+            @add-at="addAt"
+            @edit="edit"
+            @view-day="viewDay"
+            @added="handleAdd"
+            @moved="handleMove"
+          ></ds-calendar>
+
+        </slot>
+
+      </ds-gestures>
 
       <slot name="calendarAppEventDialog" v-bind="{$scopedSlots, $listeners, calendar, eventFinish}">
 
