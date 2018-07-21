@@ -183,10 +183,9 @@ export default {
 
         this.$emit('remove', ev);
 
-        if (!ev.handled && ev.schedule)
+        if (!ev.handled && ev.schedule && ev.time)
         {
-          ev.schedule.times.splice( ev.index, 1 );
-          ev.handled = true;
+          ev.handled = ev.schedule.removeTime( ev.time );
         }
 
         this.$emit('change', ev);

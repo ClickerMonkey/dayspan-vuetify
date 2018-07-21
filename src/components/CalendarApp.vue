@@ -180,8 +180,7 @@
 
         <v-dialog
           v-model="promptVisible"
-          v-bind="promptDialog"
-          :fullscreen="$dayspan.fullscreenDialogs">
+          v-bind="promptDialog">
           <v-card>
             <v-card-title>{{ promptQuestion }}</v-card-title>
             <v-card-actions>

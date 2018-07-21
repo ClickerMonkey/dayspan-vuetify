@@ -453,7 +453,7 @@ export default {
       {
         if (ev.target && ev.schedule)
         {
-          ev.target.set( ev.schedule.toInput() );
+          ev.target.set( ev.schedule );
         }
 
         if (ev.calendarEvent)

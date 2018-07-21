@@ -133,7 +133,7 @@ export default {
 
       if (!ev.handled && ev.target && ev.schedule)
       {
-        ev.target.set( ev.schedule.toInput() );
+        ev.target.set( ev.schedule );
         ev.handled = true;
       }
 

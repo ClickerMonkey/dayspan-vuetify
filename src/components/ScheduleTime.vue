@@ -157,10 +157,7 @@ export default {
         {
           if (ev.mutate)
           {
-            ev.time.hour = ev.next.hour;
-            ev.time.minute = ev.next.minute;
-            ev.time.second = ev.next.second;
-            ev.time.millisecond = ev.next.millisecond;
+            ev.time.set( ev.next );
 
             parsed = ev.next;
           }
