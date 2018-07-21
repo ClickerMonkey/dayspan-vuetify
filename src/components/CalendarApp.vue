@@ -37,7 +37,16 @@
       :calendar="calendar">
 
       <v-tooltip bottom>
-        <v-btn depressed @click="setToday" slot="activator">TODAY</v-btn>
+        <v-btn slot="activator"
+          class="ds-skinny-button"
+          depressed
+          :icon="$vuetify.breakpoint.smAndDown"
+          @click="setToday">
+
+          <span v-if="$vuetify.breakpoint.mdAndUp">{{ labels.today }}</span>
+          <v-icon v-else>{{ labels.todayIcon }}</v-icon>
+
+        </v-btn>
         <span>{{ todayDate }}</span>
       </v-tooltip>
 
@@ -50,7 +59,7 @@
 
       <v-tooltip bottom>
         <v-btn slot="activator"
-          icon depressed class="ds-light-forecolor"
+          icon depressed class="ds-light-forecolor ds-skinny-button"
           @click="prev" >
           <v-icon>keyboard_arrow_left</v-icon>
         </v-btn>
@@ -66,7 +75,7 @@
       <v-tooltip bottom>
         <v-btn slot="activator"
           icon depressed
-          class="ds-light-forecolor"
+          class="ds-light-forecolor ds-skinny-button"
           @click="next">
           <v-icon>keyboard_arrow_right</v-icon>
         </v-btn>
@@ -719,6 +728,11 @@ export default {
   .v-toolbar__content {
     border-bottom: 1px solid rgb(224, 224, 224);
   }
+}
+
+.ds-skinny-button {
+  margin-left: 2px !important;
+  margin-right: 2px !important;
 }
 
 .ds-expand {

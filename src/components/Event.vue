@@ -113,42 +113,60 @@
               <v-card-text>
 
                 <!-- Location -->
-                <v-text-field v-if="$dayspan.supports.location"
-                  single-line hide-details solo flat
-                  prepend-icon="location_on"
-                  :label="labels.location"
-                  v-model="details.location"
-                ></v-text-field>
+                <slot name="eventDetailsLocation" v-bind="slotData">
+                  <v-text-field v-if="$dayspan.supports.location"
+                    single-line hide-details solo flat
+                    prepend-icon="location_on"
+                    :label="labels.location"
+                    v-model="details.location"
+                  ></v-text-field>
+                </slot>
 
                 <!-- Description -->
-                <v-textarea v-if="$dayspan.supports.description"
-                  hide-details single-line solo flat
-                  prepend-icon="subject"
-                  :label="labels.description"
-                  v-model="details.description"
-                ></v-textarea>
-
-                <!-- Color -->
-                <v-select v-if="$dayspan.supports.color"
-                  single-line hide-details solo flat
-                  prepend-icon="invert_colors"
-                  :items="$dayspan.colors"
-                  :color="details.color"
-                  v-model="details.color">
-                  <template slot="item" slot-scope="{ item }">
-                    <v-list-tile-content>
-                      <div class="ds-color-option" :style="{backgroundColor: item.value}" v-text="item.text"></div>
-                    </v-list-tile-content>
-                  </template>
-                </v-select>
+                <slot name="eventDetailsDescription" v-bind="slotData">
+                  <v-textarea v-if="$dayspan.supports.description"
+                    hide-details single-line solo flat
+                    prepend-icon="subject"
+                    :label="labels.description"
+                    v-model="details.description"
+                  ></v-textarea>
+                </slot>
 
                 <!-- Calendar -->
-                <v-text-field v-if="$dayspan.supports.calendar"
-                  single-line hide-details solo flat readonly
-                  prepend-icon="event"
-                  :label="labels.calendar"
-                  v-model="details.calendar"
-                ></v-text-field>
+                <slot name="eventDetailsCalendar" v-bind="slotData">
+                  <v-text-field v-if="$dayspan.supports.calendar"
+                    single-line hide-details solo flat readonly
+                    prepend-icon="event"
+                    :label="labels.calendar"
+                    v-model="details.calendar"
+                  ></v-text-field>
+                </slot>
+
+                <!-- Color -->
+                <slot name="eventDetailsColor" v-bind="slotData">
+                  <v-select v-if="$dayspan.supports.color"
+                    single-line hide-details solo flat
+                    prepend-icon="invert_colors"
+                    :items="$dayspan.colors"
+                    :color="details.color"
+                    v-model="details.color">
+                    <template slot="item" slot-scope="{ item }">
+                      <v-list-tile-content>
+                        <div class="ds-color-option" :style="{backgroundColor: item.value}" v-text="item.text"></div>
+                      </v-list-tile-content>
+                    </template>
+                  </v-select>
+                </slot>
+
+                <!-- Busy -->
+                <slot name="eventDetailsBusy" v-bind="slotData">
+                  <v-select v-if="$dayspan.supports.busy"
+                    single-line hide-details solo flat
+                    prepend-icon="work"
+                    :items="busyOptions"
+                    v-model="details.busy"
+                  ></v-select>
+                </slot>
 
               </v-card-text>
             </v-card>
@@ -326,6 +344,14 @@ export default {
       default() {
         return this.$dsDefaults().hasCancelled;
       }
+    },
+
+    busyOptions:
+    {
+      type: Array,
+      default() {
+        return this.$dsDefaults().busyOptions;
+      }
     }
   },
 
@@ -352,6 +378,21 @@ export default {
 
   computed:
   {
+    slotData()
+    {
+      return {
+        targetSchedule: this.targetSchedule,
+        targetDetails: this.targetDetails,
+        schedule: this.schedule,
+        details: this.details,
+        busyOptions: this.busyOptions,
+        day: this.day,
+        calendar: this.calendar,
+        calendarEvent: this.calendarEvent,
+        labels: this.labels
+      };
+    },
+
     canSave()
     {
       return this.$dayspan.isValidEvent( this.details, this.schedule, this.calenderEvent );

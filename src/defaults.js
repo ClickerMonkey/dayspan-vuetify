@@ -38,7 +38,9 @@ export default {
       moveAll: 'Move all event occurrences',
       moveDuplicate: 'Add event occurrence',
       promptConfirm: 'Yes',
-      promptCancel: 'No'
+      promptCancel: 'No',
+      today: 'TODAY',
+      todayIcon: 'today'
     },
     styles: {
       toolbar: {
@@ -221,7 +223,11 @@ export default {
         added:      'Added',
         cancelled:  'Cancelled'
       }
-    }
+    },
+    busyOptions: [
+      {value: true, text: 'Busy'},
+      {value: false, text: 'Free'}
+    ]
   },
 
   dsScheduleActions: {

@@ -2,6 +2,7 @@
 
   <v-menu
     class="ds-calendar-event"
+    :content-class="contentClass"
     :disabled="!hasPopover"
     :style="style"
     v-model="menu"
@@ -94,6 +95,11 @@ export default {
     hasPopover()
     {
       return !!this.$scopedSlots.eventPopover;
+    },
+
+    contentClass()
+    {
+      return this.$dayspan.fullscreenPopovers ? 'ds-fullscreen' : '';
     },
 
     details()
@@ -237,6 +243,19 @@ export default {
 
   .ds-calendar-event-span {
     width: 100%;
+    height: 100%;
+  }
+}
+
+.ds-fullscreen {
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  max-height: auto !important;
+
+  /deep/ > * {
     height: 100%;
   }
 }

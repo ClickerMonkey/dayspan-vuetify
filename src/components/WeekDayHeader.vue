@@ -153,13 +153,17 @@ export default {
 
   .ds-week-date {
     font-size: 40px;
-    line-height: 44px;
+    line-height: 36px;
     color: black;
     padding-left: 8px;
 
     &:hover {
       text-decoration: underline;
     }
+  }
+
+  .ds-all-events {
+    margin-top: 8px;
   }
 
   .ds-week-weekday {
