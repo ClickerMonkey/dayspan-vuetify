@@ -7,7 +7,7 @@
       :nudge-width="60"
       v-model="startMenu">
 
-      <v-btn flat
+      <v-btn depressed
         class="ds-button-tall ma-0 mb-2"
         slot="activator">
         {{ startText }}
@@ -38,7 +38,7 @@
       :nudge-width="60"
       v-model="endMenu">
 
-      <v-btn flat
+      <v-btn depressed
         class="ds-button-tall ma-0 mb-2"
         slot="activator">
         {{ endText }}

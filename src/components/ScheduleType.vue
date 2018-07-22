@@ -4,9 +4,11 @@
     :items="types"
     :hint="typeHint"
     :hide-details="isNotCustom"
+    :append-outer-icon="customIcon"
     v-model="type"
     item-text="label"
     item-value="value"
+    @click:append-outer="custom"
   ></v-select>
 
 </template>
@@ -30,7 +32,9 @@ export default {
     {
       required: true,
       type: Schedule
-    }
+    },
+
+
   },
 
   data: () => ({
@@ -50,7 +54,6 @@ export default {
 
   computed:
   {
-
     isNotCustom()
     {
       return this.type !== 'custom';
@@ -72,6 +75,11 @@ export default {
         label: pattern.describe( this.day ),
         value: pattern.name
       }));
+    },
+
+    customIcon()
+    {
+      return this.type === 'custom' ? 'edit' : '';
     }
   },
 
@@ -105,6 +113,11 @@ export default {
       this.$emit('change', newType);
     },
 
+    custom()
+    {
+      this.$emit('custom', this);
+    },
+
     updateType()
     {
       this.applying = false;
@@ -123,5 +136,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
+
+.v-input__icon--append-outer {
+  color: black;
+}
 
 </style>

@@ -1,8 +1,11 @@
 <template>
 
-  <span>
-    <v-layout row>
-      <v-flex xs1 v-if="hasCancel">
+  <div class="ds-event"
+    :class="classes">
+
+    <div class="ds-event-header ds-event-area">
+
+      <div class="ds-event-cancel" v-if="hasCancel">
 
         <!-- Cancel -->
         <slot name="scheduleCancel" v-bind="{cancel, labels}">
@@ -16,30 +19,15 @@
 
         </slot>
 
-      </v-flex>
-      <v-flex xs6 v-if="showTitle">
+      </div>
 
-        <!-- Title -->
-        <slot name="scheduleTitle" v-bind="{schedule, schedule, calendarEvent, details}">
-
-          <!-- class="ds-textfield ds-calendar-event-title" -->
-          <v-text-field single-line hide-details solo flat
-            :label="labels.title"
-            v-model="details.title"
-          ></v-text-field>
-
-        </slot>
-
-      </v-flex>
-      <v-flex xs5 v-if="hasSave">
-
-        <v-spacer></v-spacer>
+      <div class="ds-event-actions">
 
         <!-- Save -->
         <slot name="scheduleSave" v-bind="{hasSave, save, labels}">
 
           <v-btn
-            class="ds-button-tall ml-3" depressed
+            class="ds-button-tall ml-3 mt-0 mb-2" depressed
             color="primary"
             :disabled="!canSave"
             @click.stop="save">
@@ -61,26 +49,37 @@
             :calendar-event="calendarEvent"
             :calendar="calendar"
             @finish="actioned">
-            <v-btn flat class="ds-button-tall ml-0">
+            <v-btn class="ds-button-tall ml-1 mt-0 mb-2" depressed>
               More actions...
             </v-btn>
           </ds-schedule-actions>
 
         </slot>
 
-      </v-flex>
-    </v-layout>
+      </div>
 
-    <!-- Schedule -->
-    <v-layout row>
-      <v-flex xs1 v-if="hasCancel"></v-flex>
-      <v-flex xs11>
-        <ds-schedule
-          :schedule="schedule"
-          :day="day"
-        ></ds-schedule>
-      </v-flex>
-    </v-layout>
+      <!-- Title -->
+      <slot name="scheduleTitle" v-bind="{schedule, schedule, calendarEvent, details}">
+
+        <!-- class="ds-textfield ds-calendar-event-title" -->
+        <v-text-field single-line hide-details solo flat
+          class="ds-event-title"
+          :label="labels.title"
+          v-model="details.title"
+        ></v-text-field>
+
+      </slot>
+
+    </div>
+
+    <div class="ds-event-body ds-event-area">
+
+      <ds-schedule
+        :schedule="schedule"
+        :day="day"
+      ></ds-schedule>
+
+    </div>
 
     <!-- Tabs -->
     <v-layout row v-if="hasTabs">
@@ -223,7 +222,7 @@
         </v-tabs>
       </v-flex>
     </v-layout>
-  </span>
+  </div>
 
 </template>
 
@@ -393,6 +392,14 @@ export default {
       };
     },
 
+    classes()
+    {
+      return {
+        'ds-has-cancel': this.hasCancel,
+        'ds-event-small': this.$vuetify.breakpoint.smAndDown
+      };
+    },
+
     canSave()
     {
       return this.$dayspan.isValidEvent( this.details, this.schedule, this.calenderEvent );
@@ -557,6 +564,62 @@ export default {
   width: 100%;
   color: white;
   padding: 4px;
+}
+
+.ds-button-tall {
+  height: 48px;
+}
+
+.ds-event {
+
+  &.ds-has-cancel {
+
+    .ds-event-area {
+      margin-left: 60px;
+    }
+  }
+
+  &.ds-event-small {
+
+    &.ds-has-cancel {
+
+      .ds-event-area {
+        margin-left: 0px;
+      }
+      .ds-event-header {
+        margin-left: 60px;
+        margin-bottom: 58px;
+      }
+    }
+
+    .ds-event-title {
+      position: absolute;
+      right: 8px;
+      left: -60px;
+      top: 60px;
+    }
+
+    .ds-event-body {
+      clear: both;
+    }
+  }
+
+  .ds-event-area {
+    position: relative;
+  }
+
+  .ds-event-actions {
+    float: right;
+  }
+
+  .ds-event-header {
+    min-height: 60px;
+  }
+
+  .ds-event-cancel {
+    position: absolute;
+    left: -60px;
+  }
 }
 
 </style>

@@ -210,6 +210,7 @@ export default {
   width: 100% !important;
   height: 100% !important;
   max-height: auto !important;
+  max-width: 100% !important;
 
   /deep/ > * {
     height: 100%;

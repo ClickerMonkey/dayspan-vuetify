@@ -1,33 +1,42 @@
 <template>
-  <div>
 
-    <v-text-field
-      single-line hide-details solo flat
-      class="time"
-      type="time"
-      v-model="time"
-    ></v-text-field>
+  <div class="ds-time-row">
 
-    <v-tooltip bottom v-if="showRemove">
+    <div class="ds-time-cell">
 
-      <v-btn slot="activator" icon
-        class="action-remove"
-        :color="colors.remove"
-        @click="removeTime"><v-icon>{{ icons.remove }}</v-icon></v-btn>
+      <v-text-field
+        single-line hide-details solo flat
+        type="time"
+        v-model="time"
+      ></v-text-field>
 
-      <span v-html="labels.remove"></span>
+    </div>
 
-    </v-tooltip>
-    <v-tooltip bottom v-if="showAdd">
+    <div class="ds-time-cell">
 
-      <v-btn slot="activator" icon
-        class="action-add"
-        :color="colors.add"
-        @click="addTime"><v-icon>{{ icons.add }}</v-icon></v-btn>
+      <v-tooltip bottom v-if="showRemove">
 
-      <span v-html="labels.add"></span>
+        <v-btn slot="activator" icon
+          class="action-remove"
+          :color="colors.remove"
+          @click="removeTime"><v-icon>{{ icons.remove }}</v-icon></v-btn>
 
-    </v-tooltip>
+        <span v-html="labels.remove"></span>
+
+      </v-tooltip>
+
+      <v-tooltip bottom v-if="showAdd">
+
+        <v-btn slot="activator" icon
+          class="action-add"
+          :color="colors.add"
+          @click="addTime"><v-icon>{{ icons.add }}</v-icon></v-btn>
+
+        <span v-html="labels.add"></span>
+
+      </v-tooltip>
+
+    </div>
 
   </div>
 
@@ -187,9 +196,18 @@ export default {
 
 <style scoped lang="scss">
 
-.time {
-  width: 160px;
-  display: inline-block;
+.ds-time-row {
+  display: flex;
+
+  .ds-time-cell {
+    padding-right: 8px;
+    flex: 1 0 0px;
+
+    &:last-child {
+      margin-right: -8px;
+    }
+  }
 }
+
 
 </style>

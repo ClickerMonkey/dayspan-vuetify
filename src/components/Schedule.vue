@@ -1,6 +1,9 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs12 v-if="showRange">
+
+  <div class="ds-schedule"
+    :class="classes">
+
+    <div class="ds-schedule-span" v-if="showRange">
 
       <!-- Span -->
       <slot name="scheduleSpan" v-bind="{schedule, day}">
@@ -12,35 +15,32 @@
 
       </slot>
 
-    </v-flex>
-    <v-flex xs7>
+    </div>
 
-      <!-- Type -->
-      <slot name="scheduleType" v-bind="{schedule, day, type}">
 
-        <ds-schedule-type
-          :day="day"
-          :schedule="schedule"
-          @change="setType"
-        ></ds-schedule-type>
+    <div class="ds-schedule-type-line">
 
-      </slot>
+      <div class="ds-schedule-type">
 
-    </v-flex>
-    <v-flex xs5 v-if="isCustom">
+        <!-- Type -->
+        <slot name="scheduleType" v-bind="{schedule, day, setType, custom}">
 
-      <!-- Custom -->
-      <slot name="scheduleCustom" v-bind="{schedule, day, custom, labels}">
+          <ds-schedule-type
+            :day="day"
+            :schedule="schedule"
+            @change="setType"
+            @custom="custom"
+          ></ds-schedule-type>
 
-        <v-btn depressed
-          class="ds-button-tall"
-          @click.stop="custom">
-          <span v-html="labels.editCustom"></span>
-        </v-btn>
+        </slot>
 
-      </slot>
+      </div>
 
-    </v-flex>
+    </div>
+
+  <v-layout row wrap>
+
+
     <v-flex xs12>
 
       <!-- Times -->
@@ -65,6 +65,8 @@
 
     </v-flex>
   </v-layout>
+
+  </div>
 </template>
 
 <script>
@@ -108,19 +110,21 @@ export default {
   },
 
   data: vm => ({
-    type: ''
+
   }),
 
   computed:
   {
-    isCustom()
-    {
-      return this.type === 'custom';
-    },
-
     showRange()
     {
       return this.allowsRange && !this.schedule.isSingleEvent();
+    },
+
+    classes()
+    {
+      return {
+        'ds-schedule-small': this.$vuetify.breakpoint.smAndDown
+      };
     }
   },
 
@@ -133,8 +137,6 @@ export default {
 
     setType(type)
     {
-      this.type = type;
-
       this.$emit('type', type);
     }
   }
@@ -142,5 +144,21 @@ export default {
 </script>
 
 <style lang="scss">
+
+.ds-schedule {
+
+  .ds-schedule-type {
+    max-width: 436px;
+    padding-right: 8px;
+  }
+
+  &.ds-schedule-small {
+
+    .ds-schedule-type {
+      width: 100%;
+    }
+  }
+
+}
 
 </style>

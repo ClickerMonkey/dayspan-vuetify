@@ -1,41 +1,52 @@
 <template>
-  <v-layout row wrap>
-    <v-flex xs2>
+  <div class="ds-schedule-times">
 
-      <v-checkbox
-        ref="allDayCheckbox"
-        hide-details
-        class="ma-2"
-        :label="labels.all"
-        v-model="allDay"
-      ></v-checkbox>
+    <div class="ds-time-row">
 
-    </v-flex>
-    <v-flex xs10>
+      <div class="ds-time-cell">
 
-      <v-text-field
-        single-line hide-details solo flat
-        class="time-control-width"
-        type="number"
-        v-model.number="schedule.duration"
-        @input="triggerChange"
-      ></v-text-field>
+        <v-checkbox
+          ref="allDayCheckbox"
+          hide-details
+          class="ma-2"
+          :label="labels.all"
+          v-model="allDay"
+        ></v-checkbox>
 
-      <v-select
-        single-line hide-details solo flat
-        class="time-control-width pl-1 mt-0"
-        :items="durationOptions"
-        v-model="schedule.durationUnit"
-        @input="triggerChange"
-      ></v-select>
+      </div>
 
-    </v-flex>
+      <div class="ds-time-cell">
 
-    <v-flex xs10 offset-xs2 v-if="!allDay">
+        <v-text-field
+          single-line hide-details solo flat
+          type="number"
+          v-model.number="schedule.duration"
+          @input="triggerChange"
+        ></v-text-field>
 
-      <template v-for="(time, index) in schedule.times">
+      </div>
+
+      <div class="ds-time-cell">
+
+        <v-select
+          single-line hide-details solo flat
+          :items="durationOptions"
+          v-model="schedule.durationUnit"
+          @input="triggerChange"
+        ></v-select>
+
+      </div>
+
+    </div>
+
+    <div v-if="!allDay">
+
+      <div class="ds-time-row" v-for="(time, index) in schedule.times">
+
+        <div class="ds-time-cell"></div>
 
         <ds-schedule-time
+          class="ds-time-cell double"
           :index="index"
           :show-add="isLastTime( index )"
           :show-remove="hasTimes"
@@ -46,11 +57,11 @@
           @change="changeTime"
         ></ds-schedule-time>
 
-      </template>
+      </div>
 
-    </v-flex>
+    </div>
 
-  </v-layout>
+  </div>
 
 </template>
 
@@ -220,9 +231,22 @@ export default {
 
 <style scoped lang="scss">
 
-.time-control-width {
-  display: inline-block !important;
-  width: 160px !important;
+.ds-schedule-times {
+  max-width: 436px;
+
+  .ds-time-row {
+    display: flex;
+
+    .ds-time-cell {
+      padding-right: 8px;
+      flex: 1 0 0px;
+
+      &.double {
+        padding-right: 16px;
+        flex: 2 0 0px;
+      }
+    }
+  }
 }
 
 </style>
