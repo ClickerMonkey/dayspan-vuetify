@@ -74,9 +74,9 @@ export default {
       this.add( this.$dayspan.today );
     },
 
-    add(day)
+    add(day, days)
     {
-      this.addSchedule( day, Schedule.forDay( day ) );
+      this.addSchedule( day, Schedule.forDay( day, days ) );
     },
 
     addAt(day, hour)

@@ -1,6 +1,7 @@
 <template>
 
-  <div class="ds-day" :class="classesDay"
+  <div class="ds-day"
+    :class="classesDay"
     @mouseenter="mouseEnterDay"
     @mouseleave="mouseLeaveDay"
     @mousemove.stop="mouseMove"

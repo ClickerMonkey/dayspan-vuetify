@@ -57,7 +57,8 @@ export default {
 
     index:
     {
-      type: Number
+      type: Number,
+      default: 0
     },
 
     popoverProps:

@@ -10,7 +10,11 @@
     <div class="ds-calendar-event"
       slot="activator"
       :style="style"
-      @click.stop="editCheck">
+      @click.stop="editCheck"
+      @mouseenter="mouseEnterEvent"
+      @mouseleave="mouseLeaveEvent"
+      @mousedown="mouseDownEvent"
+      @mouseup="mouseUpEvent">
 
       <span v-if="showName">
         <slot name="eventTitle" v-bind="{calendarEvent, hasPrefix, getPrefix, details}">
@@ -37,7 +41,7 @@
 </template>
 
 <script>
-import { CalendarEvent, Calendar, Day } from 'dayspan';
+import { CalendarEvent, Calendar, Day, Functions as fn } from 'dayspan';
 
 
 export default {
@@ -113,11 +117,13 @@ export default {
 
     showName()
     {
-      return this.calendarEvent.starting || (
-        this.calendar &&
-        !this.calendar.filled.contains( this.calendarEvent.time.start ) &&
-        this.calendar.filled.start.sameDay( this.calendarEvent.day )
-      );
+      return this.isPlaceholderWithDay ?
+        this.isPlaceholderWithDay.sameDay( this.calendarEvent.start ) :
+        this.calendarEvent.starting || (
+          this.calendar &&
+          !this.calendar.filled.contains( this.calendarEvent.time.start ) &&
+          this.calendar.filled.start.sameDay( this.calendarEvent.day )
+        );
     },
 
     hasPopover()
@@ -165,6 +171,38 @@ export default {
       }
     },
 
+    mouseEnterEvent($event)
+    {
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-enter-event', this.getEvent('mouse-enter-event', $event));
+      }
+    },
+
+    mouseLeaveEvent($event)
+    {
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-leave-event', this.getEvent('mouse-leave-event', $event));
+      }
+    },
+
+    mouseDownEvent($event)
+    {
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-down-event', this.getEvent('mouse-down-event', $event));
+      }
+    },
+
+    mouseUpEvent($event)
+    {
+      if (this.handlesEvents($event))
+      {
+        this.$emit('mouse-up-event', this.getEvent('mouse-up-event', $event));
+      }
+    },
+
     handlesEvents($event)
     {
       var handles = !this.isPlaceholderWithDay;
@@ -175,6 +213,24 @@ export default {
       }
 
       return handles;
+    },
+
+    getEvent(type, $event, extra = {})
+    {
+      return fn.extend({
+
+        type: type,
+        calendarEvent: this.calendarEvent,
+        calendar: this.calendar,
+        details: this.details,
+        left: $event.button === 0,
+        right: $event.button === 1,
+        handled: false,
+        $event: $event,
+        $vm: this,
+        $element: this.$el
+
+      }, extra);
     }
   }
 }

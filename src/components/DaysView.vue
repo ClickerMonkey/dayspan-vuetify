@@ -164,6 +164,7 @@ export default {
     flex: none;
     width: 44px;
     border-right: #e0e0e0 1px solid;
+    user-select: none;
 
     .ds-hour {
       text-align: center;

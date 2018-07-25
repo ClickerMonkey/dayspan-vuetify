@@ -105,6 +105,7 @@ export default {
 
   .ds-week-header {
     display: flex;
+    user-select: none;
   }
 
   .ds-week-header-day {

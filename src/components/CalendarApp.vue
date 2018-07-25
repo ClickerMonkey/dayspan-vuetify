@@ -220,7 +220,7 @@
 </template>
 
 <script>
-import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time } from 'dayspan';
+import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op } from 'dayspan';
 
 export default {
 
@@ -580,7 +580,15 @@ export default {
 
       if (!this.hasCreatePopover)
       {
-        eventDialog.addSpan(addEvent.span);
+        if (addEvent.placeholder.fullDay)
+        {
+          eventDialog.add(addEvent.span.start, addEvent.span.days(Op.UP));
+        }
+        else
+        {
+          eventDialog.addSpan(addEvent.span);
+        }
+
         eventDialog.$once('close', addEvent.clearPlaceholder);
       }
       else
@@ -610,7 +618,7 @@ export default {
           moveEvent.clearPlaceholder();
         },
         instance: () => {
-          calendarEvent.move( targetStart, sourceStart );
+          calendarEvent.move( targetStart );
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
         },
@@ -665,6 +673,7 @@ export default {
         }
 
         if (this.$dayspan.features.moveAll &&
+            !schedule.isFullDay() &&
             targetStart.sameDay(sourceStart))
         {
           options.push({

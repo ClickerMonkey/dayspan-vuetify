@@ -24,6 +24,9 @@ export default {
     inactiveBlendTarget: { r: 255, g: 255, b: 255 },
     inactiveBlendAmount: 0.5,
 
+    placeholderBlendAmount: 0.2,
+    placeholderBlendTarget: { r: 255, g: 255, b: 255 },
+
     rounding: {
       move:           1,
       add:            Constants.MILLIS_IN_MINUTE * 15,
@@ -322,6 +325,8 @@ export default {
       );
 
       placeholder.time = new DaySpan( original.start, original.end );
+      placeholder.col = 0;
+      placeholder.row = 0;
 
       return placeholder;
     },
@@ -414,7 +419,7 @@ export default {
         left: '0px',
         right: '0px',
         marginRight: '-1px',
-        backgroundColor: this.blend( stateColor, this.inactiveBlendAmount, this.inactiveBlendTarget )
+        backgroundColor: this.blend( stateColor, this.placeholderBlendAmount, this.placeholderBlendTarget )
       };
     },
 
@@ -422,13 +427,15 @@ export default {
     {
       let color = this.getStyleColor( details, calendarEvent );
       let stateColor = this.getStyleColor( details, calendarEvent );
+      let starting = calendarEvent.time.start.sameDay( forDay );
+      let ending = calendarEvent.time.end.sameDay( forDay );
 
       return {
         top: ((calendarEvent.row - (index || 0)) * this.eventHeight) + 'px',
         color: details.forecolor,
-        left: calendarEvent.starting ? '0px' : '-5px',
-        right: calendarEvent.ending ? '0px' : '-6px',
-        backgroundColor: this.blend( stateColor, this.inactiveBlendAmount, this.inactiveBlendTarget )
+        left: starting ? '0px' : '-5px',
+        right: ending ? '0px' : '-6px',
+        backgroundColor: this.blend( stateColor, this.placeholderBlendAmount, this.placeholderBlendTarget )
       };
     },
 
@@ -526,9 +533,15 @@ export default {
 
     refreshTimes()
     {
-      this.today = Day.today();
+      let today = Day.today();
+
+      if (!today.sameDay( this.today ))
+      {
+        this.today = today;
+        this.tomorrow = Day.tomorrow();
+      }
+
       this.now = Day.now();
-      this.tomorrow = Day.tomorrow();
     }
   }
 };

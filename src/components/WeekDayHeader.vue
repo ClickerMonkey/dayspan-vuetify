@@ -2,7 +2,13 @@
 
   <div class="ds-day"
     :class="classesDay"
-    @click.stop="add">
+    @mouseenter="mouseEnterDay"
+    @mouseleave="mouseLeaveDay"
+    @mousemove.stop="mouseMoveDay"
+    @mousedown="mouseDownDay"
+    @mouseup="mouseUpDay"
+    @click.stop="add"
+    @dragstart.prevent>
 
     <div class="ds-week-weekday">
       {{ weekday }}
@@ -15,16 +21,15 @@
 
     <div class="ds-all-events">
 
-      <template v-for="(event, i) in day.events">
+      <template v-for="(event, i) in visibleEvents">
 
         <ds-calendar-event
-          v-if="event.fullDay"
           v-bind="{$scopedSlots}"
+          v-on="$listeners"
           :calendar-event="event"
           :key="event.id"
           :index="i"
           :calendar="calendar"
-          @edit="edit"
         ></ds-calendar-event>
 
       </template>
@@ -38,7 +43,7 @@
           :placeholder="placeholder"
           :placeholder-for-create="placeholderForCreate"
           :calendar="calendar"
-          :index="day.events.length"
+          :index="visibleEvents.length"
         ></ds-calendar-event-placeholder>
 
       </div>
@@ -50,7 +55,7 @@
 </template>
 
 <script>
-import { CalendarDay, Calendar, CalendarEvent } from 'dayspan';
+import { CalendarDay, Calendar, CalendarEvent, Functions as fn } from 'dayspan';
 
 
 export default {
@@ -119,24 +124,83 @@ export default {
       return this.placeholder &&
         this.placeholder.time.matchesDay( this.day ) &&
         this.placeholder.fullDay;
+    },
+
+    visibleEvents()
+    {
+      return this.day.events.filter( this.isVisible );
     }
   },
 
   methods:
   {
+    isVisible(calendarEvent)
+    {
+      if (!calendarEvent.fullDay)
+      {
+        return false;
+      }
+
+      if (this.$dayspan.features.hideOnMove &&
+          this.placeholder &&
+          this.placeholder.event === calendarEvent.event)
+      {
+        return false;
+      }
+
+      return true;
+    },
+
     add()
     {
       this.$emit('add', this.day);
     },
 
-    edit(event)
-    {
-      this.$emit('edit', event);
-    },
-
     viewDay(event)
     {
       this.$emit('view-day', this.day);
+    },
+
+    mouseEnterDay($event)
+    {
+      this.$emit('mouse-enter-day', this.day);
+    },
+
+    mouseLeaveDay($event)
+    {
+      this.$emit('mouse-leave-day', this.day);
+    },
+
+    mouseMoveDay($event)
+    {
+      this.$emit('mouse-move-day', this.getEvent('mouse-move-day', $event));
+    },
+
+    mouseDownDay($event)
+    {
+      this.$emit('mouse-down-day', this.getEvent('mouse-down-day', $event));
+    },
+
+    mouseUpDay($event)
+    {
+      this.$emit('mouse-up-day', this.getEvent('mouse-up-day', $event));
+    },
+
+    getEvent(type, $event, extra = {})
+    {
+      return fn.extend({
+
+        type: type,
+        day: this.day,
+        calendar: this.calendar,
+        left: $event.button === 0 && $event.buttons > 0,
+        right: $event.button === 1 && $event.buttons > 0,
+        handled: false,
+        $event: $event,
+        $vm: this,
+        $element: this.$el
+
+      }, extra);
     }
   }
 }
@@ -156,6 +220,7 @@ export default {
     line-height: 36px;
     color: black;
     padding-left: 8px;
+    user-select: none;
 
     &:hover {
       text-decoration: underline;
@@ -169,6 +234,7 @@ export default {
   .ds-week-weekday {
     color: black;
     padding-left: 8px;
+    user-select: none;
   }
 
   &.ds-day-today {
