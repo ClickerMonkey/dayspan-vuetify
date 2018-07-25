@@ -29,6 +29,50 @@ export function dsMerge(target, source)
   return target;
 }
 
+export function dsMergeOptions(options, defaults)
+{
+  let out = {
+    data: {},
+    methods: {},
+    computed: {}
+  };
+
+  dsMergeOptionsGroup( options, defaults.data, out, out.data );
+  dsMergeOptionsGroup( options, defaults.computed, out, out.computed );
+  dsMergeOptionsGroup( options, defaults.methods, out, out.methods );
+
+  return out;
+}
+
+export function dsMergeOptionsGroup(options, group, out, outGroup)
+{
+  for (let prop in group)
+  {
+    if (options.data && prop in options.data)
+    {
+      out.data[ prop ] = options.data[ prop ];
+
+      dsMerge( out.data[ prop ], group[ prop ] );
+    }
+    else if (options.computed && prop in options.computed)
+    {
+      out.computed[ prop ] = options.computed[ prop ];
+
+      dsMerge( out.computed[ prop ], group[ prop ] );
+    }
+    else if (options.methods && prop in options.methods)
+    {
+      out.methods[ prop ] = options.methods[ prop ];
+
+      dsMerge( out.methods[ prop ], group[ prop ] );
+    }
+    else
+    {
+      outGroup[ prop ] = group[ prop ];
+    }
+  }
+}
+
 export function dsMergeValidate(target, source)
 {
   return dsMerge( target, source ) !== source;

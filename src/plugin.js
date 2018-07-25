@@ -1,5 +1,5 @@
 
-import { dsMerge, dsMergeValidate, dsValidate, dsDefaults, dsBind } from './functions';
+import { dsMergeOptions, dsMergeValidate, dsValidate, dsDefaults, dsBind } from './functions';
 import { default as Component } from './component';
 import * as ComponentMap from './components'
 
@@ -14,7 +14,7 @@ export default {
     }
 
     // $dayspan is just another reactive component
-    var $dayspan = new Vue( dsMerge( options, Component ) );
+    var $dayspan = new Vue( dsMergeOptions( options, Component ) );
 
     // allow directives to access $dayspan
     Vue.$dayspan = $dayspan;
