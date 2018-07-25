@@ -337,13 +337,13 @@ export default {
 
     mouseMoveCheckEnd(mouseEvent)
     {
-      if (this.moving && !mouseEvent.left)
+      if (this.moving && !mouseEvent.left && !this.placeholderForCreate)
       {
         this.endMove();
         this.clearPlaceholder();
       }
 
-      if (this.adding && !mouseEvent.left)
+      if (this.adding && !mouseEvent.left && !this.placeholderForCreate)
       {
         this.endAdd();
         this.clearPlaceholder();

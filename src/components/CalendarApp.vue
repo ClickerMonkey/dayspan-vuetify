@@ -161,7 +161,7 @@
 
       <slot name="calendarAppOptions" v-bind="{optionsVisible, optionsDialog, options, chooseOption}">
 
-        <v-dialog
+        <v-dialog ref="optionsDialog"
           v-model="optionsVisible"
           v-bind="optionsDialog"
           :fullscreen="$dayspan.fullscreenDialogs">
@@ -178,7 +178,7 @@
 
       <slot name="calendarAppPrompt" v-bind="{promptVisible, promptDialog, promptQuestion, choosePrompt}">
 
-        <v-dialog
+        <v-dialog ref="promptDialog"
           v-model="promptVisible"
           v-bind="promptDialog">
           <v-card>
@@ -384,6 +384,7 @@ export default {
     if (!this.$dayspan.promptOpen)
     {
       this.$dayspan.promptOpen = (question, callback) => {
+        this.promptVisible = false;
         this.promptQuestion = question;
         this.promptCallback = callback;
         this.promptVisible = true;
@@ -616,21 +617,29 @@ export default {
           calendarEvent.move( targetStart );
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
+
+          this.$emit('event-update', calendarEvent.event);
         },
         instance: () => {
           calendarEvent.move( targetStart );
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
+
+          this.$emit('event-update', calendarEvent.event);
         },
         duplicate: () => {
           schedule.setExcluded( targetStart, false );
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
+
+          this.$emit('event-update', calendarEvent.event);
         },
         all: () => {
           schedule.moveTime( sourceStart.asTime(), targetStart.asTime() );
           this.eventsRefresh();
           moveEvent.clearPlaceholder();
+
+          this.$emit('event-update', calendarEvent.event);
         }
       };
 
@@ -706,8 +715,6 @@ export default {
     eventFinish(ev)
     {
       this.triggerChange();
-
-      // this.$forceUpdate();
     },
 
     eventsRefresh()
@@ -715,8 +722,6 @@ export default {
       this.calendar.refreshEvents();
 
       this.triggerChange();
-
-      // this.$forceUpdate();
     },
 
     triggerChange()

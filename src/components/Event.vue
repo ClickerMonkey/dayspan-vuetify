@@ -473,6 +473,8 @@ export default {
           );
 
           this.$emit('update', ev);
+
+          this.$emit('event-update', ev.calendarEvent.event);
         }
         else if (ev.create)
         {
@@ -493,6 +495,11 @@ export default {
         }
 
         ev.handled = true;
+
+        if (ev.created)
+        {
+          this.$emit('event-create', ev.created);
+        }
       }
 
       this.$emit('saved', ev);
@@ -610,6 +617,10 @@ export default {
 
   .ds-event-actions {
     float: right;
+
+    > * {
+      display: inline-block;
+    }
   }
 
   .ds-event-header {

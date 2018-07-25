@@ -256,6 +256,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-remove', ev.event);
       });
     },
 
@@ -275,6 +277,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
       });
     },
 
@@ -294,6 +298,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
       });
     },
 
@@ -313,6 +319,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
       });
     },
 
@@ -390,6 +398,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
       });
     },
 
@@ -439,6 +449,8 @@ export default {
         }
 
         this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
       });
     },
 

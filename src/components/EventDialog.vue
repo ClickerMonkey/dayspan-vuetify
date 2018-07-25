@@ -128,8 +128,6 @@ export default {
 
     actioned(ev)
     {
-      // console.log('actioned in event dialog', ev);
-
       ev.hide = true;
       this.$emit('actioned', ev);
       this.finishClose( ev );

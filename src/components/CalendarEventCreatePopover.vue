@@ -357,6 +357,8 @@ export default {
         }
 
         ev.handled = true;
+
+        this.$emit('event-create', ev.created);
       }
 
       this.finishEvent( ev );

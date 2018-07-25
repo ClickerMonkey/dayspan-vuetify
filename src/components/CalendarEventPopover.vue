@@ -25,16 +25,23 @@
      <slot name="eventPopoverToolbarActions" v-bind="slotData"></slot>
 
        <v-tooltip bottom>
+
          <ds-schedule-actions
           slot="activator"
+          v-bind="{$scopedSlots}"
+          v-on="$listeners"
           :schedule="calendarEvent.schedule"
           :calendar-event="calendarEvent"
           :calendar="calendar">
+
           <v-btn icon :style="styleButton">
             <v-icon>more_vert</v-icon>
           </v-btn>
+
         </ds-schedule-actions>
+
         <span>{{ labels.options }}</span>
+
        </v-tooltip>
 
      </slot>

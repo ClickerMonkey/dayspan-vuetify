@@ -18,7 +18,10 @@
       </template>
 
       <template slot="eventPopover" slot-scope="slotData">
-         <ds-calendar-event-popover v-bind="slotData"></ds-calendar-event-popover>
+         <ds-calendar-event-popover
+          v-bind="slotData"
+          @finish="saveState"
+        ></ds-calendar-event-popover>
       </template>
 
       <template slot="eventCreatePopover" slot-scope="{placeholder, calendar, close}">
