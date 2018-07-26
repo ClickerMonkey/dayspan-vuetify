@@ -4,10 +4,10 @@ var path = require('path')
 module.exports = {
   build: {
     env: require('./prod.env'),
-    index: path.resolve(__dirname, '../index.html'),
-    assetsRoot: path.resolve(__dirname, '../dist'),
-    assetsSubDirectory: 'docs',
-    assetsPublicPath: '/dayspan-vuetify/dist',
+    index: path.resolve(__dirname, '../../dayspan-vuetify-docs/example/index.html'),
+    assetsRoot: path.resolve(__dirname, '../../dayspan-vuetify-docs/example'),
+    assetsSubDirectory: '',
+    assetsPublicPath: '',
     productionSourceMap: true,
     // Gzip off by default as many popular static hosts such as
     // Surge or Netlify already gzip all static assets for you.

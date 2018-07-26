@@ -8,7 +8,7 @@ Every feature of the library can be toggled with local and global settings, and 
 
 ## Status
 
-This library is nearing functional completion (documentation on every component, prop, event, slot, method will have to wait) but is still subject to the occasional medium-size change in API. 
+This library is nearing functional completion (documentation on every component, prop, event, slot, method will have to wait) but is still subject to the occasional small change in API.
 
 ## Usage
 
@@ -20,7 +20,10 @@ import DaySpanVuetify from 'dayspan-vuetify'
 Vue.use( DaySpanVuetify, {
   // options is vue definition, the resulting reactive component is stored in components as this.$dayspan or Vue.$dayspan
   data: {
-    // properties to override
+    // data or computed to override
+  },
+  computed: {
+    // data or computed to override
   },
   methods: {
     // methods to override
