@@ -45,6 +45,7 @@
 </template>
 
 <script>
+import { dsMerge } from './functions';
 import { Calendar, Weekday, Month, Sorts } from 'dayspan';
 import Vue from 'vue';
 
@@ -58,7 +59,10 @@ export default {
     calendar: Calendar.months(),
     defaultEvents: [
       {
-        data: {title: 'Weekly Meeting', color: '#3F51B5'},
+        data: {
+          title: 'Weekly Meeting',
+          color: '#3F51B5'
+        },
         schedule: {
           dayOfWeek: [Weekday.MONDAY],
           times: [9],
@@ -67,7 +71,34 @@ export default {
         }
       },
       {
-        data: {title: 'Mother\'s Day', color: '#2196F3'},
+        data: {
+          title: 'First Weekend',
+          color: '#4CAF50'
+        },
+        schedule: {
+          weekspanOfMonth: [0],
+          dayOfWeek: [Weekday.FRIDAY],
+          duration: 3,
+          durationUnit: 'days'
+        }
+      },
+      {
+        data: {
+          title: 'End of Month',
+          color: '#000000'
+        },
+        schedule: {
+          lastDayOfMonth: [1],
+          duration: 1,
+          durationUnit: 'hours'
+        }
+      },
+      {
+        data: {
+          title: 'Mother\'s Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
         schedule: {
           month: [Month.MAY],
           dayOfWeek: [Weekday.SUNDAY],
@@ -75,12 +106,130 @@ export default {
         }
       },
       {
-        data: {title: 'First Weekend', color: '#4CAF50'},
+        data: {
+          title: 'New Year\'s Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
         schedule: {
-          weekspanOfMonth: [0],
-          dayOfWeek: [Weekday.FRIDAY],
-          duration: 3,
-          durationUnit: 'days'
+          month: [Month.JANUARY],
+          dayOfMonth: [1]
+        }
+      },
+      {
+        data: {
+          title: 'Inauguration Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.JANUARY],
+          dayOfMonth: [20]
+        }
+      },
+      {
+        data: {
+          title: 'Martin Luther King, Jr. Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.JANUARY],
+          dayOfWeek: [Weekday.MONDAY],
+          weekspanOfMonth: [2]
+        }
+      },
+      {
+        data: {
+          title: 'George Washington\'s Birthday',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.FEBRUARY],
+          dayOfWeek: [Weekday.MONDAY],
+          weekspanOfMonth: [2]
+        }
+      },
+      {
+        data: {
+          title: 'Memorial Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.MAY],
+          dayOfWeek: [Weekday.MONDAY],
+          lastWeekspanOfMonth: [0]
+        }
+      },
+      {
+        data: {
+          title: 'Independence Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.JULY],
+          dayOfMonth: [4]
+        }
+      },
+      {
+        data: {
+          title: 'Labor Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.SEPTEMBER],
+          dayOfWeek: [Weekday.MONDAY],
+          lastWeekspanOfMonth: [0]
+        }
+      },
+      {
+        data: {
+          title: 'Columbus Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.OCTOBER],
+          dayOfWeek: [Weekday.MONDAY],
+          lastWeekspanOfMonth: [1]
+        }
+      },
+      {
+        data: {
+          title: 'Veterans Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.NOVEMBER],
+          dayOfMonth: [11]
+        }
+      },
+      {
+        data: {
+          title: 'Thanksgiving Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.NOVEMBER],
+          dayOfWeek: [Weekday.THURSDAY],
+          lastWeekspanOfMonth: [3]
+        }
+      },
+      {
+        data: {
+          title: 'Christmas Day',
+          color: '#2196F3',
+          calendar: 'US Holidays'
+        },
+        schedule: {
+          month: [Month.DECEMBER],
+          dayOfMonth: [25]
         }
       }
     ]
@@ -99,10 +248,10 @@ export default {
   {
     getCalendarTime(calendarEvent)
     {
-      var sa = calendarEvent.start.format('a');
-      var ea = calendarEvent.end.format('a');
-      var sh = calendarEvent.start.format('h');
-      var eh = calendarEvent.end.format('h');
+      let sa = calendarEvent.start.format('a');
+      let ea = calendarEvent.end.format('a');
+      let sh = calendarEvent.start.format('h');
+      let eh = calendarEvent.end.format('h');
 
       if (calendarEvent.start.minute !== 0)
       {
@@ -119,30 +268,24 @@ export default {
 
     saveState()
     {
-      var state = this.calendar.toInput(true);
-      var json = JSON.stringify(state);
+      let state = this.calendar.toInput(true);
+      let json = JSON.stringify(state);
 
       localStorage.setItem(this.storeKey, json);
     },
 
-    parseData(d)
-    {
-      return Vue.util.extend( this.$dayspan.getDefaultEventDetails(), d );
-    },
-
     loadState()
     {
-      var state = {};
+      let state = {};
 
       try
       {
-        var savedState = JSON.parse(localStorage.getItem(this.storeKey));
+        let savedState = JSON.parse(localStorage.getItem(this.storeKey));
 
         if (savedState)
         {
           state = savedState;
           state.eventSorter = state.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start;
-          state.parseData = this.parseData;
         }
       }
       catch (e)
@@ -154,6 +297,13 @@ export default {
       {
         state.events = this.defaultEvents;
       }
+
+      let defaults = this.$dayspan.getDefaultEventDetails();
+
+      state.events.forEach(ev =>
+      {
+        ev.data = dsMerge( ev.data, defaults );
+      });
 
       this.calendar.set( state );
     }
