@@ -283,35 +283,43 @@ export default {
 
 <style scoped lang="scss">
 
-.v-btn--floating.v-btn--left {
-  margin-left: 0px !important;
+.ds-calendar-event-popover-card {
 
-  .v-icon {
-    height: auto;
-  }
-}
+  .v-btn--floating.v-btn--left {
+    margin-left: 0px !important;
 
-.v-toolbar__extension {
-
-  .v-toolbar__title {
-    margin-left: 48px;
-  }
-}
-
-.v-card__text {
-  padding: 16px 0;
-
-  .v-list {
-
-    .v-list__tile {
-      padding: 0px !important;
+    .v-icon {
       height: auto;
+    }
+  }
 
-      .v-list__tile__sub-title {
+  .v-card__text {
+    padding: 16px 0;
 
+    .v-list {
+
+      .v-list__tile {
+        padding: 0px !important;
+        height: auto;
+
+        .v-list__tile__sub-title {
+
+        }
       }
     }
   }
+
+  /deep/ .v-toolbar__extension {
+    padding: 0 16px !important;
+
+    .v-toolbar__title {
+      margin-left: 56px;
+    }
+  }
 }
+
+
+
+
 
 </style>
