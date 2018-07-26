@@ -4,6 +4,8 @@
 
 This library strives to offer all the functionality any modern calendar app could support, and more. Not only can this be used for calendar apps, but any application where the user wishes to control when events should occur within a system.
 
+[Click here for a full app example](https://clickermonkey.github.io/dayspan-vuetify/example/)
+
 Every feature of the library can be toggled with local and global settings, and all text can be localized.
 
 ## Status
