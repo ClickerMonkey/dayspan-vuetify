@@ -23,6 +23,7 @@ export default {
       {id: 'W', label: 'Week',    shortcut: 'W', type: Units.WEEK,  size: 1},
       {id: 'M', label: 'Month ',  shortcut: 'M', type: Units.MONTH, size: 1},
       {id: 'Y', label: 'Year',    shortcut: 'Y', type: Units.YEAR,  size: 1},
+      {id: 'S', label: 'Schedule',shortcut: 'S', type: Units.DAY,   size: 92, focus: 0, schedule: true, repeat: false },
       {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4}
     ],
     formats: {
@@ -55,6 +56,45 @@ export default {
     promptDialog: {
       maxWidth: '300px',
       persistent: true
+    }
+  },
+
+  dsAgenda: {
+
+  },
+
+  dsAgendaDay: {
+
+  },
+
+  dsAgendaEvent: {
+    popoverProps: {
+      nudgeWidth: 200,
+      closeOnContentClick: false,
+      offsetOverflow: true,
+      offsetX: true,
+      maxWidth: 500
+    },
+    formats: {
+      firstLine:  'ddd',
+      secondLine: 'MMM Do',
+      start:      'dddd, MMMM D',
+      time:       'h:mm a'
+    },
+    labels: {
+      allDay:   'All day',
+      options:  'Options',
+      close:    'Close',
+      day:      ['day', 'days'],
+      days:     ['day', 'days'],
+      minute:   ['minute', 'minutes'],
+      minutes:  ['minute', 'minutes'],
+      hour:     ['hour', 'hours'],
+      hours:    ['hour', 'hours'],
+      week:     ['week', 'weeks'],
+      weeks:    ['week', 'weeks'],
+      busy:     'Busy',
+      free:     'Free'
     }
   },
 
@@ -376,6 +416,12 @@ export default {
       weeks:      'weeks',
       month:      'month',
       months:     'months'
+    }
+  },
+
+  dsScheduleType: {
+    formats: {
+      date:       'LL'
     }
   },
 

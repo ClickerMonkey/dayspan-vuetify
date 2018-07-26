@@ -105,56 +105,6 @@ export default {
   methods:
   {
 
-    /**
-     * details = {
-     *  title: 'title of event to display',
-     *  description: 'the description of the event',
-     *  color: '#ff5566', // the color for the event on the calendar and the popover header
-     *  background: 'location of image to use in popover header',
-     *  location: 'location of event',
-     *  notify: 'description of when the user will be notified',
-     *  calendar: 'the name of the person or calendar which this event is in. used in the popover.',
-     *  guests: [] // user data array
-     *  guestsCanEdit: true,
-     *  guestsCanInvite: true,
-     *  guestsCanSeeGuests: true,
-     *  canEdit: true
-     * }
-     * userData = {
-     *  id: 'anything to identify the person',
-     *  calendar: 'the name of the persons calendar - matches details.calendar'
-     *  name: 'display name of user',
-     *  email: 'the email of the user',
-     *  image: 'image of user'
-     *  letter: 'letter of user (used when image does not exist)'
-     *  icon: 'icon of user (used when letter does not exist)'
-     * }
-     *
-     *
-     * highlight current hour
-     *
-     * TODO
-     * conferencing?                        (type, info)
-     * notifications?                       (type, time, unit)
-     * busy/free availabilty?
-     * default/public/private visibility?
-     * list of calendars this user can manage events for?
-     * find a time based on guests?
-     * rsvp? yes/no/maybe - add to details.guests?
-     *
-     * calendar app:
-     *  add friends calendar
-     *  list of calendars being viewed
-     *  other (public) calendars
-     *  search events?
-     *
-     *
-     * more actions:
-     *    add new occurrence => duplicate?
-     *    copy to "other calendar"
-     *    print event
-     *    change owner
-     */
     setEventDetails(details, data, event, calendarEvent)
     {
       event.data = Vue.util.extend( data, details );
@@ -282,6 +232,28 @@ export default {
       let described = schedule.describe( 'event', false );
 
       return described.substring( 20 ) + ' (' + duration + ')';
+    },
+
+    getEventAgendaWhen(calendarEvent, labels, formats)
+    {
+      let when = '';
+      let schedule = calendarEvent.schedule;
+
+      if (calendarEvent.fullDay)
+      {
+        when += labels.allDay;
+      }
+      else
+      {
+        when += schedule.describeArray( schedule.times, x => x.format( formats.time ) );
+      }
+
+      if (schedule.duration !== 1 && this.$vuetify.breakpoint.smAndUp)
+      {
+        when += ' (' + this.getEventDuration( schedule, labels ) + ')';
+      }
+
+      return when;
     },
 
     getEventDuration(schedule, labels)

@@ -37,7 +37,7 @@
 
     </div>
 
-    <div v-if="isWeek || isDaySpan" class="ds-week-view">
+    <div v-if="isWeek || isDay" class="ds-week-view">
 
       <ds-days-view
         v-bind="{$scopedSlots}"
@@ -55,12 +55,6 @@
         @mouse-up-event="mouseUp"
         @clear-placeholder="clearPlaceholder"
       ></ds-days-view>
-
-    </div>
-
-    <div v-if="isAgenda">
-
-      Agenda
 
     </div>
 
@@ -122,14 +116,9 @@ export default {
       return this.calendar ? this.calendar.size : null;
     },
 
-    isDaySpan()
+    isDay()
     {
-      return this.type === Units.DAY && this.size > 1;
-    },
-
-    isAgenda()
-    {
-      return this.type === Units.DAY && this.size === 1;
+      return this.type === Units.DAY;
     },
 
     isWeek()

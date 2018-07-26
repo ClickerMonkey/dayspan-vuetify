@@ -162,7 +162,7 @@ export default {
       {
         if (!this.hasPopover)
         {
-          this.edit()
+          this.edit();
         }
         else
         {
@@ -241,6 +241,7 @@ export default {
 .ds-calendar-event-menu {
   width: 100%;
   height: 18px;
+  pointer-events: none;
 }
 
 .ds-calendar-event {
@@ -257,6 +258,7 @@ export default {
   display: block;
   margin: 0;
   border-radius: 2px;
+  pointer-events: all;
 }
 
 .ds-fullscreen {

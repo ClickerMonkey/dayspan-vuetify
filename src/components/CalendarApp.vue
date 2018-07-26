@@ -129,21 +129,38 @@
         @swipeleft="next"
         @swiperight="prev">
 
-        <slot name="calendarAppCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
+        <div v-if="currentType.schedule" class="ds-expand">
 
-          <ds-calendar ref="calendar"
+          <ds-agenda
             v-bind="{$scopedSlots}"
             v-on="$listeners"
             :calendar="calendar"
             @add="add"
-            @add-at="addAt"
             @edit="edit"
             @view-day="viewDay"
-            @added="handleAdd"
-            @moved="handleMove"
-          ></ds-calendar>
+          ></ds-agenda>
 
-        </slot>
+        </div>
+
+        <div v-else class="ds-expand">
+
+          <slot name="calendarAppCalendar" v-bind="{$scopedSlots, $listeners, calendar, add, addAt, edit, viewDay, handleAdd, handleMove}">
+
+            <ds-calendar ref="calendar"
+              v-bind="{$scopedSlots}"
+              v-on="$listeners"
+              :calendar="calendar"
+              @add="add"
+              @add-at="addAt"
+              @edit="edit"
+              @view-day="viewDay"
+              @added="handleAdd"
+              @moved="handleMove"
+            ></ds-calendar>
+
+          </slot>
+
+        </div>
 
       </ds-gestures>
 
@@ -447,6 +464,8 @@ export default {
         updateRows: true,
         updateColumns: listTimes,
         fill: !listTimes,
+        otherwiseFocus: type.focus,
+        repeatCovers: type.repeat,
         eventSorter: listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start
       };
 
@@ -549,7 +568,7 @@ export default {
 
       let eventDialog = this.$refs.eventDialog;
       let calendar = this.$refs.calendar;
-      let useDialog = !this.hasCreatePopover;
+      let useDialog = !this.hasCreatePopover || !calendar;
 
       let day = this.$dayspan.today;
 
@@ -563,12 +582,13 @@ export default {
         day = firstDistance < lastDistance ? first: last;
       }
 
-      calendar.addPlaceholder( day, true, useDialog );
+      calendar && calendar.addPlaceholder( day, true, useDialog );
 
       if (useDialog)
       {
         eventDialog.add( day );
-        eventDialog.$once('close', calendar.clearPlaceholder);
+
+        calendar && eventDialog.$once('close', calendar.clearPlaceholder);
       }
     },
 

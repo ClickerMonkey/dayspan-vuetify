@@ -3,7 +3,7 @@
   <v-select single-line solo flat persistent-hint
     :items="types"
     :hint="typeHint"
-    :hide-details="isNotCustom"
+    :hide-details="hideHint"
     :append-outer-icon="customIcon"
     v-model="type"
     item-text="label"
@@ -34,7 +34,15 @@ export default {
       type: Schedule
     },
 
-
+    formats:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'formats');
+      },
+      default() {
+        return this.$dsDefaults().formats;
+      }
+    }
   },
 
   data: () => ({
@@ -54,14 +62,24 @@ export default {
 
   computed:
   {
-    isNotCustom()
+    hideHint()
     {
-      return this.type !== 'custom';
+      return this.type !== 'none' && this.type !== 'custom';
     },
 
     typeHint()
     {
-      return this.isNotCustom ? '' : this.$dayspan.getScheduleDescription( this.schedule );
+      if (this.type === 'none')
+      {
+        return this.day.format( this.formats.date );
+      }
+
+      if (this.type === 'custom')
+      {
+        return this.$dayspan.getScheduleDescription( this.schedule );
+      }
+
+      return '';
     },
 
     types()

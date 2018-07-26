@@ -7,6 +7,10 @@ export { default as DsDaysView } from './DaysView';
 export { default as DsDayTimes } from './DayTimes';
 export { default as DsDayPicker } from './DayPicker';
 
+export { default as DsAgenda } from './Agenda';
+export { default as DsAgendaDay } from './AgendaDay';
+export { default as DsAgendaEvent } from './AgendaEvent';
+
 export { default as DsCalendar } from './Calendar';
 export { default as DsCalendarApp } from './CalendarApp';
 export { default as DsCalendarEvent } from './CalendarEvent';
