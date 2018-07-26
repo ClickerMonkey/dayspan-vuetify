@@ -31,7 +31,7 @@
 
      <slot name="eventCreatePopoverToolbarSave" v-bind="slotData">
 
-       <v-btn flat dark :disabled="!isValid" @click="save">
+       <v-btn class="ds-create-popover-save" :disabled="!isValid" @click="save">
          <v-icon left>{{ icons.save }}</v-icon>
          <span>{{ labels.save }}</span>
        </v-btn>
@@ -415,18 +415,24 @@ export default {
   }
 }
 
-.v-toolbar__extension {
+.ds-calendar-event-popover-card {
 
-  .v-toolbar__title {
-    width: 100%;
-    margin-left: 48px;
-    margin-right: -8px;
+  /deep/ .v-toolbar__extension {
+    padding: 0 16px !important;
+    height: 60px !important;
+    align-items: start;
 
-    /deep/ .v-input__slot {
-      background-color: rgba(255,255,255,0.2) !important;
+    .v-toolbar__title {
+      width: 100%;
+      margin-left: 56px;
+      margin-right: 0px;
 
-      input {
-        caret-color: rgba(0,0,0,.87) !important;
+      /deep/ .v-input__slot {
+        background-color: rgba(255,255,255,0.2) !important;
+
+        input {
+          caret-color: rgba(0,0,0,.87) !important;
+        }
       }
     }
   }
@@ -450,6 +456,10 @@ export default {
       height: auto !important;
     }
   }
+}
+
+.ds-create-popover-save {
+  background-color: transparent !important;
 }
 
 .ds-color-option {
