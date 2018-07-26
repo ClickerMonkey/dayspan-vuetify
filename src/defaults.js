@@ -19,12 +19,12 @@ export default {
   dsCalendarApp: {
     allowsAddToday: true,
     types: [
-      {id: 'D', label: 'Day',     shortcut: 'D', type: Units.DAY,   size: 1},
-      {id: 'W', label: 'Week',    shortcut: 'W', type: Units.WEEK,  size: 1},
-      {id: 'M', label: 'Month ',  shortcut: 'M', type: Units.MONTH, size: 1},
-      {id: 'Y', label: 'Year',    shortcut: 'Y', type: Units.YEAR,  size: 1},
-      {id: 'S', label: 'Schedule',shortcut: 'S', type: Units.DAY,   size: 92, focus: 0, schedule: true, repeat: false },
-      {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4}
+      {id: 'D', label: 'Day',     shortcut: 'D', type: Units.DAY,   size: 1, focus: 0.4999, repeat: true},
+      {id: 'W', label: 'Week',    shortcut: 'W', type: Units.WEEK,  size: 1, focus: 0.4999, repeat: true},
+      {id: 'M', label: 'Month ',  shortcut: 'M', type: Units.MONTH, size: 1, focus: 0.4999, repeat: true},
+      {id: 'Y', label: 'Year',    shortcut: 'Y', type: Units.YEAR,  size: 1, focus: 0.4999, repeat: true},
+      {id: 'S', label: 'Schedule',shortcut: 'S', type: Units.DAY,   size: 92, focus: 0, repeat: false, schedule: true },
+      {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4, focus: 0.4999, repeat: true}
     ],
     formats: {
       today: 'dddd, MMMM D',
