@@ -35,6 +35,8 @@ Vue.use( DaySpanVuetify, {
 });
 ```
 
+To see what options can be passed to the plugin, [checkout this file](src/component.js).
+
 Once done, you can access components like `ds-event`, `ds-calendar`, and `ds-calendar-app` from any component (they are registered globally).
 
 ## Build Setup
