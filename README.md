@@ -12,6 +12,8 @@ Every feature of the library can be toggled with local and global settings, and 
 
 This library is nearing functional completion (documentation on every component, prop, event, slot, method will have to wait) but is still subject to the occasional small change in API.
 
+[Current documentation](docs/README.md)
+
 ## Usage
 
 Install with `npm install --save dayspan-vuetify`
