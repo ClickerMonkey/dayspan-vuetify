@@ -195,7 +195,7 @@ export default {
         schedule: {
           month: [Month.OCTOBER],
           dayOfWeek: [Weekday.MONDAY],
-          lastWeekspanOfMonth: [1]
+          weekspanOfMonth: [1]
         }
       },
       {
@@ -218,7 +218,7 @@ export default {
         schedule: {
           month: [Month.NOVEMBER],
           dayOfWeek: [Weekday.THURSDAY],
-          lastWeekspanOfMonth: [3]
+          weekspanOfMonth: [3]
         }
       },
       {
