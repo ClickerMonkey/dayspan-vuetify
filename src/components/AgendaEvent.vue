@@ -20,7 +20,7 @@
 
     </td>
 
-    <td class="ds-agenda-when" @click.stop="editCheck">
+    <td class="ds-agenda-when" @click.stop>
 
       <slot name="agendaEventWhen" v-bind="slotData">
 
@@ -275,7 +275,6 @@ export default {
 
 .ds-agenda-event {
 
-  .ds-agenda-when,
   .ds-agenda-details strong {
     cursor: pointer;
 
@@ -289,21 +288,5 @@ export default {
   padding: 4px;
   cursor: pointer;
 }
-
-.ds-fullscreen {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-height: auto !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
-
-  /deep/ > * {
-    height: 100%;
-  }
-}
-
 
 </style>

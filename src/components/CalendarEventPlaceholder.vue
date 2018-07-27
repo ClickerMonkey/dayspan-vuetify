@@ -150,19 +150,4 @@ export default {
   }
 }
 
-.ds-fullscreen {
-  position: fixed !important;
-  top: 0 !important;
-  left: 0 !important;
-  width: 100% !important;
-  height: 100% !important;
-  max-height: auto !important;
-  max-width: 100% !important;
-  min-width: 100% !important;
-
-  /deep/ > * {
-    height: 100%;
-  }
-}
-
 </style>

@@ -48,12 +48,9 @@
 
      <slot name="eventPopoverToolbarClose" v-bind="slotData"></slot>
 
-       <v-tooltip bottom>
-         <v-btn icon slot="activator" @click="close" :style="styleButton">
-           <v-icon>close</v-icon>
-         </v-btn>
-         <span>{{ labels.close }}</span>
-       </v-tooltip>
+       <v-btn icon @click="close" :style="styleButton">
+         <v-icon>close</v-icon>
+       </v-btn>
 
      </slot>
 

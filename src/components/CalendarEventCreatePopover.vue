@@ -31,21 +31,29 @@
 
      <slot name="eventCreatePopoverToolbarSave" v-bind="slotData">
 
-       <v-btn class="ds-create-popover-save" :disabled="!isValid" @click="save">
+       <v-btn
+         class="ds-create-popover-save"
+         flat
+         :disabled="!isValid"
+         :style="styleText"
+         @click="save">
+
          <v-icon left>{{ icons.save }}</v-icon>
          <span>{{ labels.save }}</span>
+
        </v-btn>
 
      </slot>
 
      <slot name="eventCreatePopoverToolbarClose" v-bind="slotData">
 
-       <v-tooltip bottom>
-         <v-btn icon slot="activator" @click="close" :style="styleButton">
-           <v-icon>{{ icons.close }}</v-icon>
-         </v-btn>
-         <span>{{ labels.close }}</span>
-       </v-tooltip>
+       <v-btn icon
+        @click="close"
+        :style="styleText">
+
+         <v-icon>{{ icons.close }}</v-icon>
+
+       </v-btn>
 
      </slot>
 
@@ -274,7 +282,7 @@ export default {
       };
     },
 
-    styleButton()
+    styleText()
     {
       return {
         color: this.details.forecolor

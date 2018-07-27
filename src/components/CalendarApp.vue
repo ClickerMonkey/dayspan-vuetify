@@ -131,14 +131,18 @@
 
         <div v-if="currentType.schedule" class="ds-expand">
 
-          <ds-agenda
-            v-bind="{$scopedSlots}"
-            v-on="$listeners"
-            :calendar="calendar"
-            @add="add"
-            @edit="edit"
-            @view-day="viewDay"
-          ></ds-agenda>
+          <slot name="calendarAppAgenda" v-bind="{$scopedSlots, $listeners, calendar, add, edit, viewDay}">
+
+            <ds-agenda
+              v-bind="{$scopedSlots}"
+              v-on="$listeners"
+              :calendar="calendar"
+              @add="add"
+              @edit="edit"
+              @view-day="viewDay"
+            ></ds-agenda>
+
+          </slot>
 
         </div>
 
@@ -348,7 +352,7 @@ export default {
         return this.calendar.start.format( this.formats.xs );
       }
 
-      let large = this.$vuetify.breakpoint.lgAndUp;
+      let large = this.$vuetify.breakpoint.mdAndUp;
 
       return this.calendar.summary(false, !large, false, !large);
     },
@@ -454,19 +458,18 @@ export default {
         return;
       }
 
-      let listTimes = type.type === Units.DAY || type.type === Units.WEEK;
       let input = {
         type: type.type,
         size: type.size,
         around: aroundDay,
         eventsOutside: true,
-        listTimes: listTimes,
-        updateRows: true,
-        updateColumns: listTimes,
-        fill: !listTimes,
+        listTimes: type.listTimes,
+        updateRows: type.updateRows,
+        updateColumns: type.listTimes,
+        fill: !type.listTimes,
         otherwiseFocus: type.focus,
         repeatCovers: type.repeat,
-        eventSorter: listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start
+        eventSorter: type.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start
       };
 
       cal.set(input);
