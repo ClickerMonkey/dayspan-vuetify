@@ -324,7 +324,6 @@ export default {
   data: vm => ({
     drawer: null,
     currentType: vm.types[0],
-    loading: false,
     optionsVisible: false,
     options: [],
     promptVisible: false,
@@ -336,9 +335,7 @@ export default {
   {
     'currentType': 'tryRebuild',
     'events': 'applyEvents',
-    'calendar': 'applyEvents',
-    'calendar.size': 'updateType',
-    'calendar.type': 'updateType'
+    'calendar': 'applyEvents'
   },
 
   computed:
@@ -382,21 +379,6 @@ export default {
     hasCreatePopover()
     {
       return !!this.$scopedSlots.eventCreatePopover;
-    },
-
-    quietType:
-    {
-      get()
-      {
-        return this.currentType;
-      },
-
-      set(type)
-      {
-        this.loading = true;
-        this.currentType = type;
-        this.loading = false;
-      }
     }
   },
 
@@ -415,20 +397,35 @@ export default {
 
   methods:
   {
-    tryRebuild()
+    setState(state)
     {
-      if (!this.loading)
-      {
-        this.rebuild();
-      }
+      state.eventSorter = state.listTimes
+        ? Sorts.List([Sorts.FullDay, Sorts.Start])
+        : Sorts.Start;
+
+      this.calendar.set( state );
+
+      this.updateType();
+
+      this.triggerChange();
+    },
+
+    tryRebuild(newType)
+    {
+      this.rebuild();
     },
 
     updateType()
     {
-      this.quietType = this.types.find((type) =>
+      let foundType = this.types.find((type) =>
         type.type === this.calendar.type &&
         type.size === this.calendar.size
       );
+
+      if (foundType)
+      {
+        this.currentType = foundType;
+      }
     },
 
     applyEvents()
@@ -448,12 +445,11 @@ export default {
           (!aroundDay || cal.span.matchesDay(aroundDay)));
     },
 
-    rebuild(aroundDay)
+    rebuild (aroundDay, force, forceType)
     {
-      let cal = this.calendar;
-      let type = this.currentType || this.types[ 2 ];
+      let type = forceType || this.currentType || this.types[ 2 ];
 
-      if (this.isType( type, aroundDay ))
+      if (this.isType( type, aroundDay ) && !force)
       {
         return;
       }
@@ -468,13 +464,10 @@ export default {
         updateColumns: type.listTimes,
         fill: !type.listTimes,
         otherwiseFocus: type.focus,
-        repeatCovers: type.repeat,
-        eventSorter: type.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start
+        repeatCovers: type.repeat
       };
 
-      cal.set(input);
-
-      this.triggerChange();
+      this.setState( input );
     },
 
     next()
@@ -498,9 +491,7 @@ export default {
 
     viewDay(day)
     {
-      this.quietType = this.types[0];
-
-      this.rebuild( day );
+      this.rebuild( day, false, this.types[ 0 ] );
     },
 
     edit(calendarEvent)

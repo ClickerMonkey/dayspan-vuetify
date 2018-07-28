@@ -15,7 +15,8 @@
     </div>
 
     <a class="ds-week-date"
-      @click="viewDay">
+      @click.stop="viewDay"
+      @mousedown.stop>
       {{ dayOfMonth }}
     </a>
 

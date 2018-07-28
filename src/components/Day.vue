@@ -18,7 +18,8 @@
 
       <a class="ds-dom" href
         :class="classesDayOfMonth"
-        @click.prevent.stop="viewDay">
+        @click.stop="viewDay"
+        @mousedown.stop>
         {{ dayOfMonth }}
       </a>
 

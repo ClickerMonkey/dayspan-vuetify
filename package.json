@@ -22,7 +22,7 @@
     "styleguide:build": "vue-styleguidist build"
   },
   "dependencies": {
-    "dayspan": "^0.12.0",
+    "dayspan": "^0.12.1",
     "material-design-icons-iconfont": "^3.0.3",
     "vue": "^2.3.3",
     "vuetify": "^1.1.1"

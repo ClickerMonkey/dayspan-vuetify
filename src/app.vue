@@ -285,7 +285,7 @@ export default {
         if (savedState)
         {
           state = savedState;
-          state.eventSorter = state.listTimes ? Sorts.List([Sorts.FullDay, Sorts.Start]) : Sorts.Start;
+          state.preferToday = false;
         }
       }
       catch (e)
@@ -305,7 +305,7 @@ export default {
         ev.data = dsMerge( ev.data, defaults );
       });
 
-      this.calendar.set( state );
+      this.$refs.app.setState( state );
     }
   }
 }
