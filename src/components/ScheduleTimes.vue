@@ -119,38 +119,48 @@ export default {
       return this.allDay ? allDay : duringDay.concat( allDay );
     },
 
-    allDay:
-    {
-      get()
-      {
-        return this.schedule.isFullDay();
-      },
-
-      set(allDay)
-      {
-        if (this.schedule.isFullDay() !== allDay)
-        {
-          this.$dayspan.getPermission('toggleAllDay',
-            (prompted) => {
-              this.schedule.setFullDay( allDay );
-              this.triggerChange();
-            },
-            () => {
-              this.$refs.allDayCheckbox.reset();
-            }
-          );
-        }
-      }
-    },
-
     hasTimes()
     {
       return this.schedule.times.length > 1;
     }
   },
 
+  data: vm => ({
+    allDay: false
+  }),
+
+  watch:
+  {
+    schedule: {
+      handler: 'updateAllDay',
+      immediate: true
+    },
+    allDay: 'updateScheduleAllDay'
+  },
+
   methods:
   {
+    updateAllDay()
+    {
+      this.allDay = this.schedule.isFullDay();
+    },
+
+    updateScheduleAllDay(allDay)
+    {
+      if (this.schedule.isFullDay() !== allDay)
+      {
+        this.$dayspan.getPermission('toggleAllDay',
+          (prompted) => {
+            this.schedule.setFullDay( allDay );
+            this.triggerChange();
+          },
+          () => {
+            this.allDay = !allDay;
+          }
+        );
+      }
+    },
+
     changeTime(ev)
     {
       ev.schedule = this.schedule;

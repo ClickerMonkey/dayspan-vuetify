@@ -242,8 +242,11 @@ export default {
     {
       let target = this.placeholder.time;
       let source = this.movingEvent.calendarEvent.time;
+      let sameTime = target.start.sameMinute( source.start );
+      let sameDay = target.start.sameDay( source.start );
+      let isDay = !isFinite( mouseEvent.offset );
 
-      if (!target.start.sameMinute( source.start ))
+      if ((isDay && !sameDay) || (!isDay && sameTime))
       {
         var ev = this.getEvent('moved', {
           mouseEvent: mouseEvent,
