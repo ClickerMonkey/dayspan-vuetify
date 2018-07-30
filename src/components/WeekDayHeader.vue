@@ -210,7 +210,7 @@ export default {
 <style scoped lang="scss">
 
 .ds-day {
-  flex: 1;
+  flex: 1 1 auto;
   width: 0;
   border-right: #e0e0e0 1px solid;
   border-bottom: #e0e0e0 1px solid;

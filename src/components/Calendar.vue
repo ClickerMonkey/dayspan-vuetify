@@ -240,18 +240,28 @@ export default {
 
     finishMove(mouseEvent)
     {
-      var ev = this.getEvent('moved', {
-        mouseEvent: mouseEvent,
-        movingEvent: this.movingEvent,
-        calendarEvent: this.movingEvent.calendarEvent,
-        target: this.placeholder.time
-      });
+      let target = this.placeholder.time;
+      let source = this.movingEvent.calendarEvent.time;
 
-      this.$emit('moved', ev);
-
-      if (!ev.handled)
+      if (!target.start.sameMinute( source.start ))
       {
-        ev.clearPlaceholder();
+        var ev = this.getEvent('moved', {
+          mouseEvent: mouseEvent,
+          movingEvent: this.movingEvent,
+          calendarEvent: this.movingEvent.calendarEvent,
+          target: this.placeholder.time
+        });
+
+        this.$emit('moved', ev);
+
+        if (!ev.handled)
+        {
+          ev.clearPlaceholder();
+        }
+      }
+      else
+      {
+        this.clearPlaceholder();
       }
 
       this.endMove();
