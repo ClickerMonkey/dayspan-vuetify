@@ -1,5 +1,5 @@
 
-import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Functions as fn } from 'dayspan';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { dsMerge } from './functions';
@@ -104,6 +104,11 @@ export default {
 
   methods:
   {
+    init()
+    {
+      this.startRefreshTimes();
+      this.addPatterns();
+    },
 
     setEventDetails(details, data, event, calendarEvent)
     {
@@ -126,6 +131,36 @@ export default {
         schedule: schedule,
         data: this.createEventData( details, schedule )
       });
+    },
+
+    addPatterns()
+    {
+      Patterns.unshift(PatternMap.lastDay = new Pattern(
+        'lastDay', false,
+        (day) => 'Last day of the month',
+        {
+          lastDayOfMonth: [1]
+        }
+      ));
+
+      Patterns.unshift(PatternMap.lastDayOfMonth = new Pattern(
+        'lastDayOfMonth', false,
+        (day) => 'Last day of ' + day.format('MMMM'),
+        {
+          month: 1,
+          lastDayOfMonth: [1]
+        }
+      ));
+
+      Patterns.unshift(PatternMap.lastWeekday = new Pattern(
+        'lastWeekday', false,
+        (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM'),
+        {
+          lastWeekspanOfMonth: [0],
+          dayOfWeek: 1,
+          month: 1
+        }
+      ));
     },
 
     getDefaultEventDetails()
@@ -203,7 +238,7 @@ export default {
         }
       }
 
-      let pattern = Pattern.findMatch( schedule );
+      let pattern = Pattern.findMatch( schedule, false );
 
       if (pattern && pattern.name !== 'custom')
       {

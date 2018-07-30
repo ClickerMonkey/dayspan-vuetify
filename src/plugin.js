@@ -29,6 +29,9 @@ export default {
 
     // allow v-bind="{$scopedSlots}"
     Vue.prototype._b = dsBind(Vue.prototype._b);
+
+    // Call initialization functions
+    $dayspan.init();
   }
 
 };

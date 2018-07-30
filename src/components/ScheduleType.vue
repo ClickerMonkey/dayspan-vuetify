@@ -89,10 +89,13 @@ export default {
         return [];
       }
 
-      return Patterns.map((pattern) => ({
-        label: pattern.describe( this.day ),
-        value: pattern.name
-      }));
+      return Patterns
+        .filter((pattern) => pattern.listed)
+        .map((pattern) => ({
+          label: pattern.describe( this.day ),
+          value: pattern.name
+        }))
+      ;
     },
 
     customIcon()

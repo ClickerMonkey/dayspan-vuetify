@@ -239,8 +239,6 @@ export default {
   {
     window.app = this.$refs.app;
 
-    this.$dayspan.startRefreshTimes();
-
     this.loadState();
   },
 
