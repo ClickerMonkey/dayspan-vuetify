@@ -19,6 +19,9 @@
           @saved="saved"
           @cancel="cancel"
           @actioned="actioned"
+          @event-create="eventCreate"
+          @event-update="eventUpdate"
+          @event-remove="eventRemove"
         ></ds-event>
 
       </v-card-text>
@@ -124,6 +127,21 @@ export default {
       {
         this.open = true;
       }
+    },
+
+    eventCreate(ev)
+    {
+      this.$emit('event-create', ev);
+    },
+
+    eventUpdate(ev)
+    {
+      this.$emit('event-update', ev);
+    },
+
+    eventRemove(ev)
+    {
+      this.$emit('event-remove', ev);
     },
 
     actioned(ev)
