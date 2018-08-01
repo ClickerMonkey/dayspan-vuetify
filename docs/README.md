@@ -22,7 +22,7 @@ Documenting components is as easy as looking at the code found [here](../src/com
 - ds-agenda
 - ds-agenda-day
 - ds-agenda-event
-- ds-calenar
+- ds-calendar
 - ds-calendar-app
 - ds-calendar-event
 - ds-calendar-event-time
