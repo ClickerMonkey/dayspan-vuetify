@@ -276,13 +276,17 @@ export default {
     allowUncancel: true,
     allowMove: true,
     allowInclude: true,
+    allowSetStart: true,
+    allowSetEnd: true,
     labels: {
       remove:     'Remove this event',
       exclude:    'Remove this occurrence',
       cancel:     'Cancel this occurrence',
       uncancel:   'Undo cancellation',
       move:       'Move this occurrence',
-      include:    'Add new occurrence'
+      include:    'Add new occurrence',
+      setStart:   'Set as first occurrence',
+      setEnd:     'Set as last occurrence'
     }
   },
 

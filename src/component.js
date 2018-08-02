@@ -65,6 +65,8 @@ export default {
       actionUncancel:     true,
       actionMove:         true,
       actionInclude:      true,
+      actionSetStart:     true,
+      actionSetEnd:       true,
       move:               true,
       toggleAllDay:       true,
       removeExistingTime: true
@@ -75,6 +77,8 @@ export default {
       actionExclude:      'Are you sure you want to remove this event occurrence?',
       actionCancel:       'Are you sure you want to cancel this event?',
       actionUncancel:     'Are you sure you want to uncancel this event?',
+      actionSetStart:     'Are you sure you want to set this occurrence as the first?',
+      actionSetEnd:       'Are you sure you want to set this occurrence as the last?',
       actionMove:         'Are you sure you want to move this event?',
       actionInclude:      'Are you sure you want to add an event occurrence?',
       move:               'Are you sure you want to move this event?',

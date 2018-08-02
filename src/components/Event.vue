@@ -507,12 +507,6 @@ export default {
 
     actioned(ev)
     {
-      if (ev.type === 'include')
-      {
-        this.targetSchedule.setExcluded( ev.target, false );
-        ev.calendar && ev.calendar.refreshEvents();
-      }
-
       this.$emit('actioned', ev);
     },
 

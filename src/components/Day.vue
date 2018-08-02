@@ -12,16 +12,16 @@
 
     <div :class="classesHeader">
 
-      <span class="ds-first-day" v-if="showMonth">
-        {{ month }}
-      </span>
-
       <a class="ds-dom" href
         :class="classesDayOfMonth"
         @click.stop="viewDay"
         @mousedown.stop>
         {{ dayOfMonth }}
       </a>
+
+      <span class="ds-first-day" v-if="showMonth">
+        {{ month }}
+      </span>
 
     </div>
 
@@ -248,7 +248,7 @@ export default {
       border-radius: 12px;
       background-color: #4285f4;
       color: white;
-      display: block;
+      display: inline-block;
       position: relative;
       z-index: 1;
     }

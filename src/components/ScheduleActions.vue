@@ -24,6 +24,14 @@
         <v-list-tile-title v-html="labels.uncancel"></v-list-tile-title>
       </v-list-tile>
 
+      <v-list-tile @click="setStart" v-if="canSetStart">
+        <v-list-tile-title v-html="labels.setStart"></v-list-tile-title>
+      </v-list-tile>
+
+      <v-list-tile @click="setEnd" v-if="canSetEnd">
+        <v-list-tile-title v-html="labels.setEnd"></v-list-tile-title>
+      </v-list-tile>
+
       <v-list-tile @click="moveStart" v-if="canMove">
         <v-menu
           lazy offset-y full-width
@@ -183,6 +191,22 @@ export default {
       default() {
         return this.$dsDefaults().allowInclude;
       }
+    },
+
+    allowSetStart:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().allowSetStart;
+      }
+    },
+
+    allowSetEnd:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().allowSetEnd;
+      }
     }
   },
 
@@ -228,6 +252,14 @@ export default {
     canInclude()
     {
       return this.allowInclude;
+    },
+    canSetStart()
+    {
+      return this.allowSetStart;
+    },
+    canSetEnd()
+    {
+      return this.allowSetEnd;
     },
     moving()
     {
@@ -314,6 +346,48 @@ export default {
         if (!ev.handled && ev.calendarEvent)
         {
           ev.calendarEvent.cancel( false );
+          ev.refresh && ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
+      });
+    },
+
+    setStart()
+    {
+      this.$dayspan.getPermission('actionSetStart', () =>
+      {
+        var ev = this.getEvent('set-start');
+
+        this.$emit('set-start', ev);
+
+        if (!ev.handled && ev.calendarEvent)
+        {
+          ev.calendarEvent.schedule.start = ev.calendarEvent.day.start();
+          ev.refresh && ev.calendar && ev.calendar.refreshEvents();
+          ev.handled = true;
+        }
+
+        this.$emit('finish', ev);
+
+        this.$emit('event-update', ev.event);
+      });
+    },
+
+    setEnd()
+    {
+      this.$dayspan.getPermission('actionSetEnd', () =>
+      {
+        var ev = this.getEvent('set-end');
+
+        this.$emit('set-end', ev);
+
+        if (!ev.handled && ev.calendarEvent)
+        {
+          ev.calendarEvent.schedule.end = ev.calendarEvent.day.end();
           ev.refresh && ev.calendar && ev.calendar.refreshEvents();
           ev.handled = true;
         }
@@ -441,9 +515,9 @@ export default {
 
         this.$emit('include', ev);
 
-        if (!ev.handled && ev.schedule && ev.target)
+        if (!ev.handled && ev.calendarEvent && ev.calendarEvent.schedule && ev.target)
         {
-          ev.schedule.setExcluded( ev.target, false );
+          ev.calendarEvent.schedule.setExcluded( ev.target, false );
           ev.calendar && ev.calendar.refreshEvents();
           ev.handled = true;
         }
