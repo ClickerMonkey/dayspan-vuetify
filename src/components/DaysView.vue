@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { Calendar, CalendarEvent } from 'dayspan';
+import { Calendar, CalendarEvent, Constants } from 'dayspan';
 
 
 export default {
@@ -147,19 +147,19 @@ export default {
     {
       if (this.scrollToFirst)
       {
-        let last = 24 * 60;
+        let last = Constants.MINUTES_IN_DAY;
         let first = this.calendar
           .iterateDays()
           .reduce( last,
             (day, first) => day.iterateEvents().reduce( first,
-              (event, first) => Math.min( first, event.start.hour * 60 + event.start.minute ),
+              (event, first) => Math.min( first, event.start.hour * Constants.MINUTES_IN_HOUR + event.start.minute ),
               (event) => !event.fullDay
             )
           );
 
         if (last !== first)
         {
-          let dayDelta = (first - this.scrollBuffer) / 60;
+          let dayDelta = (first - this.scrollBuffer) / Constants.MINUTES_IN_HOUR;
           let dayPixels = dayDelta * this.$dayspan.hourHeight;
 
           this.$refs.scrollArea.scrollTop = Math.floor( dayPixels );
