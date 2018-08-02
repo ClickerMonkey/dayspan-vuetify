@@ -161,7 +161,7 @@
                 <slot name="eventDetailsIcon" v-bind="slotData">
                   <v-select v-if="$dayspan.supports.icon"
                     single-line hide-details solo flat
-                    :prepend-icon="details.icon || 'star'"
+                    :prepend-icon="details.icon || 'help'"
                     :items="$dayspan.icons"
                     v-model="details.icon">
                     <template slot="item" slot-scope="{ item }">
