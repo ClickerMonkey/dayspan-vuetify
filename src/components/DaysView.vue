@@ -13,7 +13,7 @@
 
     <div class="ds-week-view-bottom">
 
-      <div class="ds-week-view-scrollable">
+      <div class="ds-week-view-scrollable" ref="scrollArea">
 
         <div class="ds-week-view-pane" :style="dayHeight">
 
@@ -82,6 +82,22 @@ export default {
     {
       type: Boolean,
       default: false
+    },
+
+    scrollToFirst:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().scrollToFirst;
+      }
+    },
+
+    scrollBuffer:
+    {
+      type: Number,
+      default() {
+        return this.$dsDefaults().scrollBuffer;
+      }
     }
   },
 
@@ -115,8 +131,41 @@ export default {
     ]
   }),
 
+  watch:
+  {
+    'calendar.start': 'scrollToEvent'
+  },
+
+  mounted()
+  {
+    this.scrollToEvent();
+  },
+
   methods:
   {
+    scrollToEvent()
+    {
+      if (this.scrollToFirst)
+      {
+        let last = 24 * 60;
+        let first = this.calendar
+          .iterateDays()
+          .reduce( last,
+            (day, first) => day.iterateEvents().reduce( first,
+              (event, first) => Math.min( first, event.start.hour * 60 + event.start.minute ),
+              (event) => !event.fullDay
+            )
+          );
+
+        if (last !== first)
+        {
+          let dayDelta = (first - this.scrollBuffer) / 60;
+          let dayPixels = dayDelta * this.$dayspan.hourHeight;
+
+          this.$refs.scrollArea.scrollTop = Math.floor( dayPixels );
+        }
+      }
+    }
   }
 }
 </script>

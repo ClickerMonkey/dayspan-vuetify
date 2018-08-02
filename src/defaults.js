@@ -450,6 +450,11 @@ export default {
     weekdays: moment.weekdaysShort()
   },
 
+  dsDaysView: {
+    scrollToFirst: true,
+    scrollBuffer: 60
+  },
+
   dsGestures: {
     minDistance: 50,
     maxDistance: 200,
