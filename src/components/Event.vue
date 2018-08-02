@@ -157,6 +157,24 @@
                   </v-select>
                 </slot>
 
+                <!-- Icon -->
+                <slot name="eventDetailsIcon" v-bind="slotData">
+                  <v-select v-if="$dayspan.supports.icon"
+                    single-line hide-details solo flat
+                    :prepend-icon="details.icon || 'star'"
+                    :items="$dayspan.icons"
+                    v-model="details.icon">
+                    <template slot="item" slot-scope="{ item }">
+                      <v-list-tile-avatar>
+                        <v-icon>{{ item.value }}</v-icon>
+                      </v-list-tile-avatar>
+                      <v-list-tile-content>
+                        {{ item.text }}
+                      </v-list-tile-content>
+                    </template>
+                  </v-select>
+                </slot>
+
                 <!-- Busy -->
                 <slot name="eventDetailsBusy" v-bind="slotData">
                   <v-select v-if="$dayspan.supports.busy"

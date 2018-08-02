@@ -20,6 +20,12 @@
       <span v-if="showName">
         <slot name="eventTimeTitle" v-bind="{calendarEvent, details}">
 
+          <v-icon class="ds-ev-icon"
+            v-if="hasIcon"
+            size="14"
+            :style="{color: details.forecolor}">
+            {{ details.icon }}
+          </v-icon>
           <strong class="ds-ev-title">{{ details.title }}</strong>
           <span class="ds-ev-description">{{ details.description }}</span>
 
@@ -95,6 +101,11 @@ export default {
     hasPopover()
     {
       return !!this.$scopedSlots.eventPopover;
+    },
+
+    hasIcon()
+    {
+      return !!(this.$dayspan.supports.icon && this.details.icon);
     },
 
     contentClass()

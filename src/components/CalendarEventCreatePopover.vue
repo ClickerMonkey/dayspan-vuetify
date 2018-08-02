@@ -150,6 +150,31 @@
          </v-list-tile-content>
        </v-list-tile>
 
+       <v-list-tile v-if="prompts.icon && $dayspan.supports.icon">
+         <v-list-tile-avatar>
+           <v-icon>{{ details.icon || 'help' }}</v-icon>
+         </v-list-tile-avatar>
+         <v-list-tile-content>
+           <slot name="eventCreatePopoverIcon" v-bind="slotData">
+
+            <v-select
+              single-line hide-details solo flat full-width
+              :items="$dayspan.icons"
+              v-model="details.icon">
+              <template slot="item" slot-scope="{ item }">
+                <v-list-tile-avatar>
+                  <v-icon>{{ item.value }}</v-icon>
+                </v-list-tile-avatar>
+                <v-list-tile-content>
+                  {{ item.text }}
+                </v-list-tile-content>
+              </template>
+            </v-select>
+
+           </slot>
+         </v-list-tile-content>
+       </v-list-tile>
+
        <v-list-tile v-if="prompts.busy && $dayspan.supports.busy">
          <v-list-tile-avatar>
            <v-icon>work</v-icon>

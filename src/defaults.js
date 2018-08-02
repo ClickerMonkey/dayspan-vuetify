@@ -149,6 +149,7 @@ export default {
       location:     true,
       calendar:     true,
       busy:         true,
+      icon:         true,
       guests:       false
     },
     formats: {

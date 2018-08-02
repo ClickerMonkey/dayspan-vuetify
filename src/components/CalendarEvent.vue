@@ -19,6 +19,12 @@
       <span v-if="showName">
         <slot name="eventTitle" v-bind="{calendarEvent, hasPrefix, getPrefix, details}">
 
+          <v-icon class="ds-ev-icon"
+            v-if="hasIcon"
+            size="14"
+            :style="{color: details.forecolor}">
+            {{ details.icon }}
+          </v-icon>
           <span v-if="hasPrefix">
             {{ getPrefix }}
           </span>
@@ -108,6 +114,11 @@ export default {
     hasPrefix()
     {
       return !this.calendarEvent.fullDay && this.sameDayEvents.length > 0;
+    },
+
+    hasIcon()
+    {
+      return !!(this.$dayspan.supports.icon && this.details.icon);
     },
 
     getPrefix()

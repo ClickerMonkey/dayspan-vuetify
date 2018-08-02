@@ -43,6 +43,11 @@
 
           <slot name="agendaEventDetails" v-bind="slotData">
 
+            <v-icon class="ds-details-icon"
+              v-if="details.icon" size="16">
+              {{ details.icon }}
+            </v-icon>
+
             <strong v-html="details.title"></strong>
 
             <span class="ds-details-description" v-html="details.description"></span>

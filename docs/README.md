@@ -233,6 +233,7 @@ which generate the events.
 - eventCreatePopoverDescription
 - eventCreatePopoverCalendar
 - eventCreatePopoverColor
+- eventCreatePopoverIcon
 - eventCreatePopoverBusy
 - eventCreatePopoverBodyBottom
 - eventCreatePopoverActions
@@ -261,6 +262,7 @@ which generate the events.
 - eventDetailsDescription
 - eventDetailsCalendar
 - eventDetailsColor
+- eventDetailsIcon
 - eventDetailsBusy
 - scheduleSpan
 - scheduleType

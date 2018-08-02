@@ -6,7 +6,13 @@
    <v-toolbar extended flat
     :style="styleHeader">
 
-     <v-toolbar-title slot="extension">{{ details.title }}</v-toolbar-title>
+     <v-toolbar-title slot="extension">
+       {{ details.title }}
+       <v-icon v-if="details.icon"
+        :style="styleButton">
+         {{ details.icon }}
+       </v-icon>
+     </v-toolbar-title>
 
      <v-btn
        v-if="!details.readonly"

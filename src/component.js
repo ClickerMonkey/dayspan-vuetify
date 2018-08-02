@@ -2,6 +2,7 @@
 import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
+import { default as Icons } from './icons';
 import { dsMerge } from './functions';
 import Vue from 'vue';
 
@@ -40,6 +41,7 @@ export default {
       location:       true,
       calendar:       true,
       busy:           true,
+      icon:           true,
       guests:         false
     },
 
@@ -89,6 +91,8 @@ export default {
     promptOpen: null,
 
     colors: Colors,
+
+    icons: Icons,
 
     defaults: Defaults
   },
@@ -176,7 +180,8 @@ export default {
         color: this.getDefaultEventColor(),
         forecolor: '#ffffff',
         calendar: '',
-        busy: true
+        busy: true,
+        icon: ''
       };
     },
 

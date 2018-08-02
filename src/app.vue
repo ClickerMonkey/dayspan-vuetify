@@ -35,7 +35,15 @@
       </template>
 
       <template slot="eventTimeTitle" slot-scope="{calendarEvent, details}">
-        <div><strong class="ds-ev-title">{{ details.title }}</strong></div>
+        <div>
+          <v-icon class="ds-ev-icon"
+            v-if="details.icon"
+            size="14"
+            :style="{color: details.forecolor}">
+            {{ details.icon }}
+          </v-icon>
+          <strong class="ds-ev-title">{{ details.title }}</strong>
+        </div>
         <div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
       </template>
 
