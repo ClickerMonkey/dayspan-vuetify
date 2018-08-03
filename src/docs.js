@@ -3,6 +3,9 @@ import Vuetify from 'vuetify'
 import DaySpanVuetify from './plugin'
 import App from './app'
 
+import 'vuetify/dist/vuetify.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+
 import './styles/app.scss'
 
 Vue.config.productionTip = false

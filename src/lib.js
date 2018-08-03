@@ -1,6 +1,5 @@
 
-import 'vuetify/dist/vuetify.min.css'
-import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import './styles/lib.scss'
 
 import DaySpanVuetify from './plugin'
 
