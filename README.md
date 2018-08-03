@@ -39,6 +39,65 @@ To see what options can be passed to the plugin, [checkout this file](src/compon
 
 Once done, you can access components like `ds-event`, `ds-calendar`, and `ds-calendar-app` from any component (they are registered globally).
 
+## Full Example
+
+Install with `npm install --save dayspan-vuetify`
+
+#### app.js
+```babel
+import Vue from 'vue'
+import Vuetify from 'vuetify'
+import DaySpanVuetify from 'dayspan-vuetify'
+import App from './App.vue'
+
+import 'vuetify/dist/vuetify.min.css'
+import 'material-design-icons-iconfont/dist/material-design-icons.css'
+import 'dayspan-vuetify/dist/lib/dayspan-vuetify.min.css'
+
+Vue.config.productionTip = false
+
+Vue.use(Vuetify);
+
+Vue.use(DaySpanVuetify, {
+  methods: {
+    getDefaultEventColor: () => '#1976d2'
+  }
+});
+
+new Vue({
+  el: '#app',
+  render: h => h(App)
+})
+```
+
+#### App.vue
+```vue
+<template>
+  <v-app id="app" v-cloak>
+    <ds-calendar-app :calendar="calendar"></ds-calendar-app>
+  </v-app>
+</template>
+
+<script>
+import { Calendar } from 'dayspan';
+
+export default {
+  name: 'app',
+  data: () => ({
+    calendar: Calendar.months()
+  })
+}
+</script>
+
+<style>
+body, html, #app {
+  font-family: Roboto, sans-serif;
+  width: 100%;
+  height: 100%;
+}
+</style>
+```
+
 ## Build Setup
 
 ``` bash
