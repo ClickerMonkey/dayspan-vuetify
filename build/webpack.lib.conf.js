@@ -14,6 +14,15 @@ baseWebpackConfig.entry = {
 }
 
 var webpackConfig = merge(baseWebpackConfig, {
+  externals: [
+    function(context, request, cb) {
+      if(/^[a-z\-0-9]+$/.test(request)) {
+        cb(null, 'commonjs ' + request);
+        return;
+      }
+      cb();
+    }
+  ],
   module: {
     rules: utils.styleLoaders({
       sourceMap: config.lib.productionSourceMap,
