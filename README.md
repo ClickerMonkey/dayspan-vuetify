@@ -18,6 +18,8 @@ This library is nearing functional completion (documentation on every component,
 
 Install with `npm install --save dayspan-vuetify`
 
+**This library works best with Vuetify >= 1.1.9**
+
 ```babel
 import DaySpanVuetify from 'dayspan-vuetify'
 
@@ -39,7 +41,11 @@ To see what options can be passed to the plugin, [checkout this file](src/compon
 
 Once done, you can access components like `ds-event`, `ds-calendar`, and `ds-calendar-app` from any component (they are registered globally).
 
-## Full Example
+## Example / Template
+
+Checkout [dayspan-vuetify-example](https://github.com/ClickerMonkey/dayspan-vuetify-example) for an example of a calendar app which saves events to localStorage.
+
+## Example Code
 
 Install with `npm install --save dayspan-vuetify`
 
@@ -73,7 +79,7 @@ new Vue({
 #### App.vue
 ```vue
 <template>
-  <v-app id="app" v-cloak>
+  <v-app id="dayspan" v-cloak>
     <ds-calendar-app :calendar="calendar"></ds-calendar-app>
   </v-app>
 </template>
@@ -90,12 +96,31 @@ export default {
 </script>
 
 <style>
-body, html, #app {
+body, html, #app, #dayspan {
   font-family: Roboto, sans-serif;
   width: 100%;
   height: 100%;
 }
 </style>
+```
+
+#### index.html
+```html
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet">
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, minimal-ui">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>You Calendar App Title</title>
+    <style> [v-cloak] { display: none; } </style>
+  </head>
+  <body>
+    <div id="app"></div>
+    <!-- built files should be auto injected -->
+  </body>
+</html>
 ```
 
 ## Build Setup
