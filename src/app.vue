@@ -55,7 +55,6 @@
 <script>
 import { dsMerge } from './functions';
 import { Calendar, Weekday, Month, Sorts } from 'dayspan';
-import Vue from 'vue';
 
 
 export default {

@@ -10,6 +10,8 @@ export default {
 
   data:
   {
+    version:          '0.2.4',
+
     today:            Day.today(),
     tomorrow:         Day.tomorrow(),
     now:              Day.now(),

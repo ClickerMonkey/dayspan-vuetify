@@ -14,7 +14,9 @@ export default {
     }
 
     // $dayspan is just another reactive component
-    var $dayspan = new Vue( dsMergeOptions( options, Component ) );
+    var $dayspan = new Vue( options
+      ? dsMergeOptions( options, Component )
+      : Component );
 
     // allow directives to access $dayspan
     Vue.$dayspan = $dayspan;

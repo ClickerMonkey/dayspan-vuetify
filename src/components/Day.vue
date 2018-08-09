@@ -230,6 +230,7 @@ export default {
   border-bottom: #e0e0e0 1px solid;
   padding: 4px;
   overflow: hidden;
+  user-select: none;
 
   .ds-dom {
     text-decoration: none;
