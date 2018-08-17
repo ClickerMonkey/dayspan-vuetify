@@ -28,7 +28,7 @@
 
      <slot name="eventPopoverToolbarRight" v-bind="slotData"></slot>
 
-     <slot name="eventPopoverToolbarActions" v-bind="slotData"></slot>
+     <slot name="eventPopoverToolbarActions" v-bind="slotData">
 
        <v-tooltip bottom>
 
@@ -52,7 +52,7 @@
 
      </slot>
 
-     <slot name="eventPopoverToolbarClose" v-bind="slotData"></slot>
+     <slot name="eventPopoverToolbarClose" v-bind="slotData">
 
        <v-btn icon @click="close" :style="styleButton">
          <v-icon>close</v-icon>
