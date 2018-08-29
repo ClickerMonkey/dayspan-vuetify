@@ -247,6 +247,7 @@ export default {
   right: 0px;
   user-select: none;
   border-radius: 2px;
+  pointer-events: none;
 
   /deep/ .v-menu__activator {
     align-items: end;
@@ -255,6 +256,7 @@ export default {
   .ds-calendar-event-span {
     width: 100%;
     height: 100%;
+    pointer-events: all;
   }
 }
 
