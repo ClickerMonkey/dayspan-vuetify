@@ -323,7 +323,6 @@ export default {
 
   data: vm => ({
     drawer: null,
-    currentType: vm.types[0],
     optionsVisible: false,
     options: [],
     promptVisible: false,
@@ -333,13 +332,27 @@ export default {
 
   watch:
   {
-    'currentType': 'tryRebuild',
     'events': 'applyEvents',
     'calendar': 'applyEvents'
   },
 
   computed:
   {
+    currentType:
+    {
+      get()
+      {
+        return this.types.find((type) =>
+          type.type === this.calendar.type &&
+          type.size === this.calendar.size
+        ) || this.types[0];
+      },
+      set(type)
+      {
+        this.rebuild(undefined, true, type);
+      }
+    },
+
     summary()
     {
       let small = this.$vuetify.breakpoint.xs;
@@ -405,27 +418,7 @@ export default {
 
       this.calendar.set( state );
 
-      this.updateType();
-
       this.triggerChange();
-    },
-
-    tryRebuild(newType)
-    {
-      this.rebuild();
-    },
-
-    updateType()
-    {
-      let foundType = this.types.find((type) =>
-        type.type === this.calendar.type &&
-        type.size === this.calendar.size
-      );
-
-      if (foundType)
-      {
-        this.currentType = foundType;
-      }
     },
 
     applyEvents()
@@ -459,6 +452,7 @@ export default {
         size: type.size,
         around: aroundDay,
         eventsOutside: true,
+        preferToday: false,
         listTimes: type.listTimes,
         updateRows: type.updateRows,
         updateColumns: type.listTimes,
