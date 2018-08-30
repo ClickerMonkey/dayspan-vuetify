@@ -244,9 +244,9 @@ export default {
       let source = this.movingEvent.calendarEvent.time;
       let sameTime = target.start.sameMinute( source.start );
       let sameDay = target.start.sameDay( source.start );
-      let isDay = !isFinite( mouseEvent.offset );
+      let isDay = mouseEvent.type === 'mouse-up-day'
 
-      if ((isDay && !sameDay) || (!isDay && sameTime))
+      if ((isDay && !sameDay) || (!isDay && !sameTime))
       {
         var ev = this.getEvent('moved', {
           mouseEvent: mouseEvent,

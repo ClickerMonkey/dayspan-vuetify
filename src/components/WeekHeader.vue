@@ -1,6 +1,6 @@
 <template>
 
-  <div class="ds-week-header">
+  <div class="ds-week-header" :style="style">
 
     <div class="ds-hour-list"></div>
 
@@ -51,6 +51,22 @@ export default {
     {
       type: Boolean,
       default: false
+    },
+
+    scrollPush:
+    {
+      type: Number,
+      default: 0
+    }
+  },
+
+  computed:
+  {
+    style()
+    {
+      return {
+        marginRight: this.scrollPush + 'px'
+      };
     }
   },
 

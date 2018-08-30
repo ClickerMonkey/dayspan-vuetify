@@ -9,13 +9,14 @@
       :placeholder="placeholder"
       :placeholder-for-create="placeholderForCreate"
       :days="calendar.days"
+      :scroll-push="scrollPush"
     ></ds-week-header>
 
     <div class="ds-week-view-bottom">
 
       <div class="ds-week-view-scrollable" ref="scrollArea">
 
-        <div class="ds-week-view-pane" :style="dayHeight">
+        <div class="ds-week-view-pane" ref="pane" :style="dayHeight">
 
           <div class="ds-week">
 
@@ -125,6 +126,7 @@ export default {
   },
 
   data: vm => ({
+    scrollPush: 0,
     hours: [
       '    ', '1am', '2am', '3am', '4am', '5am', '6am', '7am', '8am', '9am', '10am', '11am',
       '12pm', '1pm', '2pm', '3pm', '4pm', '5pm', '6pm', '7pm', '8pm', '9pm', '10pm', '11pm'
@@ -139,6 +141,7 @@ export default {
   mounted()
   {
     this.scrollToEvent();
+    this.scrollPush = this.getScrollPush();
   },
 
   methods:
@@ -165,8 +168,16 @@ export default {
           this.$refs.scrollArea.scrollTop = Math.floor( dayPixels );
         }
       }
+    },
+    getScrollPush()
+    {
+      var area = this.$refs.scrollArea;
+      var pane = this.$refs.pane;
+
+      return area && pane ? (area.offsetWidth - pane.offsetWidth) : 0;
     }
   }
+
 }
 </script>
 
