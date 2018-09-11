@@ -222,7 +222,6 @@ which generate the events.
 - containerInside
 - eventTitle
 - eventEmpty
-- eventPopover
 - eventCreatePopoverToolbarLeft
 - eventCreatePopoverToolbarRight
 - eventCreatePopoverToolbarSave
@@ -252,7 +251,6 @@ which generate the events.
 - eventPopoverActions
 - eventTimeTitle
 - eventTimeEmpty
-- eventPopover
 - eventCreatePopover
 - scheduleCancel
 - scheduleSave
