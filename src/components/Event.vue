@@ -185,6 +185,16 @@
                   ></v-select>
                 </slot>
 
+				<!-- Custom -->
+				<v-select v-if="$dayspan.supports.custom && $dayspan.supports.custom.length"
+					v-for="custom in $dayspan.supports.custom"
+					:key="custom.id"
+                    single-line hide-details solo flat
+                    :prepend-icon="custom.icon"
+                    :items="custom.options"
+					:placeholder="custom.label"
+                    v-model="details[custom.id]"
+                  ></v-select>
               </v-card-text>
             </v-card>
           </v-tab-item>
