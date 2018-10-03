@@ -44,7 +44,19 @@ export default {
       calendar:       true,
       busy:           true,
       icon:           true,
-      guests:         false
+	  guests:         false,
+	  custom: [
+		  {
+			  id: "custom",
+			  label: "Custom Field",
+			  icon: "favorite",
+			  options: [
+				  "One",
+				  "Two",
+				  "Three"
+			  ]
+		  }
+	  ]
     },
 
     features: {

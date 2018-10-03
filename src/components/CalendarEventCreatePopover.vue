@@ -192,6 +192,23 @@
          </v-list-tile-content>
        </v-list-tile>
 
+		<v-list-tile v-if="$dayspan.supports.custom && $dayspan.supports.custom.length"
+			v-for="custom in $dayspan.supports.custom"
+			:key="custom.id">
+
+			<v-list-tile-avatar>
+			<v-icon>{{custom.icon}}</v-icon>
+			</v-list-tile-avatar>
+			<v-list-tile-content>
+			<v-select
+				single-line hide-details solo flat full-width
+				:items="custom.options"
+				v-model="details[custom.id]"
+				></v-select>
+			</v-list-tile-content>
+       </v-list-tile>
+
+
      </v-list>
 
      <slot name="eventCreatePopoverBodyBottom" v-bind="slotData"></slot>
