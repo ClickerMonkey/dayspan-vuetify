@@ -192,6 +192,7 @@
                     single-line hide-details solo flat
                     :prepend-icon="custom.icon"
                     :items="custom.options"
+					:placeholder="custom.label"
                     v-model="details[custom.id]"
                   ></v-select>
               </v-card-text>

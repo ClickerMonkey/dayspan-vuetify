@@ -204,6 +204,7 @@
 				single-line hide-details solo flat full-width
 				:items="custom.options"
 				v-model="details[custom.id]"
+				:placeholder="custom.label"
 				></v-select>
 			</v-list-tile-content>
        </v-list-tile>
