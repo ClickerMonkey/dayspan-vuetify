@@ -32,7 +32,6 @@
 
 <script>
 import { Calendar, CalendarEvent } from 'dayspan';
-import * as moment from 'moment';
 
 
 export default {

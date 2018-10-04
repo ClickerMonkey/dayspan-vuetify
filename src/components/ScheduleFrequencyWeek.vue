@@ -5,8 +5,8 @@
     <v-flex xs7>
       <v-select
         hide-details solo flat
-        label="Weeks"
         v-model="type"
+        :label="labels.type"
         :items="options"
       ></v-select>
     </v-flex>
@@ -68,10 +68,21 @@ export default {
         return this.$dsDefaults().options;
       }
     },
+    
     types:
     {
       default() {
         return this.$dsDefaults().types;
+      }
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'labels');
+      },
+      default() {
+        return this.$dsDefaults().labels;
       }
     }
   },

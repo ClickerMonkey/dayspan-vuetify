@@ -3,7 +3,8 @@ import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patte
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
-import { dsMerge } from './functions';
+import { default as Locales, defaultLocale } from './locales'
+import { dsMerge, dsMergeLocale } from './functions';
 import Vue from 'vue';
 
 export default {
@@ -76,6 +77,8 @@ export default {
       removeExistingTime: true
     },
 
+    promptOpen: null,
+
     promptLabels: {
       actionRemove:       'Are you sure you want to remove this event?',
       actionExclude:      'Are you sure you want to remove this event occurrence?',
@@ -90,13 +93,25 @@ export default {
       removeExistingTime: 'Are you sure you want to remove all event occurrences at this time?'
     },
 
-    promptOpen: null,
+    placeholder: {
+      noTitle: '(no title)'
+    },
+
+    patterns: {
+      lastDay:        (day) => 'Last day of the month',
+      lastDayOfMonth: (day) => 'Last day of ' + day.format('MMMM'),
+      lastWeekday:    (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM')
+    },
 
     colors: Colors,
 
     icons: Icons,
 
-    defaults: Defaults
+    defaults: Defaults,
+
+    locales: Locales,
+
+    currentLocale: defaultLocale
   },
 
   computed:
@@ -114,8 +129,40 @@ export default {
 
   methods:
   {
+    setLocale(name, strict)
+    {
+      const locale = this.locales[name];
+
+      if (!locale && strict)
+      {
+        throw 'No locale exists with the name ' + name;
+      }
+      else if (locale)
+      {
+        dsMergeLocale(this, locale, name);
+      }
+    },
+
+    addLocale(name, locale)
+    {
+      this.locales[name] = locale;
+    },
+
+    updateLocale(name, update)
+    {
+      const locale = this.locales[name];
+
+      if (!locale)
+      {
+        throw 'No locale exists with the name ' + name;
+      }
+
+      dsMergeLocale(locale, update);
+    },
+
     init()
     {
+      this.setLocale(this.currentLocale, true);
       this.startRefreshTimes();
       this.addPatterns();
     },
@@ -147,7 +194,7 @@ export default {
     {
       Patterns.unshift(PatternMap.lastDay = new Pattern(
         'lastDay', false,
-        (day) => 'Last day of the month',
+        (day) => this.patterns.lastDay(day),
         {
           lastDayOfMonth: [1]
         }
@@ -155,7 +202,7 @@ export default {
 
       Patterns.unshift(PatternMap.lastDayOfMonth = new Pattern(
         'lastDayOfMonth', false,
-        (day) => 'Last day of ' + day.format('MMMM'),
+        (day) => this.patterns.lastDayOfMonth(day),
         {
           month: 1,
           lastDayOfMonth: [1]
@@ -164,7 +211,7 @@ export default {
 
       Patterns.unshift(PatternMap.lastWeekday = new Pattern(
         'lastWeekday', false,
-        (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM'),
+        (day) => this.patterns.lastWeekday(day),
         {
           lastWeekspanOfMonth: [0],
           dayOfWeek: 1,
@@ -316,7 +363,7 @@ export default {
     {
       let details = this.getDefaultEventDetails();
 
-      details.title = '(no title)';
+      details.title = this.placeholder.noTitle;
 
       return details;
     },

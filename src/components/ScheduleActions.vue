@@ -50,16 +50,16 @@
             v-if="movingDate"
             v-model="targetDate">
             <v-spacer></v-spacer>
-            <v-btn flat color="primary" @click="movingDate = false">Cancel</v-btn>
-            <v-btn flat color="primary" @click="moveEnd">OK</v-btn>
+            <v-btn flat color="primary" @click="movingDate = false">{{ labels.pickerCancel }}</v-btn>
+            <v-btn flat color="primary" @click="moveEnd">{{ labels.pickerOk }}</v-btn>
           </v-date-picker>
 
           <v-time-picker no-title scrollable
             v-if="movingTime"
             v-model="targetTime">
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="movingTime = false">Cancel</v-btn>
-            <v-btn color="primary" @click="moveEnd">OK</v-btn>
+            <v-btn color="primary" @click="movingTime = false">{{ labels.pickerCancel }}</v-btn>
+            <v-btn color="primary" @click="moveEnd">{{ labels.pickerOk }}</v-btn>
           </v-time-picker>
 
         </v-menu>
@@ -83,16 +83,16 @@
             v-if="includingDate"
             v-model="targetDate">
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="includingDate = false">Cancel</v-btn>
-            <v-btn color="primary" @click="includeEnd">OK</v-btn>
+            <v-btn color="primary" @click="includingDate = false">{{ labels.pickerCancel }}</v-btn>
+            <v-btn color="primary" @click="includeEnd">{{ labels.pickerOk }}</v-btn>
           </v-date-picker>
 
           <v-time-picker no-title scrollable
             v-if="includingTime"
             v-model="targetTime">
             <v-spacer></v-spacer>
-            <v-btn color="primary" @click="includingTime = false">Cancel</v-btn>
-            <v-btn color="primary" @click="includeEnd">OK</v-btn>
+            <v-btn color="primary" @click="includingTime = false">{{ labels.pickerCancel }}</v-btn>
+            <v-btn color="primary" @click="includeEnd">{{ labels.pickerOk }}</v-btn>
           </v-time-picker>
 
         </v-menu>

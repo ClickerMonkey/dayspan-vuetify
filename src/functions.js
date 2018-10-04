@@ -101,3 +101,46 @@ export function dsBind(bind)
     return bind.apply(this, arguments);
   };
 }
+
+export function dsMergeLocale(currentData, localeData, path = '')
+{
+  if (fn.isArray(localeData) && fn.isArray(currentData) && localeData.length === currentData.length)
+  {
+    for (let i = 0; i < localeData.length; i++)
+    {
+      let value = localeData[i];
+
+      if (fn.isObject(value) || fn.isArray(value))
+      {
+        dsMergeLocale(currentData[i], value, path + '[' + i + ']');
+      }
+      else
+      {
+        currentData[i] = value;
+      }
+    }
+
+    return;
+  }
+
+  if (fn.isObject(localeData) && fn.isObject(currentData))
+  {
+    for (let prop in localeData)
+    {
+      let value = localeData[prop];
+
+      if (fn.isObject(value) || fn.isArray(value))
+      {
+        dsMergeLocale(currentData[prop], value, path + '.' + prop);
+      }
+      else
+      {
+        currentData[prop] = value;
+      }
+    }
+
+    return;
+  }
+
+  throw 'Incompatible locale data at ' + path;
+}
