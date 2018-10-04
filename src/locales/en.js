@@ -69,12 +69,12 @@ export default {
     },
     dsCalendarApp: {
       types: [
-        {label: 'Day'},
-        {label: 'Week'},
-        {label: 'Month'},
-        {label: 'Year'},
-        {label: 'Schedule'},
-        {label: '4 days'}
+        { label: 'Day' },
+        { label: 'Week' },
+        { label: 'Month' },
+        { label: 'Year' },
+        { label: 'Schedule' },
+        { label: '4 days' }
       ],
       formats: {
         today: 'dddd, MMMM D',
