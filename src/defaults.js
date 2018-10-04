@@ -121,6 +121,7 @@ export default {
   },
 
   dsCalendarEventPopover: {
+    allowEditOnReadOnly: true,
     formats: {
       start:    LOCALE_ENTRY,
       time:     LOCALE_ENTRY

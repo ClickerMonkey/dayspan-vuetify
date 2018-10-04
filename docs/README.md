@@ -262,6 +262,12 @@ which generate the events.
 - eventDetailsColor
 - eventDetailsIcon
 - eventDetailsBusy
+- eventDetailsExtra
+- eventTabsExtra
+- eventExclusions
+- eventInclusions
+- eventCancels
+- schedule
 - scheduleSpan
 - scheduleType
 - scheduleTimes

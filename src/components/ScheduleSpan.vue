@@ -5,6 +5,7 @@
     <v-menu offset-y
       :close-on-content-click="false"
       :nudge-width="60"
+      :disabled="isReadOnly"
       v-model="startMenu">
 
       <v-btn depressed
@@ -36,6 +37,7 @@
     <v-menu offset-y
       :close-on-content-click="false"
       :nudge-width="60"
+      :disabled="isReadOnly"
       v-model="endMenu">
 
       <v-btn depressed
@@ -87,6 +89,12 @@ export default {
       type: Day
     },
 
+    readOnly:
+    {
+      type: Boolean,
+      default: false
+    },
+
     labels:
     {
       validate(x) {
@@ -119,29 +127,39 @@ export default {
     {
       return !!this.schedule.start;
     },
+
     hasEnd()
     {
       return !!this.schedule.end;
     },
+
     startSpan: function()
     {
       var point = this.schedule.start || this.day;
 
       return point ? DaySpan.point( point ) : null;
     },
+
     startText()
     {
       return this.schedule.start ? this.schedule.start.format( this.formats.start ) : this.labels.startless;
     },
+
     endSpan()
     {
       var point = this.schedule.end || this.day;
 
       return point ? DaySpan.point( point ) : null;
     },
+
     endText()
     {
       return this.schedule.end ? this.schedule.end.format( this.formats.end ) : this.labels.endless;
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

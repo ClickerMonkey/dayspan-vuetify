@@ -9,6 +9,7 @@
       <ds-agenda-event
         v-bind="{$scopedSlots}"
         v-on="$listeners"
+        :read-only="readOnly"
         :key="event.id"
         :calendar-event="event"
         :calendar="calendar"
@@ -42,6 +43,12 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     placeholder:

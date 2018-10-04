@@ -13,6 +13,7 @@
       <ds-agenda-day
         v-bind="{$scopedSlots}"
         v-on="$listeners"
+        :read-only="readOnly"
         :key="day.dayIdentifier"
         :day="day"
         :calendar="calendar"
@@ -40,6 +41,12 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     }
   },
 

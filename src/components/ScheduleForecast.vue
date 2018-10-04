@@ -23,7 +23,7 @@
         :key="time.time"
         :day="aroundDay"
         :time="time"
-        :can-exclude="canExclude"
+        :can-exclude="canExclude && !isReadOnly"
         @exclude="exclude"
       ></ds-calendar-event-chip>
 
@@ -51,6 +51,12 @@ export default {
     day:
     {
       type: Day
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     canExclude:
@@ -128,6 +134,11 @@ export default {
         })
         .list()
       ;
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

@@ -5,6 +5,7 @@
     :hint="typeHint"
     :hide-details="hideHint"
     :append-outer-icon="customIcon"
+    :disabled="isReadOnly"
     v-model="type"
     item-text="label"
     item-value="value"
@@ -32,6 +33,12 @@ export default {
     {
       required: true,
       type: Schedule
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     formats:
@@ -101,6 +108,11 @@ export default {
     customIcon()
     {
       return this.type === 'custom' ? 'edit' : '';
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

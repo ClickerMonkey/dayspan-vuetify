@@ -10,7 +10,7 @@
       <ds-identifier-chip
         :key="id"
         :identifier="id"
-        :can-remove="canRemove"
+        :can-remove="canRemove && !isReadOnly"
         @remove="remove"
       ></ds-identifier-chip>
 
@@ -33,6 +33,12 @@ export default {
     {
       required: true,
       type: ScheduleModifier
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     canRemove:
@@ -61,6 +67,11 @@ export default {
     identifiers()
     {
       return this.modifier.identifiers(x => x).list();
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

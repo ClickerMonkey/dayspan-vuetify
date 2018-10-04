@@ -11,7 +11,9 @@ export default {
 
   data:
   {
-    version:          '0.2.4',
+    version:          '0.3.0',
+
+    readOnly:         false,
 
     today:            Day.today(),
     tomorrow:         Day.tomorrow(),
