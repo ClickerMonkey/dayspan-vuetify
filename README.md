@@ -20,7 +20,7 @@ Install with `npm install --save dayspan-vuetify`
 
 **This library works best with Vuetify >= 1.1.9**
 
-```babel
+```javascript
 import DaySpanVuetify from 'dayspan-vuetify'
 
 Vue.use( DaySpanVuetify, {
@@ -50,7 +50,7 @@ Checkout [dayspan-vuetify-example](https://github.com/ClickerMonkey/dayspan-vuet
 Install with `npm install --save dayspan-vuetify`
 
 #### app.js
-```babel
+```javascript
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import DaySpanVuetify from 'dayspan-vuetify'
@@ -127,7 +127,7 @@ body, html, #app, #dayspan {
 
 This library supports multiple locales but comes only with [en-us/en](https://github.com/ClickerMonkey/dayspan-vuetify/blob/master/src/locales/en.js). The following code shows you how to add locales, changing the current locale, and updating a given locale:
 
-```babel
+```javascript
 // You can access $dayspan via Vue.$dayspan or this.$dayspan inside a component.
 
 $dayspan.setLocale('en'); // if en does not exist, this will have no affect
