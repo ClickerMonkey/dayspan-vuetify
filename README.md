@@ -20,7 +20,7 @@ Install with `npm install --save dayspan-vuetify`
 
 **This library works best with Vuetify >= 1.1.9**
 
-```babel
+```javascript
 import DaySpanVuetify from 'dayspan-vuetify'
 
 Vue.use( DaySpanVuetify, {
@@ -50,7 +50,7 @@ Checkout [dayspan-vuetify-example](https://github.com/ClickerMonkey/dayspan-vuet
 Install with `npm install --save dayspan-vuetify`
 
 #### app.js
-```babel
+```javascript
 import Vue from 'vue'
 import Vuetify from 'vuetify'
 import DaySpanVuetify from 'dayspan-vuetify'
@@ -121,6 +121,34 @@ body, html, #app, #dayspan {
     <!-- built files should be auto injected -->
   </body>
 </html>
+```
+
+### Locales
+
+This library supports multiple locales but comes only with [en-us/en](https://github.com/ClickerMonkey/dayspan-vuetify/blob/master/src/locales/en.js). The following code shows you how to add locales, changing the current locale, and updating a given locale:
+
+```javascript
+// You can access $dayspan via Vue.$dayspan or this.$dayspan inside a component.
+
+$dayspan.setLocale('en'); // if en does not exist, this will have no affect
+$dayspan.setLocale('fr', true); // true was passed, so if the locale does not exist an error is thrown
+$dayspan.locales; // map of locale names to locale values
+
+// A locale is really just an object that overrides the values you specify found in $dayspan. A locale does not need to specify all possible values, just ones that should be overriden when setLocale is called.
+
+$dayspan.addLocale('es', {
+  promptLabels: {
+    // Are you sure you want to remove this event?
+    actionRemove: '¿Estás seguro de que quieres eliminar este evento?'
+  }
+});
+
+// Update locale (merge changes into locale)
+$dayspan.updateLocale('en', {
+  patterns: {
+    lastDay: (day) => 'Final day of the month'
+  }
+});
 ```
 
 ## Build Setup
