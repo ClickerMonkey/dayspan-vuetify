@@ -142,6 +142,8 @@ export default {
       else if (locale)
       {
         dsMergeLocale(this, locale, name);
+
+        this.currentLocale = name;
       }
     },
 
