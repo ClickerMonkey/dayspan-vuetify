@@ -7,6 +7,8 @@ import { default as Locales, defaultLocale } from './locales'
 import { dsMerge, dsMergeLocale } from './functions';
 import Vue from 'vue';
 
+const LOCALE_ENTRY = 0;
+
 export default {
 
   data:
@@ -82,27 +84,27 @@ export default {
     promptOpen: null,
 
     promptLabels: {
-      actionRemove:       'Are you sure you want to remove this event?',
-      actionExclude:      'Are you sure you want to remove this event occurrence?',
-      actionCancel:       'Are you sure you want to cancel this event?',
-      actionUncancel:     'Are you sure you want to uncancel this event?',
-      actionSetStart:     'Are you sure you want to set this occurrence as the first?',
-      actionSetEnd:       'Are you sure you want to set this occurrence as the last?',
-      actionMove:         'Are you sure you want to move this event?',
-      actionInclude:      'Are you sure you want to add an event occurrence?',
-      move:               'Are you sure you want to move this event?',
-      toggleAllDay:       'Are you sure you want to change whether this event occurs all day?',
-      removeExistingTime: 'Are you sure you want to remove all event occurrences at this time?'
+      actionRemove:       LOCALE_ENTRY,
+      actionExclude:      LOCALE_ENTRY,
+      actionCancel:       LOCALE_ENTRY,
+      actionUncancel:     LOCALE_ENTRY,
+      actionSetStart:     LOCALE_ENTRY,
+      actionSetEnd:       LOCALE_ENTRY,
+      actionMove:         LOCALE_ENTRY,
+      actionInclude:      LOCALE_ENTRY,
+      move:               LOCALE_ENTRY,
+      toggleAllDay:       LOCALE_ENTRY,
+      removeExistingTime: LOCALE_ENTRY
     },
 
     placeholder: {
-      noTitle: '(no title)'
+      noTitle:            LOCALE_ENTRY
     },
 
     patterns: {
-      lastDay:        (day) => 'Last day of the month',
-      lastDayOfMonth: (day) => 'Last day of ' + day.format('MMMM'),
-      lastWeekday:    (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM')
+      lastDay:            LOCALE_ENTRY,
+      lastDayOfMonth:     LOCALE_ENTRY,
+      lastWeekday:        LOCALE_ENTRY
     },
 
     colors: Colors,
