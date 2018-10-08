@@ -3,6 +3,7 @@
 
     <ds-calendar-app ref="app"
       :calendar="calendar"
+      :read-only="readOnly"
       @change="saveState">
 
       <template slot="title">
@@ -20,6 +21,7 @@
       <template slot="eventPopover" slot-scope="slotData">
          <ds-calendar-event-popover
           v-bind="slotData"
+          :read-only="readOnly"
           @finish="saveState"
         ></ds-calendar-event-popover>
       </template>
@@ -47,6 +49,15 @@
         <div class="ds-ev-description">{{ getCalendarTime( calendarEvent ) }}</div>
       </template>
 
+      <template slot="drawerBottom">
+        <div class="pa-3">
+          <v-checkbox
+            label="Read Only?"
+            v-model="readOnly"
+          ></v-checkbox>
+        </div>
+      </template>
+
     </ds-calendar-app>
 
   </v-app>
@@ -64,6 +75,7 @@ export default {
   data: vm => ({
     storeKey: 'dayspanState',
     calendar: Calendar.months(),
+    readOnly: false,
     defaultEvents: [
       {
         data: {

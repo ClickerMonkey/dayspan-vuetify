@@ -1,6 +1,6 @@
 {
   "name": "dayspan-vuetify",
-  "version": "0.2.6",
+  "version": "0.3.2",
   "description": "A collection of components for Schedules and Calendars in DaySpan using Vuetify",
   "author": "Philip Diffenderfer <pdiffenderfer@gmail.com>",
   "repository": {

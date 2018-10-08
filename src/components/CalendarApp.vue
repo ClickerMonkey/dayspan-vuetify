@@ -31,10 +31,7 @@
       </span>
     </v-toolbar-title>
 
-    <slot name="today"
-      :setToday="setToday"
-      :todayDate="todayDate"
-      :calendar="calendar">
+    <slot name="today" v-bind="{setToday, todayDate, calendar}">
 
       <v-tooltip bottom>
         <v-btn slot="activator"
@@ -52,10 +49,7 @@
 
     </slot>
 
-    <slot name="prev"
-      :prev="prev"
-      :prevLabel="prevLabel"
-      :calendar="calendar">
+    <slot name="prev" v-bind="{prev, prevLabel, calendar}">
 
       <v-tooltip bottom>
         <v-btn slot="activator"
@@ -67,10 +61,8 @@
       </v-tooltip>
 
     </slot>
-    <slot name="next"
-      :next="next"
-      :nextLabel="nextLabel"
-      :calendar="calendar">
+
+    <slot name="next" v-bind="{next, nextLabel, calendar}">
 
       <v-tooltip bottom>
         <v-btn slot="activator"
@@ -84,9 +76,7 @@
 
     </slot>
 
-    <slot name="summary"
-      :summary="summary"
-      :calendar="calendar">
+    <slot name="summary" v-bind="{summary, calendar}">
 
       <h1 class="title ds-light-forecolor">
         {{ summary }}
@@ -96,9 +86,7 @@
 
     <v-spacer></v-spacer>
 
-    <slot name="view"
-      :currentType="currentType"
-      :types="types">
+    <slot name="view" v-bind="{currentType, types}">
 
       <v-menu>
         <v-btn flat slot="activator">
@@ -136,6 +124,7 @@
             <ds-agenda
               v-bind="{$scopedSlots}"
               v-on="$listeners"
+              :read-only="readOnly"
               :calendar="calendar"
               @add="add"
               @edit="edit"
@@ -154,6 +143,7 @@
               v-bind="{$scopedSlots}"
               v-on="$listeners"
               :calendar="calendar"
+              :read-only="readOnly"
               @add="add"
               @add-at="addAt"
               @edit="edit"
@@ -174,6 +164,7 @@
           v-bind="{$scopedSlots}"
           v-on="$listeners"
           :calendar="calendar"
+          :read-only="readOnly"
           @saved="eventFinish"
           @actioned="eventFinish"
         ></ds-event-dialog>
@@ -220,7 +211,7 @@
 
       <slot name="calendarAppAdd" v-bind="{allowsAddToday, addToday}">
 
-        <v-fab-transition>
+        <v-fab-transition v-if="!readOnly">
           <v-btn
             class="ds-add-event-today"
             color="primary"
@@ -259,6 +250,11 @@ export default {
       default() {
         return Calendar.months();
       }
+    },
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
     types:
     {
@@ -392,6 +388,16 @@ export default {
     hasCreatePopover()
     {
       return !!this.$scopedSlots.eventCreatePopover;
+    },
+
+    canAddDay()
+    {
+      return this.$dayspan.features.addDay && !this.readOnly && !this.$dayspan.readOnly;
+    },
+
+    canAddTime()
+    {
+      return this.$dayspan.features.addTime && !this.readOnly && !this.$dayspan.readOnly;
     }
   },
 
@@ -508,7 +514,7 @@ export default {
 
     add(day)
     {
-      if (!this.$dayspan.features.addDay)
+      if (!this.canAddDay)
       {
         return;
       }
@@ -528,7 +534,7 @@ export default {
 
     addAt(dayHour)
     {
-      if (!this.$dayspan.features.addTime)
+      if (!this.canAddTime)
       {
         return;
       }
@@ -549,7 +555,7 @@ export default {
 
     addToday()
     {
-      if (!this.$dayspan.features.addDay)
+      if (!this.canAddDay)
       {
         return;
       }

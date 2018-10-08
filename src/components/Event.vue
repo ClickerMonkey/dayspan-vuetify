@@ -24,9 +24,10 @@
       <div class="ds-event-actions">
 
         <!-- Save -->
-        <slot name="scheduleSave" v-bind="{hasSave, save, labels}">
+        <slot name="scheduleSave" v-bind="{hasSave, save, labels, readOnly}">
 
           <v-btn
+            v-if="!isReadOnly"
             class="ds-button-tall ml-3 mt-0 mb-2" depressed
             color="primary"
             :disabled="!canSave"
@@ -39,10 +40,10 @@
         </slot>
 
         <!-- More Actions -->
-        <slot name="scheduleActions" v-bind="{calendarEvent, schedule, calendar, actioned}">
+        <slot name="scheduleActions" v-bind="{calendarEvent, schedule, calendar, actioned, readOnly}">
 
           <ds-schedule-actions
-            v-if="calendarEvent"
+            v-if="calendarEvent && !isReadOnly"
             v-bind="{$scopedSlots}"
             v-on="$listeners"
             :schedule="schedule"
@@ -65,6 +66,7 @@
         <v-text-field single-line hide-details solo flat
           class="ds-event-title"
           :label="labels.title"
+          :readonly="isReadOnly"
           v-model="details.title"
         ></v-text-field>
 
@@ -74,10 +76,15 @@
 
     <div class="ds-event-body ds-event-area">
 
-      <ds-schedule
-        :schedule="schedule"
-        :day="day"
-      ></ds-schedule>
+      <slot name="schedule" v-bind="slotData">
+
+        <ds-schedule
+          :schedule="schedule"
+          :day="day"
+          :read-only="readOnly"
+        ></ds-schedule>
+
+      </slot>
 
     </div>
 
@@ -106,6 +113,8 @@
             {{ labels.tabs.cancelled }}
           </v-tab>
 
+          <slot name="eventTabsExtra" v-bind="slotData"></slot>
+
           <!-- Details -->
           <v-tab-item id="details" v-if="hasDetails">
             <v-card flat>
@@ -117,6 +126,7 @@
                     single-line hide-details solo flat
                     prepend-icon="location_on"
                     :label="labels.location"
+                    :readonly="isReadOnly"
                     v-model="details.location"
                   ></v-text-field>
                 </slot>
@@ -127,6 +137,7 @@
                     hide-details single-line solo flat
                     prepend-icon="subject"
                     :label="labels.description"
+                    :readonly="isReadOnly"
                     v-model="details.description"
                   ></v-textarea>
                 </slot>
@@ -137,6 +148,7 @@
                     single-line hide-details solo flat readonly
                     prepend-icon="event"
                     :label="labels.calendar"
+                    :readonly="isReadOnly"
                     v-model="details.calendar"
                   ></v-text-field>
                 </slot>
@@ -148,6 +160,7 @@
                     prepend-icon="invert_colors"
                     :items="$dayspan.colors"
                     :color="details.color"
+                    :disabled="isReadOnly"
                     v-model="details.color">
                     <template slot="item" slot-scope="{ item }">
                       <v-list-tile-content>
@@ -163,6 +176,7 @@
                     single-line hide-details solo flat
                     :prepend-icon="details.icon || 'help'"
                     :items="$dayspan.icons"
+                    :disabled="isReadOnly"
                     v-model="details.icon">
                     <template slot="item" slot-scope="{ item }">
                       <v-list-tile-avatar>
@@ -181,9 +195,12 @@
                     single-line hide-details solo flat
                     prepend-icon="work"
                     :items="busyOptions"
+                    :disabled="isReadOnly"
                     v-model="details.busy"
                   ></v-select>
                 </slot>
+
+                <slot name="eventDetailsExtra" v-bind="slotData"></slot>
 
               </v-card-text>
             </v-card>
@@ -193,10 +210,15 @@
           <v-tab-item id="forecast" lazy v-if="showForecast">
             <v-card flat>
               <v-card-text>
-                <ds-schedule-forecast
-                  :schedule="schedule"
-                  :day="day"
-                ></ds-schedule-forecast>
+                <slot name="eventForecast" v-bind="slotData">
+
+                  <ds-schedule-forecast
+                    :schedule="schedule"
+                    :day="day"
+                    :read-only="readOnly"
+                  ></ds-schedule-forecast>
+
+                </slot>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -205,10 +227,15 @@
           <v-tab-item id="exclusions" lazy v-if="showExclusions">
             <v-card flat>
               <v-card-text>
-                <ds-schedule-modifier
-                  :description="labels.exclusions"
-                  :modifier="schedule.exclude"
-                ></ds-schedule-modifier>
+                <slot name="eventExclusions" v-bind="slotData">
+
+                  <ds-schedule-modifier
+                    :description="labels.exclusions"
+                    :modifier="schedule.exclude"
+                    :read-only="readOnly"
+                  ></ds-schedule-modifier>
+
+                </slot>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -217,10 +244,15 @@
           <v-tab-item id="inclusions" lazy v-if="showInclusions">
             <v-card flat>
               <v-card-text>
-                <ds-schedule-modifier
-                  :description="labels.inclusions"
-                  :modifier="schedule.include"
-                ></ds-schedule-modifier>
+                <slot name="eventInclusions" v-bind="slotData">
+
+                  <ds-schedule-modifier
+                    :description="labels.inclusions"
+                    :modifier="schedule.include"
+                    :read-only="readOnly"
+                  ></ds-schedule-modifier>
+
+                </slot>
               </v-card-text>
             </v-card>
           </v-tab-item>
@@ -229,13 +261,20 @@
           <v-tab-item id="cancelled" lazy v-if="showCancels">
             <v-card flat>
               <v-card-text>
-                <ds-schedule-modifier
-                  :description="labels.cancelled"
-                  :modifier="schedule.cancel"
-                ></ds-schedule-modifier>
+                <slot name="eventCancels" v-bind="slotData">
+
+                  <ds-schedule-modifier
+                    :description="labels.cancelled"
+                    :modifier="schedule.cancel"
+                    :read-only="readOnly"
+                  ></ds-schedule-modifier>
+
+                </slot>
               </v-card-text>
             </v-card>
           </v-tab-item>
+
+          <slot name="eventTabItemsExtra" v-bind="slotData"></slot>
 
         </v-tabs>
       </v-flex>
@@ -279,6 +318,12 @@ export default {
     day:
     {
       type: Day
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     labels:
@@ -406,7 +451,8 @@ export default {
         day: this.day,
         calendar: this.calendar,
         calendarEvent: this.calendarEvent,
-        labels: this.labels
+        labels: this.labels,
+        readOnly: this.readOnly
       };
     },
 
@@ -463,6 +509,11 @@ export default {
         this.repeats &&
         this.hasInclusions &&
         !this.schedule.include.isEmpty();
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

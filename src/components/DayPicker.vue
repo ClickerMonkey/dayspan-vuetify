@@ -15,7 +15,7 @@
           class="ds-light-forecolor ma-0">
           <v-icon>keyboard_arrow_left</v-icon>
         </v-btn>
-        <span>Previous month</span>
+        <span>{{ labels.prevMonth }}</span>
 
       </v-tooltip>
 
@@ -26,7 +26,7 @@
           @click="next">
           <v-icon>keyboard_arrow_right</v-icon>
         </v-btn>
-        <span>Next month</span>
+        <span>{{ labels.nextMonth }}</span>
 
       </v-tooltip>
 
@@ -66,7 +66,6 @@
 
 <script>
 import { DaySpan, Calendar, Functions as fn } from 'dayspan';
-import * as moment from 'moment';
 
 
 export default {
@@ -80,17 +79,34 @@ export default {
       required: true,
       type: DaySpan
     },
-    
+
     highlightSpan:
     {
       type: Boolean,
       default: false
+    },
+
+    weekdays:
+    {
+      type: Array,
+      default() {
+        return this.$dsDefaults().weekdays;
+      }
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'labels');
+      },
+      default() {
+        return this.$dsDefaults().labels;
+      }
     }
   },
 
   data: vm => ({
-    month: vm.getMonth(),
-    weekdays: moment.weekdays()
+    month: vm.getMonth()
   }),
 
   computed:

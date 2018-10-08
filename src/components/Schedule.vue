@@ -11,6 +11,7 @@
         <ds-schedule-span
           :schedule="schedule"
           :day="day"
+          :read-only="readOnly"
         ></ds-schedule-span>
 
       </slot>
@@ -28,6 +29,7 @@
           <ds-schedule-type
             :day="day"
             :schedule="schedule"
+            :read-only="readOnly"
             @change="setType"
             @custom="custom"
           ></ds-schedule-type>
@@ -48,12 +50,13 @@
 
         <ds-schedule-times
           :schedule="schedule"
+          :read-only="readOnly"
         ></ds-schedule-times>
 
       </slot>
 
     </v-flex>
-    <v-flex xs12>
+    <v-flex xs12 v-if="!isReadOnly">
 
       <slot name="scheduleFooter" v-bind="{schedule, day}"></slot>
 
@@ -88,6 +91,12 @@ export default {
     day:
     {
       type: Day
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     labels:
@@ -125,6 +134,11 @@ export default {
       return {
         'ds-schedule-small': this.$vuetify.breakpoint.smAndDown
       };
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

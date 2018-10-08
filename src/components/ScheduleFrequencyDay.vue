@@ -5,8 +5,8 @@
     <v-flex xs7>
       <v-select
         hide-details solo flat
-        label="Days"
         v-model="type"
+        :label="labels.type"
         :items="options"
       ></v-select>
     </v-flex>
@@ -74,6 +74,16 @@ export default {
     {
       default() {
         return this.$dsDefaults().types;
+      }
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'labels');
+      },
+      default() {
+        return this.$dsDefaults().labels;
       }
     }
   },

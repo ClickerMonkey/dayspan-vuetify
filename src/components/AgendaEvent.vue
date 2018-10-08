@@ -56,7 +56,7 @@
 
         </div>
 
-        <slot name="eventPopover" v-bind="{calendarEvent, calendar, edit, details, close}"></slot>
+        <slot name="eventPopover" v-bind="{readOnly, calendarEvent, calendar, edit, details, close}"></slot>
 
       </v-menu>
 
@@ -86,6 +86,12 @@ export default {
     {
       required: true,
       type: Calendar
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     first:
@@ -136,6 +142,7 @@ export default {
     slotData()
     {
       return {
+        readOnly: this.readOnly,
         calendarEvent: this.calendarEvent,
         calendar: this.calendar,
         details: this.details,

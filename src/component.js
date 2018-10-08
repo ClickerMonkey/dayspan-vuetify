@@ -3,14 +3,19 @@ import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patte
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
-import { dsMerge } from './functions';
+import { default as Locales, defaultLocale } from './locales'
+import { dsMerge, dsMergeLocale } from './functions';
 import Vue from 'vue';
+
+const LOCALE_ENTRY = 0;
 
 export default {
 
   data:
   {
-    version:          '0.2.4',
+    version:          '0.3.0',
+
+    readOnly:         false,
 
     today:            Day.today(),
     tomorrow:         Day.tomorrow(),
@@ -76,27 +81,41 @@ export default {
       removeExistingTime: true
     },
 
+    promptOpen: null,
+
     promptLabels: {
-      actionRemove:       'Are you sure you want to remove this event?',
-      actionExclude:      'Are you sure you want to remove this event occurrence?',
-      actionCancel:       'Are you sure you want to cancel this event?',
-      actionUncancel:     'Are you sure you want to uncancel this event?',
-      actionSetStart:     'Are you sure you want to set this occurrence as the first?',
-      actionSetEnd:       'Are you sure you want to set this occurrence as the last?',
-      actionMove:         'Are you sure you want to move this event?',
-      actionInclude:      'Are you sure you want to add an event occurrence?',
-      move:               'Are you sure you want to move this event?',
-      toggleAllDay:       'Are you sure you want to change whether this event occurs all day?',
-      removeExistingTime: 'Are you sure you want to remove all event occurrences at this time?'
+      actionRemove:       LOCALE_ENTRY,
+      actionExclude:      LOCALE_ENTRY,
+      actionCancel:       LOCALE_ENTRY,
+      actionUncancel:     LOCALE_ENTRY,
+      actionSetStart:     LOCALE_ENTRY,
+      actionSetEnd:       LOCALE_ENTRY,
+      actionMove:         LOCALE_ENTRY,
+      actionInclude:      LOCALE_ENTRY,
+      move:               LOCALE_ENTRY,
+      toggleAllDay:       LOCALE_ENTRY,
+      removeExistingTime: LOCALE_ENTRY
     },
 
-    promptOpen: null,
+    placeholder: {
+      noTitle:            LOCALE_ENTRY
+    },
+
+    patterns: {
+      lastDay:            LOCALE_ENTRY,
+      lastDayOfMonth:     LOCALE_ENTRY,
+      lastWeekday:        LOCALE_ENTRY
+    },
 
     colors: Colors,
 
     icons: Icons,
 
-    defaults: Defaults
+    defaults: Defaults,
+
+    locales: Locales,
+
+    currentLocale: defaultLocale
   },
 
   computed:
@@ -114,8 +133,42 @@ export default {
 
   methods:
   {
+    setLocale(name, strict)
+    {
+      const locale = this.locales[name];
+
+      if (!locale && strict)
+      {
+        throw 'No locale exists with the name ' + name;
+      }
+      else if (locale)
+      {
+        dsMergeLocale(this, locale, name);
+
+        this.currentLocale = name;
+      }
+    },
+
+    addLocale(name, locale)
+    {
+      this.locales[name] = locale;
+    },
+
+    updateLocale(name, update)
+    {
+      const locale = this.locales[name];
+
+      if (!locale)
+      {
+        throw 'No locale exists with the name ' + name;
+      }
+
+      dsMergeLocale(locale, update);
+    },
+
     init()
     {
+      this.setLocale(this.currentLocale, true);
       this.startRefreshTimes();
       this.addPatterns();
     },
@@ -147,7 +200,7 @@ export default {
     {
       Patterns.unshift(PatternMap.lastDay = new Pattern(
         'lastDay', false,
-        (day) => 'Last day of the month',
+        (day) => this.patterns.lastDay(day),
         {
           lastDayOfMonth: [1]
         }
@@ -155,7 +208,7 @@ export default {
 
       Patterns.unshift(PatternMap.lastDayOfMonth = new Pattern(
         'lastDayOfMonth', false,
-        (day) => 'Last day of ' + day.format('MMMM'),
+        (day) => this.patterns.lastDayOfMonth(day),
         {
           month: 1,
           lastDayOfMonth: [1]
@@ -164,7 +217,7 @@ export default {
 
       Patterns.unshift(PatternMap.lastWeekday = new Pattern(
         'lastWeekday', false,
-        (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM'),
+        (day) => this.patterns.lastWeekday(day),
         {
           lastWeekspanOfMonth: [0],
           dayOfWeek: 1,
@@ -316,7 +369,7 @@ export default {
     {
       let details = this.getDefaultEventDetails();
 
-      details.title = '(no title)';
+      details.title = this.placeholder.noTitle;
 
       return details;
     },

@@ -10,6 +10,7 @@
           hide-details
           class="ma-2"
           :label="labels.all"
+          :readonly="isReadOnly"
           v-model="allDay"
         ></v-checkbox>
 
@@ -21,6 +22,7 @@
           single-line hide-details solo flat
           type="number"
           v-model.number="schedule.duration"
+          :disabled="isReadOnly"
           @input="triggerChange"
         ></v-text-field>
 
@@ -32,6 +34,7 @@
           single-line hide-details solo flat
           :items="durationOptions"
           v-model="schedule.durationUnit"
+          :disabled="isReadOnly"
           @input="triggerChange"
         ></v-select>
 
@@ -52,6 +55,7 @@
           :show-remove="hasTimes"
           :value="schedule.times[ index ]"
           :key="index"
+          :read-only="readOnly"
           @add="addTime"
           @remove="removeTime"
           @change="changeTime"
@@ -79,6 +83,12 @@ export default {
     {
       required: true,
       type: Schedule
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     labels:
@@ -122,6 +132,11 @@ export default {
     hasTimes()
     {
       return this.schedule.times.length > 1;
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 

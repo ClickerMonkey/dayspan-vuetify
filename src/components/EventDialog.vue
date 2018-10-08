@@ -16,6 +16,7 @@
           :calendar="calendar"
           :calendar-event="calendarEvent"
           :day="day"
+          :read-only="readOnly"
           @saved="saved"
           @cancel="cancel"
           @actioned="actioned"
@@ -55,6 +56,12 @@ export default {
       default() {
         return this.$dsDefaults().dialogProps;
       }
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     }
   },
 

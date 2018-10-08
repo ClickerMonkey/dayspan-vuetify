@@ -90,6 +90,12 @@ export default {
       default() {
         return this.$dsDefaults().handleMove;
       }
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     }
   },
 
@@ -143,12 +149,12 @@ export default {
 
     canAdd()
     {
-      return this.$dayspan.features.drag && this.handleAdd;
+      return this.$dayspan.features.drag && this.handleAdd && !this.readOnly && !this.$dayspan.readOnly;
     },
 
     canMove()
     {
-      return this.$dayspan.features.move && this.handleMove;
+      return this.$dayspan.features.move && this.handleMove && !this.readOnly && !this.$dayspan.readOnly;
     }
   },
 

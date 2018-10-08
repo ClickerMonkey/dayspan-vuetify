@@ -1,7 +1,7 @@
 
 import { Units } from 'dayspan';
-import * as moment from 'moment';
 
+const LOCALE_ENTRY = 0;
 
 export default {
 
@@ -12,35 +12,35 @@ export default {
 
   dsDay: {
     formats: {
-      month:  'MMM'
+      month: LOCALE_ENTRY
     }
   },
 
   dsCalendarApp: {
     allowsAddToday: true,
     types: [
-      {id: 'D', label: 'Day',     shortcut: 'D', type: Units.DAY,   size: 1,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false },
-      {id: 'W', label: 'Week',    shortcut: 'W', type: Units.WEEK,  size: 1,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false },
-      {id: 'M', label: 'Month',   shortcut: 'M', type: Units.MONTH, size: 1,  focus: 0.4999, repeat: true,  listTimes: false, updateRows: true,  schedule: false },
-      {id: 'Y', label: 'Year',    shortcut: 'Y', type: Units.YEAR,  size: 1,  focus: 0.4999, repeat: true,  listTimes: false, updateRows: true,  schedule: false },
-      {id: 'S', label: 'Schedule',shortcut: 'S', type: Units.DAY,   size: 92, focus: 0.0000, repeat: false, listTimes: false, updateRows: false, schedule: true },
-      {id: 'X', label: '4 days',  shortcut: 'X', type: Units.DAY,   size: 4,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false }
+      {id: 'D', label: LOCALE_ENTRY, shortcut: 'D', type: Units.DAY,   size: 1,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false },
+      {id: 'W', label: LOCALE_ENTRY, shortcut: 'W', type: Units.WEEK,  size: 1,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false },
+      {id: 'M', label: LOCALE_ENTRY, shortcut: 'M', type: Units.MONTH, size: 1,  focus: 0.4999, repeat: true,  listTimes: false, updateRows: true,  schedule: false },
+      {id: 'Y', label: LOCALE_ENTRY, shortcut: 'Y', type: Units.YEAR,  size: 1,  focus: 0.4999, repeat: true,  listTimes: false, updateRows: true,  schedule: false },
+      {id: 'S', label: LOCALE_ENTRY, shortcut: 'S', type: Units.DAY,   size: 92, focus: 0.0000, repeat: false, listTimes: false, updateRows: false, schedule: true },
+      {id: 'X', label: LOCALE_ENTRY, shortcut: 'X', type: Units.DAY,   size: 4,  focus: 0.4999, repeat: true,  listTimes: true,  updateRows: true,  schedule: false }
     ],
     formats: {
-      today: 'dddd, MMMM D',
-      xs: 'MMM'
+      today: LOCALE_ENTRY,
+      xs: LOCALE_ENTRY
     },
     labels: {
-      next: (type) => type ? 'Next ' + type.label.toLowerCase() : 'Next',
-      prev: (type) => type ? 'Previous ' + type.label.toLowerCase() : 'Previous',
-      moveCancel: 'Cancel move',
-      moveSingleEvent: 'Move event',
-      moveOccurrence: 'Move just this event occurrence',
-      moveAll: 'Move all event occurrences',
-      moveDuplicate: 'Add event occurrence',
-      promptConfirm: 'Yes',
-      promptCancel: 'No',
-      today: 'TODAY',
+      next: LOCALE_ENTRY,
+      prev: LOCALE_ENTRY,
+      moveCancel: LOCALE_ENTRY,
+      moveSingleEvent: LOCALE_ENTRY,
+      moveOccurrence: LOCALE_ENTRY,
+      moveAll: LOCALE_ENTRY,
+      moveDuplicate: LOCALE_ENTRY,
+      promptConfirm: LOCALE_ENTRY,
+      promptCancel: LOCALE_ENTRY,
+      today: LOCALE_ENTRY,
       todayIcon: 'today'
     },
     styles: {
@@ -75,25 +75,25 @@ export default {
       maxWidth: 500
     },
     formats: {
-      firstLine:  'ddd',
-      secondLine: 'MMM Do',
-      start:      'dddd, MMMM D',
-      time:       'h:mm a'
+      firstLine:  LOCALE_ENTRY,
+      secondLine: LOCALE_ENTRY,
+      start:      LOCALE_ENTRY,
+      time:       LOCALE_ENTRY
     },
     labels: {
-      allDay:   'All day',
-      options:  'Options',
-      close:    'Close',
-      day:      ['day', 'days'],
-      days:     ['day', 'days'],
-      minute:   ['minute', 'minutes'],
-      minutes:  ['minute', 'minutes'],
-      hour:     ['hour', 'hours'],
-      hours:    ['hour', 'hours'],
-      week:     ['week', 'weeks'],
-      weeks:    ['week', 'weeks'],
-      busy:     'Busy',
-      free:     'Free'
+      allDay:   LOCALE_ENTRY,
+      options:  LOCALE_ENTRY,
+      close:    LOCALE_ENTRY,
+      day:      [LOCALE_ENTRY, LOCALE_ENTRY],
+      days:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      minute:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      minutes:  [LOCALE_ENTRY, LOCALE_ENTRY],
+      hour:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      week:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      busy:     LOCALE_ENTRY,
+      free:     LOCALE_ENTRY
     }
   },
 
@@ -115,30 +115,31 @@ export default {
       sameBackground:   'primary'
     },
     formats: {
-      fullDay:          'ddd MMM Do YYYY',
-      timed:            'ddd MMM Do YYYY'
+      fullDay:          LOCALE_ENTRY,
+      timed:            LOCALE_ENTRY
     }
   },
 
   dsCalendarEventPopover: {
+    allowEditOnReadOnly: true,
     formats: {
-      start:    'dddd, MMMM D',
-      time:     'h:mm a'
+      start:    LOCALE_ENTRY,
+      time:     LOCALE_ENTRY
     },
     labels: {
-      allDay:   'All day',
-      options:  'Options',
-      close:    'Close',
-      day:      ['day', 'days'],
-      days:     ['day', 'days'],
-      minute:   ['minute', 'minutes'],
-      minutes:  ['minute', 'minutes'],
-      hour:     ['hour', 'hours'],
-      hours:    ['hour', 'hours'],
-      week:     ['week', 'weeks'],
-      weeks:    ['week', 'weeks'],
-      busy:     'Busy',
-      free:     'Free'
+      allDay:   LOCALE_ENTRY,
+      options:  LOCALE_ENTRY,
+      close:    LOCALE_ENTRY,
+      day:      [LOCALE_ENTRY, LOCALE_ENTRY],
+      days:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      minute:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      minutes:  [LOCALE_ENTRY, LOCALE_ENTRY],
+      hour:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      week:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      busy:     LOCALE_ENTRY,
+      free:     LOCALE_ENTRY
     }
   },
 
@@ -153,8 +154,8 @@ export default {
       guests:       false
     },
     formats: {
-      start:    'dddd, MMMM D',
-      time:     'h:mm a'
+      start:    LOCALE_ENTRY,
+      time:     LOCALE_ENTRY
     },
     icons: {
       save:     'save',
@@ -162,27 +163,27 @@ export default {
       edit:     'edit'
     },
     labels: {
-      title:    'Add title',
-      allDay:   'All day',
-      close:    'Close',
-      save:     'Save',
-      day:      ['day', 'days'],
-      days:     ['day', 'days'],
-      minute:   ['minute', 'minutes'],
-      minutes:  ['minute', 'minutes'],
-      hour:     ['hour', 'hours'],
-      hours:    ['hour', 'hours'],
-      week:     ['week', 'weeks'],
-      weeks:    ['week', 'weeks'],
-      busy:     'Busy',
-      free:     'Free',
-      location: 'Add location',
-      description: 'Add description',
-      calendar: 'Calendar',
+      title:    LOCALE_ENTRY,
+      allDay:   LOCALE_ENTRY,
+      close:    LOCALE_ENTRY,
+      save:     LOCALE_ENTRY,
+      day:      [LOCALE_ENTRY, LOCALE_ENTRY],
+      days:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      minute:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      minutes:  [LOCALE_ENTRY, LOCALE_ENTRY],
+      hour:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      week:     [LOCALE_ENTRY, LOCALE_ENTRY],
+      weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      busy:     LOCALE_ENTRY,
+      free:     LOCALE_ENTRY,
+      location: LOCALE_ENTRY,
+      description: LOCALE_ENTRY,
+      calendar: LOCALE_ENTRY,
     },
     busyOptions: [
-      {value: true, text: 'Busy'},
-      {value: false, text: 'Free'}
+      {value: true, text: LOCALE_ENTRY},
+      {value: false, text: LOCALE_ENTRY}
     ]
   },
 
@@ -229,7 +230,7 @@ export default {
   dsSchedule: {
     allowsRange: true,
     labels: {
-      editCustom:   'Edit'
+      editCustom:   LOCALE_ENTRY
     }
   },
 
@@ -245,28 +246,28 @@ export default {
     hasInclusions: true,
     hasCancelled: true,
     labels: {
-      cancel:       'Cancel event changes',
-      save:         'Save',
-      title:        'Title',
-      exclusions:   'These are events or spans of time where a normally occurring event was excluded from the schedule. Events are excluded here if an event occurrence is moved.',
-      inclusions:   'These are events or spans of time where events were added outside the normally occurring schedule. Events are added here if an event occurrence is moved.',
-      cancelled:    'These are events or spans of time where events were cancelled.',
-      edit:         'Edit event',
-      add:          'Add event',
-      location:     'Add location',
-      description:  'Add description',
-      calendar:     'Calendar',
+      cancel:       LOCALE_ENTRY,
+      save:         LOCALE_ENTRY,
+      title:        LOCALE_ENTRY,
+      exclusions:   LOCALE_ENTRY,
+      inclusions:   LOCALE_ENTRY,
+      cancelled:    LOCALE_ENTRY,
+      edit:         LOCALE_ENTRY,
+      add:          LOCALE_ENTRY,
+      location:     LOCALE_ENTRY,
+      description:  LOCALE_ENTRY,
+      calendar:     LOCALE_ENTRY,
       tabs: {
-        details:    'Event Details',
-        forecast:   'Forecast',
-        removed:    'Removed',
-        added:      'Added',
-        cancelled:  'Cancelled'
+        details:    LOCALE_ENTRY,
+        forecast:   LOCALE_ENTRY,
+        removed:    LOCALE_ENTRY,
+        added:      LOCALE_ENTRY,
+        cancelled:  LOCALE_ENTRY
       }
     },
     busyOptions: [
-      {value: true, text: 'Busy'},
-      {value: false, text: 'Free'}
+      {value: true, text: LOCALE_ENTRY},
+      {value: false, text: LOCALE_ENTRY}
     ]
   },
 
@@ -280,14 +281,14 @@ export default {
     allowSetStart: true,
     allowSetEnd: true,
     labels: {
-      remove:     'Remove this event',
-      exclude:    'Remove this occurrence',
-      cancel:     'Cancel this occurrence',
-      uncancel:   'Undo cancellation',
-      move:       'Move this occurrence',
-      include:    'Add new occurrence',
-      setStart:   'Set as first occurrence',
-      setEnd:     'Set as last occurrence'
+      remove:     LOCALE_ENTRY,
+      exclude:    LOCALE_ENTRY,
+      cancel:     LOCALE_ENTRY,
+      uncancel:   LOCALE_ENTRY,
+      move:       LOCALE_ENTRY,
+      include:    LOCALE_ENTRY,
+      setStart:   LOCALE_ENTRY,
+      setEnd:     LOCALE_ENTRY
     }
   },
 
@@ -305,69 +306,86 @@ export default {
     defaultSize: 5,
     sizeMax: 100,
     labels: {
-      prefix:     'The forecast shows previous & next',
-      suffix:     'event occurrences within a years time.'
+      prefix:     LOCALE_ENTRY,
+      suffix:     LOCALE_ENTRY
     }
   },
 
   dsScheduleFrequencyDay: {
+    labels: {
+      type: LOCALE_ENTRY
+    },
     options: [
-      { text: 'Any day', value: 'any'},
-      { text: 'On the following days...', value: 'oneof'},
-      { text: 'Every _ days starting on _', value: 'every'}
+      { text: LOCALE_ENTRY, value: 'any'},
+      { text: LOCALE_ENTRY, value: 'oneof'},
+      { text: LOCALE_ENTRY, value: 'every'}
     ],
     types: [
-      { text: 'Day of the month', property: 'dayOfMonth', max: 32, min: 1 },
-      { text: 'Last day of the month', property: 'lastDayOfMonth', max: 32, min: 1 },
-      { text: 'Day of the year', property: 'dayOfYear', max: 367, min: 1, offset: -1 }
+      { text: LOCALE_ENTRY, property: 'dayOfMonth', max: 32, min: 1 },
+      { text: LOCALE_ENTRY, property: 'lastDayOfMonth', max: 32, min: 1 },
+      { text: LOCALE_ENTRY, property: 'dayOfYear', max: 367, min: 1, offset: -1 }
     ]
   },
 
   dsScheduleFrequencyDayOfWeek: {
+    weekdays: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY],
+    labels: {
+      type: LOCALE_ENTRY
+    },
     options: [
-      { text: 'Any day of the week', value: 'any'},
-      { text: 'On the following days of the week...', value: 'oneof'},
-      { text: 'Every _ weekday starting on _', value: 'every'},
-      { text: 'Weekends', value: 'weekend'},
-      { text: 'Weekdays', value: 'weekday'}
+      { text: LOCALE_ENTRY, value: 'any'},
+      { text: LOCALE_ENTRY, value: 'oneof'},
+      { text: LOCALE_ENTRY, value: 'every'},
+      { text: LOCALE_ENTRY, value: 'weekend'},
+      { text: LOCALE_ENTRY, value: 'weekday'}
     ]
   },
 
   dsScheduleFrequencyMonth: {
+    months: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY],
+    labels: {
+      type: LOCALE_ENTRY
+    },
     options: [
-      { text: 'Any month', value: 'any'},
-      { text: 'On the following months...', value: 'oneof'},
-      { text: 'Every _ months starting on _', value: 'every'}
+      { text: LOCALE_ENTRY, value: 'any'},
+      { text: LOCALE_ENTRY, value: 'oneof'},
+      { text: LOCALE_ENTRY, value: 'every'}
     ]
   },
 
   dsScheduleFrequencyWeek: {
+    labels: {
+      type: LOCALE_ENTRY
+    },
     options: [
-      { text: 'Any week', value: 'any'},
-      { text: 'On the following weeks...', value: 'oneof'},
-      { text: 'Every _ weeks starting on _', value: 'every'}
+      { text: LOCALE_ENTRY, value: 'any'},
+      { text: LOCALE_ENTRY, value: 'oneof'},
+      { text: LOCALE_ENTRY, value: 'every'}
     ],
     types: [
-      { text: 'Week of the month (first week has a Thursday)', property: 'weekOfMonth', max: 6 },
-      { text: 'Weekspan of the month (starts on first day of month)', property: 'weekspanOfMonth', max: 7, min: 1, offset: -1 },
-      { text: 'Full week of the month (0th = the week before if any)', property: 'fullWeekOfMonth', max: 6 },
-      { text: 'Last weekspan of the month (starts on last day of month)', property: 'lastWeekspanOfMonth', max: 7, min: 1, offset: -1 },
-      { text: 'Last full week of the month (0th = the week after if any)', property: 'lastFullWeekOfMonth', max: 6 },
-      { text: 'Week of the year (first week has a Thursday)', property: 'weekOfYear', max: 54 },
-      { text: 'Weekspan of the year (starts on first day of year)', property: 'weekspanOfYear', max: 53, min: 1, offset: -1 },
-      { text: 'Full week of the year (0th = the week before if any)', property: 'fullWeekOfYear', max: 54 },
-      { text: 'Last weekspan of the year (starts on last day of year)', property: 'lastWeekspanOfYear', max: 53, min: 1, offset: -1 },
-      { text: 'Last full week of the year (0th = the week after if any)', property: 'lastFullWeekOfYear', max: 54 }
+      { text: LOCALE_ENTRY, property: 'weekOfMonth', max: 6 },
+      { text: LOCALE_ENTRY, property: 'weekspanOfMonth', max: 7, min: 1, offset: -1 },
+      { text: LOCALE_ENTRY, property: 'fullWeekOfMonth', max: 6 },
+      { text: LOCALE_ENTRY, property: 'lastWeekspanOfMonth', max: 7, min: 1, offset: -1 },
+      { text: LOCALE_ENTRY, property: 'lastFullWeekOfMonth', max: 6 },
+      { text: LOCALE_ENTRY, property: 'weekOfYear', max: 54 },
+      { text: LOCALE_ENTRY, property: 'weekspanOfYear', max: 53, min: 1, offset: -1 },
+      { text: LOCALE_ENTRY, property: 'fullWeekOfYear', max: 54 },
+      { text: LOCALE_ENTRY, property: 'lastWeekspanOfYear', max: 53, min: 1, offset: -1 },
+      { text: LOCALE_ENTRY, property: 'lastFullWeekOfYear', max: 54 }
     ]
   },
 
   dsScheduleFrequencyYear: {
     lookback: 5,
     lookahead: 20,
+    labels: {
+      type: LOCALE_ENTRY
+    },
     options: [
-      { text: 'Any year', value: 'any'},
-      { text: 'On the following years...', value: 'oneof'},
-      { text: 'Every _ years starting on _', value: 'every'}
+      { text: LOCALE_ENTRY, value: 'any'},
+      { text: LOCALE_ENTRY, value: 'oneof'},
+      { text: LOCALE_ENTRY, value: 'every'}
     ]
   },
 
@@ -378,12 +396,12 @@ export default {
 
   dsScheduleSpan: {
     labels: {
-      startless:  'Beginning of Time',
-      endless:    'End of Time'
+      startless:  LOCALE_ENTRY,
+      endless:    LOCALE_ENTRY
     },
     formats: {
-      start:      'MMMM Do, YYYY',
-      end:        'MMMM Do, YYYY'
+      start:      LOCALE_ENTRY,
+      end:        LOCALE_ENTRY
     }
   },
 
@@ -393,8 +411,8 @@ export default {
     showAdd: false,
     showRemove: false,
     labels: {
-      remove:     'Remove time',
-      add:        'Add time'
+      remove:     LOCALE_ENTRY,
+      add:        LOCALE_ENTRY
     },
     colors: {
       add:        'secondary',
@@ -409,23 +427,23 @@ export default {
   dsScheduleTimes: {
     defaultTime: '08:00',
     labels: {
-      all:        'All day',
-      minute:     'minute',
-      minutes:    'minutes',
-      hour:       'hour',
-      hours:      'hours',
-      day:        'day',
-      days:       'days',
-      week:       'week',
-      weeks:      'weeks',
-      month:      'month',
-      months:     'months'
+      all:        LOCALE_ENTRY,
+      minute:     LOCALE_ENTRY,
+      minutes:    LOCALE_ENTRY,
+      hour:       LOCALE_ENTRY,
+      hours:      LOCALE_ENTRY,
+      day:        LOCALE_ENTRY,
+      days:       LOCALE_ENTRY,
+      week:       LOCALE_ENTRY,
+      weeks:      LOCALE_ENTRY,
+      month:      LOCALE_ENTRY,
+      months:     LOCALE_ENTRY
     }
   },
 
   dsScheduleType: {
     formats: {
-      date:       'LL'
+      date:       LOCALE_ENTRY
     }
   },
 
@@ -436,24 +454,36 @@ export default {
       lazy: true
     },
     labels: {
-      save:     'Save',
-      cancel:   'Cancel'
+      save:     LOCALE_ENTRY,
+      cancel:   LOCALE_ENTRY
+    }
+  },
+
+  dsDayPicker: {
+    weekdays: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY],
+    labels: {
+      prevMonth: LOCALE_ENTRY,
+      nextMonth: LOCALE_ENTRY
     }
   },
 
   dsWeekDayHeader: {
     formats: {
-      weekday:    'ddd'
+      weekday:    LOCALE_ENTRY
     }
   },
 
   dsWeeksView: {
-    weekdays: moment.weekdaysShort()
+    weekdays: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY]
   },
 
   dsDaysView: {
     scrollToFirst: true,
-    scrollBuffer: 60
+    scrollBuffer: 60,
+    hours: [
+      LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY,
+      LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY
+    ]
   },
 
   dsGestures: {

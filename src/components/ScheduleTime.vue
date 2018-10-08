@@ -7,6 +7,7 @@
       <v-text-field
         single-line hide-details solo flat
         type="time"
+        :readonly="isReadOnly"
         v-model="time"
       ></v-text-field>
 
@@ -14,7 +15,7 @@
 
     <div class="ds-time-cell">
 
-      <v-tooltip bottom v-if="showRemove">
+      <v-tooltip bottom v-if="showRemove && !isReadOnly">
 
         <v-btn slot="activator" icon
           class="action-remove"
@@ -25,7 +26,7 @@
 
       </v-tooltip>
 
-      <v-tooltip bottom v-if="showAdd">
+      <v-tooltip bottom v-if="showAdd && !isReadOnly">
 
         <v-btn slot="activator" icon
           class="action-add"
@@ -56,6 +57,12 @@ export default {
     {
       required: true,
       type: Time
+    },
+
+    readOnly:
+    {
+      type: Boolean,
+      default: false
     },
 
     index:
@@ -137,6 +144,11 @@ export default {
       {
         this.setTime( time );
       }
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly;
     }
   },
 
@@ -208,6 +220,5 @@ export default {
     }
   }
 }
-
 
 </style>

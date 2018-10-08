@@ -5,8 +5,8 @@
     <v-flex xs7>
       <v-select
         hide-details solo flat
-        label="Months"
         v-model="type"
+        :label="labels.type"
         :items="options"
       ></v-select>
     </v-flex>
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import * as moment from 'moment';
 import { default as ScheduleFrequency } from './ScheduleFrequency';
 
 
@@ -59,6 +58,24 @@ export default {
       default() {
         return this.$dsDefaults().options;
       }
+    },
+
+    months:
+    {
+      type: Array,
+      default() {
+        return this.$dsDefaults().months;
+      }
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate(x, 'labels');
+      },
+      default() {
+        return this.$dsDefaults().labels;
+      }
     }
   },
 
@@ -68,11 +85,6 @@ export default {
 
   computed:
   {
-    months()
-    {
-      return moment.months();
-    },
-
     oneOfs()
     {
       return this.months.map(function(name, i) {

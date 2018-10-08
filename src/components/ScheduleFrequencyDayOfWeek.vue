@@ -5,7 +5,7 @@
     <v-flex xs7>
       <v-select
         hide-details solo flat
-        label="Days of week"
+        :label="labels.type"
         v-model="type"
         :items="options"
       ></v-select>
@@ -42,7 +42,6 @@
 </template>
 
 <script>
-import * as moment from 'moment';
 import { Weekday, Functions as fn } from 'dayspan';
 import { default as ScheduleFrequency } from './ScheduleFrequency';
 
@@ -60,6 +59,24 @@ export default {
       default() {
         return this.$dsDefaults().options;
       }
+    },
+
+    labels:
+    {
+      validate(x) {
+        return this.$dsValidate( x, 'labels' );
+      },
+      default() {
+        return this.$dsDefaults().labels;
+      }
+    },
+
+    weekdays:
+    {
+      type: Array,
+      default() {
+        return this.$dsDefaults().weekdays;
+      }
     }
   },
 
@@ -72,11 +89,6 @@ export default {
     isSimple()
     {
       return this.type === 'any' || this.type === 'weekday' || this.type === 'weekend';
-    },
-
-    weekdays()
-    {
-      return moment.weekdays();
     },
 
     oneOfs()

@@ -15,7 +15,7 @@
      </v-toolbar-title>
 
      <v-btn
-       v-if="!details.readonly"
+       v-if="allowEdit"
        color="secondary"
        small absolute bottom left fab icon
        @click="edit">
@@ -30,7 +30,7 @@
 
      <slot name="eventPopoverToolbarActions" v-bind="slotData">
 
-       <v-tooltip bottom>
+       <v-tooltip bottom v-if="!isReadOnly">
 
          <ds-schedule-actions
           slot="activator"
@@ -176,9 +176,23 @@ export default {
       type: Calendar
     },
 
+    readOnly:
+    {
+      type: Boolean,
+      default: false
+    },
+
     edit:
     {
       type: Function
+    },
+
+    allowEditOnReadOnly:
+    {
+      type: Boolean,
+      default() {
+        return this.$dsDefaults().allowEditOnReadOnly;
+      }
     },
 
     close:
@@ -216,7 +230,8 @@ export default {
         calendar: this.calendar,
         edit: this.edit,
         close: this.close,
-        details: this.details
+        details: this.details,
+        readOnly: this.readOnly
       };
     },
 
@@ -270,6 +285,16 @@ export default {
     details()
     {
       return this.calendarEvent.event.data;
+    },
+
+    allowEdit()
+    {
+      return this.allowEditOnReadOnly || !this.isReadOnly;
+    },
+
+    isReadOnly()
+    {
+      return this.readOnly || this.$dayspan.readOnly || this.details.readonly;
     }
   },
 
@@ -320,9 +345,5 @@ export default {
     }
   }
 }
-
-
-
-
 
 </style>
