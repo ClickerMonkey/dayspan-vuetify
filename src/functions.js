@@ -102,7 +102,7 @@ export function dsBind(bind)
   };
 }
 
-export function dsMergeLocale(currentData, localeData, path = '')
+export function dsMergeLocale(currentData, localeData, path = '', strict = false)
 {
   if (fn.isArray(localeData) && fn.isArray(currentData) && localeData.length === currentData.length)
   {
@@ -142,5 +142,8 @@ export function dsMergeLocale(currentData, localeData, path = '')
     return;
   }
 
-  throw 'Incompatible locale data at ' + path;
+  if (strict)
+  {
+    throw 'Incompatible locale data at ' + path;
+  }
 }

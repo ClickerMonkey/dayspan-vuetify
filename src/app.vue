@@ -50,12 +50,24 @@
       </template>
 
       <template slot="drawerBottom">
-        <div class="pa-3">
-          <v-checkbox
-            label="Read Only?"
-            v-model="readOnly"
-          ></v-checkbox>
-        </div>
+        <v-container fluid>
+          <v-layout wrap align-center>
+            <v-flex xs12>
+              <v-checkbox box
+                label="Read Only?"
+                v-model="readOnly"
+              ></v-checkbox>
+            </v-flex>
+            <v-flex xs12>
+              <v-select
+                label="Language"
+                :items="locales"
+                v-model="currentLocale"
+                @input="setLocale"
+              ></v-select>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </template>
 
     </ds-calendar-app>
@@ -66,7 +78,7 @@
 <script>
 import { dsMerge } from './functions';
 import { Calendar, Weekday, Month, Sorts } from 'dayspan';
-
+import * as moment from 'moment';
 
 export default {
 
@@ -76,6 +88,11 @@ export default {
     storeKey: 'dayspanState',
     calendar: Calendar.months(),
     readOnly: false,
+    currentLocale: vm.$dayspan.currentLocale,
+    locales: [
+      { value: 'en', text: 'English' },
+      { value: 'fr', text: 'French' }
+    ],
     defaultEvents: [
       {
         data: {
@@ -281,6 +298,16 @@ export default {
       }
 
       return (sa === ea) ? (sh + ' - ' + eh + ea) : (sh + sa + ' - ' + eh + ea);
+    },
+
+    setLocale(code)
+    {
+      moment.lang(code);
+
+      this.$dayspan.setLocale(code);
+      this.$dayspan.refreshTimes();
+
+      this.$refs.app.$forceUpdate();
     },
 
     saveState()
