@@ -112,7 +112,7 @@ export function dsMergeLocale(currentData, localeData, path = '', strict = false
 
       if (fn.isObject(value) || fn.isArray(value))
       {
-        dsMergeLocale(currentData[i], value, path + '[' + i + ']');
+        dsMergeLocale(currentData[i], value, path + '[' + i + ']', strict);
       }
       else
       {
@@ -131,7 +131,7 @@ export function dsMergeLocale(currentData, localeData, path = '', strict = false
 
       if (fn.isObject(value) || fn.isArray(value))
       {
-        dsMergeLocale(currentData[prop], value, path + '.' + prop);
+        dsMergeLocale(currentData[prop], value, path + '.' + prop, strict);
       }
       else
       {
