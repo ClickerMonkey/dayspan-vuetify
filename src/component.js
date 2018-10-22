@@ -154,7 +154,7 @@ export default {
       this.locales[name] = locale;
     },
 
-    updateLocale(name, update)
+    updateLocale(name, update, strict = true)
     {
       const locale = this.locales[name];
 
@@ -163,7 +163,7 @@ export default {
         throw 'No locale exists with the name ' + name;
       }
 
-      dsMergeLocale(locale, update);
+      dsMergeLocale(locale, update, '', strict);
     },
 
     init()
@@ -602,11 +602,11 @@ export default {
       this.timeout = null;
     },
 
-    refreshTimes()
+    refreshTimes(force = false)
     {
       let today = Day.today();
 
-      if (!today.sameDay( this.today ))
+      if (!today.sameDay( this.today ) || force)
       {
         this.today = today;
         this.tomorrow = Day.tomorrow();
