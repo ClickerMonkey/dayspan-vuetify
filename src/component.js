@@ -517,6 +517,11 @@ export default {
       }
 
       let match = /#(\w\w)(\w\w)(\w\w)/.exec(color);
+
+      if (!match) {
+        throw 'Colors must be in the format of #rrggbb';
+      }
+
       return {
         r: parseInt( match[1], 16 ),
         g: parseInt( match[2], 16 ),
