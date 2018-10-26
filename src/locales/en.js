@@ -112,6 +112,8 @@ export default {
         hours:    ['hour', 'hours'],
         week:     ['week', 'weeks'],
         weeks:    ['week', 'weeks'],
+        second:   ['second', 'seconds'],
+        seconds:  ['second', 'seconds'],
         busy:     'Busy',
         free:     'Free'
       }
@@ -139,6 +141,8 @@ export default {
         hours:    ['hour', 'hours'],
         week:     ['week', 'weeks'],
         weeks:    ['week', 'weeks'],
+        second:   ['second', 'seconds'],
+        seconds:  ['second', 'seconds'],
         busy:     'Busy',
         free:     'Free'
       }
@@ -161,6 +165,8 @@ export default {
         hours:    ['hour', 'hours'],
         week:     ['week', 'weeks'],
         weeks:    ['week', 'weeks'],
+        second:   ['second', 'seconds'],
+        seconds:  ['second', 'seconds'],
         busy:     'Busy',
         free:     'Free',
         location: 'Add location',
@@ -340,7 +346,9 @@ export default {
         week:       'week',
         weeks:      'weeks',
         month:      'month',
-        months:     'months'
+        months:     'months',
+        second:     'second',
+        seconds:    'seconds'
       }
     },
 

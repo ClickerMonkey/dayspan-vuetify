@@ -112,6 +112,8 @@ export default {
         hours:    ['heure', 'heures'],
         week:     ['semaine', 'semaines'],
         weeks:    ['semaine', 'semaines'],
+        second:   ['seconde', 'secondes'],
+        seconds:  ['seconde', 'secondes'],
         busy:     'Occupé',
         free:     'Libre'
       }
@@ -139,6 +141,8 @@ export default {
         hours:    ['heure', 'heures'],
         week:     ['semaine', 'semaines'],
         weeks:    ['semaine', 'semaines'],
+        second:   ['seconde', 'secondes'],
+        seconds:  ['seconde', 'secondes'],
         busy:     'Occupé',
         free:     'Libre'
       }
@@ -161,6 +165,8 @@ export default {
         hours:    ['heure', 'heures'],
         week:     ['semaine', 'semaines'],
         weeks:    ['semaine', 'semaines'],
+        second:   ['seconde', 'secondes'],
+        seconds:  ['seconde', 'secondes'],
         busy:     'Occupé',
         free:     'Libre',
         location: 'Ajouter un emplacement',
@@ -174,7 +180,7 @@ export default {
     },
     dsSchedule: {
       labels: {
-        editCustom:   'Modifier' 
+        editCustom:   'Modifier'
       }
     },
     dsEvent: {
@@ -339,6 +345,8 @@ export default {
         days:       'jours',
         week:       'semaine',
         weeks:      'semaines',
+        second:     'seconde',
+        seconds:    'secondes',
         month:      'mois',
         months:     'mois'
       }

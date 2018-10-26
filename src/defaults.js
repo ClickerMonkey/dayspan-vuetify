@@ -92,6 +92,8 @@ export default {
       hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
       week:     [LOCALE_ENTRY, LOCALE_ENTRY],
       weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      second:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      seconds:  [LOCALE_ENTRY, LOCALE_ENTRY],
       busy:     LOCALE_ENTRY,
       free:     LOCALE_ENTRY
     }
@@ -138,6 +140,8 @@ export default {
       hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
       week:     [LOCALE_ENTRY, LOCALE_ENTRY],
       weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      second:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      seconds:  [LOCALE_ENTRY, LOCALE_ENTRY],
       busy:     LOCALE_ENTRY,
       free:     LOCALE_ENTRY
     }
@@ -175,6 +179,8 @@ export default {
       hours:    [LOCALE_ENTRY, LOCALE_ENTRY],
       week:     [LOCALE_ENTRY, LOCALE_ENTRY],
       weeks:    [LOCALE_ENTRY, LOCALE_ENTRY],
+      second:   [LOCALE_ENTRY, LOCALE_ENTRY],
+      seconds:  [LOCALE_ENTRY, LOCALE_ENTRY],
       busy:     LOCALE_ENTRY,
       free:     LOCALE_ENTRY,
       location: LOCALE_ENTRY,
@@ -437,7 +443,9 @@ export default {
       week:       LOCALE_ENTRY,
       weeks:      LOCALE_ENTRY,
       month:      LOCALE_ENTRY,
-      months:     LOCALE_ENTRY
+      months:     LOCALE_ENTRY,
+      second:     LOCALE_ENTRY,
+      seconds:    LOCALE_ENTRY
     }
   },
 
