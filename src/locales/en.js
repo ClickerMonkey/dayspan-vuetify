@@ -185,7 +185,6 @@ export default {
     },
     dsEvent: {
       labels: {
-        moreActions:  'More actions...',
         cancel:       'Cancel event changes',
         save:         'Save',
         title:        'Title',

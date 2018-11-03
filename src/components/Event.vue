@@ -51,7 +51,7 @@
             :calendar="calendar"
             @finish="actioned">
             <v-btn class="ds-button-tall ml-1 mt-0 mb-2" depressed>
-               {{ labels.moreActions }}
+              More actions...
             </v-btn>
           </ds-schedule-actions>
 
