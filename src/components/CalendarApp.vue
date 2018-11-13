@@ -355,17 +355,17 @@ export default {
 
       if (small)
       {
-        return this.calendar.start.format( this.formats.xs );
+        return this.calendar.start.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.xs );
       }
 
       let large = this.$vuetify.breakpoint.mdAndUp;
 
-      return this.calendar.summary(false, !large, false, !large);
+      return DaySpan.prototype.summary.call(this.calendar.span, this.calendar.type, false, !large, false, !large);
     },
 
     todayDate()
     {
-      return this.$dayspan.today.format( this.formats.today );
+      return this.$dayspan.today.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.today );
     },
 
     nextLabel()

@@ -78,7 +78,7 @@ export default {
     {
       if (this.type === 'none')
       {
-        return this.day.format( this.formats.date );
+        return this.day.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.date );
       }
 
       if (this.type === 'custom')

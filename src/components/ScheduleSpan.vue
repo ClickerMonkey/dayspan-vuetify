@@ -142,7 +142,7 @@ export default {
 
     startText()
     {
-      return this.schedule.start ? this.schedule.start.format( this.formats.start ) : this.labels.startless;
+      return this.schedule.start ? this.schedule.start.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.start ) : this.labels.startless;
     },
 
     endSpan()
@@ -154,7 +154,7 @@ export default {
 
     endText()
     {
-      return this.schedule.end ? this.schedule.end.format( this.formats.end ) : this.labels.endless;
+      return this.schedule.end ? this.schedule.end.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.end ) : this.labels.endless;
     },
 
     isReadOnly()

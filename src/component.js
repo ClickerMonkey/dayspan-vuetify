@@ -9,7 +9,33 @@ import Vue from 'vue';
 
 const LOCALE_ENTRY = 0;
 
-export default {
+DaySpan.prototype.summary = function (type, dayOfWeek, short, repeat, contextual, delimiter) {
+  if (dayOfWeek === void 0) { dayOfWeek = true; }
+  if (short === void 0) { short = false; }
+  if (repeat === void 0) { repeat = false; }
+  if (contextual === void 0) { contextual = true; }
+  if (delimiter === void 0) { delimiter = ' - '; }
+  var formats = DaySpan.SUMMARY_FORMATS[type];
+  var today = Day.today();
+  var showStartYear = !contextual || !this.start.sameYear(today);
+  var showEndYear = !contextual || !this.end.sameYear(today);
+  var start = this.start.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, showStartYear));
+  var end = this.end.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, showEndYear));
+  var summary = start;
+  if (start !== end) {
+      if (!repeat) {
+          summary = this.start.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, !this.start.sameYear(this.end)));
+      }
+      summary += delimiter;
+      summary += end;
+  }
+  else {
+      summary = start;
+  }
+  return summary;
+};
+
+let component = {
 
   data:
   {
@@ -616,3 +642,5 @@ export default {
     }
   }
 };
+
+export default component;

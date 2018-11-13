@@ -316,7 +316,7 @@ export default {
 
     startDate()
     {
-      return this.calendarEvent.start.format( this.formats.start );
+      return this.calendarEvent.start.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.start );
     },
 
     busyness()

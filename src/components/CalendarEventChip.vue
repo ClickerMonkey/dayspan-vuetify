@@ -84,7 +84,7 @@ export default {
 
     text()
     {
-      return this.time.format( this.formats.fullDay );
+      return this.time.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.fullDay );
     }
   },
 

@@ -137,7 +137,7 @@ export default {
 
     month()
     {
-      return this.day.format( this.formats.month );
+      return this.day.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.month );
     },
 
     hasPlaceholder()

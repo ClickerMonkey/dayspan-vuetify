@@ -181,12 +181,12 @@ export default {
 
     firstLine()
     {
-      return this.calendarEvent.day.format( this.formats.firstLine );
+      return this.calendarEvent.day.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.firstLine );
     },
 
     secondLine()
     {
-      return this.calendarEvent.day.format( this.formats.secondLine );
+      return this.calendarEvent.day.toMoment().locale(this.$dayspan.currentLocale).format( this.formats.secondLine );
     },
 
     when()
