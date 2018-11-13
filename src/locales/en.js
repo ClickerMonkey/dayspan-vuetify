@@ -21,6 +21,12 @@ export default {
     lastDayOfMonth: (day) => 'Last day of ' + day.format('MMMM'),
     lastWeekday:    (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM')
   },
+  formats: {
+    day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
+    week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
+    month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
+    year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
+  },
   colors: [
     { text: 'Red' },
     { text: 'Pink' },

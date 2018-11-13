@@ -1,5 +1,5 @@
 
-import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn, Units } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
@@ -15,7 +15,21 @@ DaySpan.prototype.summary = function (type, dayOfWeek, short, repeat, contextual
   if (repeat === void 0) { repeat = false; }
   if (contextual === void 0) { contextual = true; }
   if (delimiter === void 0) { delimiter = ' - '; }
-  var formats = DaySpan.SUMMARY_FORMATS[type];
+  var formats;
+  switch (type) {
+    case Units.DAY:
+      formats = component.data.formats.day;
+    break;
+    case Units.WEEK:
+      formats = component.data.formats.week;
+    break;
+    case Units.MONTH:
+      formats = component.data.formats.month;
+    break;
+    case Units.YEAR:
+      formats = component.data.formats.year;
+    break;
+  }
   var today = Day.today();
   var showStartYear = !contextual || !this.start.sameYear(today);
   var showEndYear = !contextual || !this.end.sameYear(today);
@@ -131,6 +145,13 @@ let component = {
       lastDay:            LOCALE_ENTRY,
       lastDayOfMonth:     LOCALE_ENTRY,
       lastWeekday:        LOCALE_ENTRY
+    },
+
+    formats: {
+      day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+      week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+      month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
+      year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
     },
 
     colors: Colors,
