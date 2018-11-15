@@ -25,7 +25,8 @@ export default {
     day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
     week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
     month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
-    year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
+    year: (short, dayOfWeek, year) => (year ? 'YYYY' : ''),
+    timeShort: 'ha'
   },
   colors: [
     { text: 'Red' },

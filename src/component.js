@@ -151,7 +151,8 @@ let component = {
       day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
       week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
       month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
-      year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
+      year: (short, dayOfWeek, year) => (year ? 'YYYY' : ''),
+      timeShort: LOCALE_ENTRY
     },
 
     colors: Colors,
@@ -325,7 +326,7 @@ let component = {
 
     getPrefix(calendarEvent, sameDay)
     {
-      return sameDay.length === 1 ? sameDay[0].start.format('ha') : '(' + sameDay.length + ')';
+      return sameDay.length === 1 ? sameDay[0].start.toMoment().locale(component.data.currentLocale).format(component.data.formats.timeShort) : '(' + sameDay.length + ')';
     },
 
     getScheduleDescription(schedule)
