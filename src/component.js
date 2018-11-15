@@ -76,25 +76,25 @@ Schedule.prototype.describe = function (thing, includeRange, includeTimes, inclu
   }
 
   var _in = ' ' + component.data.schedule.ruleIn + ' ';
-  rules += this.describeRule(this.dayOfWeek.input, component.data.schedule.ruleDayOfWeek, x => component.data.schedule.weekdays[x], 1, false);
-  rules += this.describeRule(this.lastDayOfMonth.input, component.data.schedule.ruleLastDayOfMonth, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.dayOfMonth.input, component.data.schedule.ruleDayOfMonth, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.dayOfYear.input, component.data.schedule.ruleDayOfYear, x => component.data.suffix(x, true), 1);
-  rules += this.describeRule(this.year.input, component.data.schedule.ruleYear, x => x, 0, false, _in);
-  rules += this.describeRule(this.month.input, component.data.schedule.ruleMonth, x => component.data.schedule.months[x], 0, false, _in);
-  rules += this.describeRule(this.weekOfYear.input, component.data.schedule.ruleWeekOfYear, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.weekspanOfYear.input, component.data.schedule.ruleWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
-  rules += this.describeRule(this.fullWeekOfYear.input, component.data.schedule.ruleFullWeekOfYear, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.lastWeekspanOfYear.input, component.data.schedule.ruleLastWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
-  rules += this.describeRule(this.lastFullWeekOfYear.input, component.data.schedule.ruleLastFullWeekOfYear, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.weekOfMonth.input, component.data.schedule.ruleWeekOfMonth, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.fullWeekOfMonth.input, component.data.schedule.ruleFullWeekOfMonth, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.weekspanOfMonth.input, component.data.schedule.ruleWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
-  rules += this.describeRule(this.lastFullWeekOfMonth.input, component.data.schedule.ruleLastFullWeekOfMonth, x => component.data.suffix(x, true));
-  rules += this.describeRule(this.lastWeekspanOfMonth.input, component.data.schedule.ruleLastWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
+  rules += Schedule.prototype.describeRule.call(this, this.dayOfWeek.input, component.data.schedule.ruleDayOfWeek, x => component.data.schedule.weekdays[x], 1, false);
+  rules += Schedule.prototype.describeRule.call(this, this.lastDayOfMonth.input, component.data.schedule.ruleLastDayOfMonth, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.dayOfMonth.input, component.data.schedule.ruleDayOfMonth, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.dayOfYear.input, component.data.schedule.ruleDayOfYear, x => component.data.suffix(x, true), 1);
+  rules += Schedule.prototype.describeRule.call(this, this.year.input, component.data.schedule.ruleYear, x => x, 0, false, _in);
+  rules += Schedule.prototype.describeRule.call(this, this.month.input, component.data.schedule.ruleMonth, x => component.data.schedule.months[x], 0, false, _in);
+  rules += Schedule.prototype.describeRule.call(this, this.weekOfYear.input, component.data.schedule.ruleWeekOfYear, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.weekspanOfYear.input, component.data.schedule.ruleWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
+  rules += Schedule.prototype.describeRule.call(this, this.fullWeekOfYear.input, component.data.schedule.ruleFullWeekOfYear, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.lastWeekspanOfYear.input, component.data.schedule.ruleLastWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
+  rules += Schedule.prototype.describeRule.call(this, this.lastFullWeekOfYear.input, component.data.schedule.ruleLastFullWeekOfYear, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.weekOfMonth.input, component.data.schedule.ruleWeekOfMonth, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.fullWeekOfMonth.input, component.data.schedule.ruleFullWeekOfMonth, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.weekspanOfMonth.input, component.data.schedule.ruleWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
+  rules += Schedule.prototype.describeRule.call(this, this.lastFullWeekOfMonth.input, component.data.schedule.ruleLastFullWeekOfMonth, x => component.data.suffix(x, true));
+  rules += Schedule.prototype.describeRule.call(this, this.lastWeekspanOfMonth.input, component.data.schedule.ruleLastWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
 
   if (includeTimes && this.times.length) {
-      times = component.data.schedule.times + ' ' + this.describeArray(this.times, x => x.toMoment().locale(component.currentLocale).format('LT')) + ' ';
+      times = component.data.schedule.times + ' ' + Schedule.prototype.describeArray.call(this, this.times, x => x.toMoment().locale(component.currentLocale).format('LT')) + ' ';
   }
   if (includeDuration && this.duration !== Constants.DURATION_DEFAULT) {
       duration = ' ' + component.data.schedule.duration + ' ' + this.duration + ' ';
@@ -105,19 +105,19 @@ Schedule.prototype.describe = function (thing, includeRange, includeTimes, inclu
   if (includeExcludes) {
       var theExcludes = this.exclude.spans().list();
       if (theExcludes.length) {
-          excludes = component.data.schedule.exclude + ' ' + this.describeArray(theExcludes, x => x.span.summary(Units.DAY)) + ' ';
+          excludes = component.data.schedule.exclude + ' ' + Schedule.prototype.describeArray.call(this, theExcludes, x => x.span.summary(Units.DAY)) + ' ';
       }
   }
   if (includeIncludes) {
       var theIncludes = this.include.spans().list();
       if (theIncludes.length) {
-          includes = component.data.schedule.include + ' ' + this.describeArray(theIncludes, x => x.span.summary(Units.DAY)) + ' ';
+          includes = component.data.schedule.include + ' ' + Schedule.prototype.describeArray.call(this, theIncludes, x => x.span.summary(Units.DAY)) + ' ';
       }
   }
   if (includeCancels) {
       var theCancels = this.cancel.spans().list();
       if (theCancels.length) {
-          cancels = component.data.schedule.cancels + ' ' + this.describeArray(theCancels, x => x.span.summary(Units.DAY));
+          cancels = component.data.schedule.cancels + ' ' + Schedule.prototype.describeArray.call(this, theCancels, x => x.span.summary(Units.DAY));
       }
   }
   var out = component.data.schedule.summaryFormat
@@ -165,7 +165,7 @@ Schedule.prototype.describeRule = function (value, unit, map, everyOffset, the, 
         var valueOne = value;
         if (valueOne.length) {
             out += on + (the ? component.data.schedule.ruleThe + ' ' : '');
-            out += this.describeArray(valueOne, map);
+            out += Schedule.prototype.describeArray.call(this, valueOne, map);
             out += suffix;
         }
     }
@@ -538,7 +538,7 @@ let component = {
 
     getScheduleDescription(schedule)
     {
-      return schedule.describe(component.data.event, false, false, false, false)
+      return Schedule.prototype.describe.call(schedule, component.data.event, false, false, false, false)
     },
 
     getEventOccurrence(schedule, start, labels, formats)
