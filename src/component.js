@@ -1,5 +1,5 @@
 
-import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Suffix, Functions as fn, Units } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
@@ -9,7 +9,193 @@ import Vue from 'vue';
 
 const LOCALE_ENTRY = 0;
 
-export default {
+DaySpan.prototype.summary = function (type, dayOfWeek, short, repeat, contextual, delimiter) {
+  if (dayOfWeek === void 0) { dayOfWeek = true; }
+  if (short === void 0) { short = false; }
+  if (repeat === void 0) { repeat = false; }
+  if (contextual === void 0) { contextual = true; }
+  if (delimiter === void 0) { delimiter = ' - '; }
+  var formats;
+  switch (type) {
+    case Units.DAY:
+      formats = component.data.formats.day;
+    break;
+    case Units.WEEK:
+      formats = component.data.formats.week;
+    break;
+    case Units.MONTH:
+      formats = component.data.formats.month;
+    break;
+    case Units.YEAR:
+      formats = component.data.formats.year;
+    break;
+  }
+  var today = Day.today();
+  var showStartYear = !contextual || !this.start.sameYear(today);
+  var showEndYear = !contextual || !this.end.sameYear(today);
+  var start = this.start.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, showStartYear));
+  var end = this.end.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, showEndYear));
+  var summary = start;
+  if (start !== end) {
+      if (!repeat) {
+          summary = this.start.toMoment().locale(component.data.currentLocale).format(formats(short, dayOfWeek, !this.start.sameYear(this.end)));
+      }
+      summary += delimiter;
+      summary += end;
+  }
+  else {
+      summary = start;
+  }
+  return summary;
+};
+
+Schedule.prototype.describe = function (thing, includeRange, includeTimes, includeDuration, includeExcludes, includeIncludes, includeCancels) {
+  if (thing === void 0) { thing = component.data.event; }
+  if (includeRange === void 0) { includeRange = true; }
+  if (includeTimes === void 0) { includeTimes = true; }
+  if (includeDuration === void 0) { includeDuration = false; }
+  if (includeExcludes === void 0) { includeExcludes = false; }
+  if (includeIncludes === void 0) { includeIncludes = false; }
+  if (includeCancels === void 0) { includeCancels = false; }
+  var range = '', rules = '', times = '', duration = '', excludes = '', includes = '', cancels = '';
+  if (includeRange) {
+      if (this.start) {
+          if (this.end) {
+              range = component.data.schedule.range
+                .replace('{:start}', component.formats.day(this.start.toMoment().locale(component.data.currentLocale)))
+                .replace('{:end}', component.formats.day(this.end.toMoment().locale(component.data.currentLocale)));
+          } else {
+            range = component.data.schedule.rangeNoEnd.replace('{:start}', component.formats.day(this.start.toMoment().locale(component.data.currentLocale)));
+          }
+      } else if (this.end) {
+          range = component.data.schedule.rangeNoStart.replace('{:end}', component.formats.day(this.end.toMoment().locale(component.data.currentLocale)));
+      }
+      if (range && !range.endsWith(' ')) {
+        range += ' ';
+      }
+  }
+
+  var _in = ' ' + component.data.schedule.ruleIn + ' ';
+  rules += this.describeRule(this.dayOfWeek.input, component.data.schedule.ruleDayOfWeek, x => component.data.schedule.weekdays[x], 1, false);
+  rules += this.describeRule(this.lastDayOfMonth.input, component.data.schedule.ruleLastDayOfMonth, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.dayOfMonth.input, component.data.schedule.ruleDayOfMonth, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.dayOfYear.input, component.data.schedule.ruleDayOfYear, x => component.data.suffix(x, true), 1);
+  rules += this.describeRule(this.year.input, component.data.schedule.ruleYear, x => x, 0, false, _in);
+  rules += this.describeRule(this.month.input, component.data.schedule.ruleMonth, x => component.data.schedule.months[x], 0, false, _in);
+  rules += this.describeRule(this.weekOfYear.input, component.data.schedule.ruleWeekOfYear, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.weekspanOfYear.input, component.data.schedule.ruleWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
+  rules += this.describeRule(this.fullWeekOfYear.input, component.data.schedule.ruleFullWeekOfYear, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.lastWeekspanOfYear.input, component.data.schedule.ruleLastWeekspanOfYear, x => component.data.suffix(x + 1, true), 1);
+  rules += this.describeRule(this.lastFullWeekOfYear.input, component.data.schedule.ruleLastFullWeekOfYear, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.weekOfMonth.input, component.data.schedule.ruleWeekOfMonth, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.fullWeekOfMonth.input, component.data.schedule.ruleFullWeekOfMonth, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.weekspanOfMonth.input, component.data.schedule.ruleWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
+  rules += this.describeRule(this.lastFullWeekOfMonth.input, component.data.schedule.ruleLastFullWeekOfMonth, x => component.data.suffix(x, true));
+  rules += this.describeRule(this.lastWeekspanOfMonth.input, component.data.schedule.ruleLastWeekspanOfMonth, x => component.data.suffix(x + 1, true), 1);
+
+  if (includeTimes && this.times.length) {
+      times = component.data.schedule.times + ' ' + this.describeArray(this.times, x => x.toMoment().locale(component.currentLocale).format('LT')) + ' ';
+  }
+  if (includeDuration && this.duration !== Constants.DURATION_DEFAULT) {
+      duration = ' ' + component.data.schedule.duration + ' ' + this.duration + ' ';
+      if (this.durationUnit) {
+          duration += component.data.defaults.dsScheduleTimes.labels[this.durationUnit] + ' ';
+      }
+  }
+  if (includeExcludes) {
+      var theExcludes = this.exclude.spans().list();
+      if (theExcludes.length) {
+          excludes = component.data.schedule.exclude + ' ' + this.describeArray(theExcludes, x => x.span.summary(Units.DAY)) + ' ';
+      }
+  }
+  if (includeIncludes) {
+      var theIncludes = this.include.spans().list();
+      if (theIncludes.length) {
+          includes = component.data.schedule.include + ' ' + this.describeArray(theIncludes, x => x.span.summary(Units.DAY)) + ' ';
+      }
+  }
+  if (includeCancels) {
+      var theCancels = this.cancel.spans().list();
+      if (theCancels.length) {
+          cancels = component.data.schedule.cancels + ' ' + this.describeArray(theCancels, x => x.span.summary(Units.DAY));
+      }
+  }
+  var out = component.data.schedule.summaryFormat
+    .replace('{:range}', range)
+    .replace('{:thing}', thing)
+    .replace('{:rules}', rules)
+    .replace('{:times}', times)
+    .replace('{:duration}', duration)
+    .replace('{:excludes}', excludes)
+    .replace('{:includes}', includes)
+    .replace('{:cancels}', cancels)
+  ;
+  return out.charAt(0).toLocaleUpperCase() + out.substring(1);
+};
+/**
+ * Describes the given frequency.
+ *
+ * @param value The frequency to describe.
+ * @param unit The unit of the frequency.
+ * @param map How the values in the frequency should be described.
+ * @param everyOffset A value to add to a [[FrequencyValueEvery]] offset to
+ *    account for zero-based values that should be shifted for human
+ *    friendliness.
+ * @param the If the word 'the' should be used to describe the unit.
+ * @param on The word which preceeds values of the given unit.
+ * @param required If the description should always return a non-empty string
+ *    even if the frequency was not specified in the original input.
+ * @returns A string description of the frequency.
+ */
+Schedule.prototype.describeRule = function (value, unit, map, everyOffset, the, on, required) {
+    if (everyOffset === void 0) { everyOffset = 0; }
+    if (the === void 0) { the = true; }
+    if (on === void 0) { on = ' ' + component.data.schedule.ruleOn + ' '; }
+    if (required === void 0) { required = false; }
+    var out = '';
+    var suffix = the ? ' ' + unit : '';
+    if (fn.isFrequencyValueEvery(value)) {
+        var valueEvery = value;
+        out += ' ' + component.data.schedule.ruleEvery + ' ' + component.data.suffix(valueEvery.every, true) + ' ' + unit;
+        if (valueEvery.offset) {
+            out += ' ' + component.data.schedule.ruleStarts + ' ' + map(valueEvery.offset + everyOffset) + suffix;
+        }
+    }
+    else if (fn.isFrequencyValueOneOf(value)) {
+        var valueOne = value;
+        if (valueOne.length) {
+            out += on + (the ? component.data.schedule.ruleThe + ' ' : '');
+            out += this.describeArray(valueOne, map);
+            out += suffix;
+        }
+    }
+    else if (required) {
+        out += on + component.data.schedule.ruleAny + ' ' + unit;
+    }
+    return out;
+};
+/**
+ * Describes the array by adding commas where appropriate and 'and' before the
+ * last value of the array (if its more than `1`).
+ *
+ * @param array The array of items to describe.
+ * @param map The function which converts an item to a string.
+ * @returns The final description of the array items.
+ */
+Schedule.prototype.describeArray = function (array, map) {
+    var out = '';
+    var last = array.length - 1;
+    out += map(array[0]);
+    for (var i = 1; i < last; i++) {
+        out += ', ' + map(array[i]);
+    }
+    if (last > 0) {
+        out += ' ' + component.data.schedule.ruleAnd + ' ' + map(array[last]);
+    }
+    return out;
+};
+
+let component = {
 
   data:
   {
@@ -83,6 +269,8 @@ export default {
 
     promptOpen: null,
 
+    event: LOCALE_ENTRY,
+
     promptLabels: {
       actionRemove:       LOCALE_ENTRY,
       actionExclude:      LOCALE_ENTRY,
@@ -104,7 +292,64 @@ export default {
     patterns: {
       lastDay:            LOCALE_ENTRY,
       lastDayOfMonth:     LOCALE_ENTRY,
-      lastWeekday:        LOCALE_ENTRY
+      lastWeekday:        LOCALE_ENTRY,
+      none:               LOCALE_ENTRY,
+      daily:              LOCALE_ENTRY,
+      weekly:             LOCALE_ENTRY,
+      monthlyWeek:        LOCALE_ENTRY,
+      annually:           LOCALE_ENTRY,
+      annuallyMonthWeek:  LOCALE_ENTRY,
+      weekday:            LOCALE_ENTRY,
+      monthly:            LOCALE_ENTRY,
+      custom:             LOCALE_ENTRY
+      },
+
+    schedule: {
+      cancels: LOCALE_ENTRY,
+      duration: LOCALE_ENTRY,
+      exclude: LOCALE_ENTRY,
+      including: LOCALE_ENTRY,
+      months: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY],
+      range: LOCALE_ENTRY,
+      rangeNoEnd: LOCALE_ENTRY,
+      rangeNoStart: LOCALE_ENTRY,
+      ruleDayOfWeek: LOCALE_ENTRY,
+      ruleLastDayOfMonth: LOCALE_ENTRY,
+      ruleDayOfMonth: LOCALE_ENTRY,
+      ruleDayOfYear: LOCALE_ENTRY,
+      ruleYear: LOCALE_ENTRY,
+      ruleMonth: LOCALE_ENTRY,
+      ruleWeekOfYear: LOCALE_ENTRY,
+      ruleWeekspanOfYear: LOCALE_ENTRY,
+      ruleFullWeekOfYear: LOCALE_ENTRY,
+      ruleLastWeekspanOfYear: LOCALE_ENTRY,
+      ruleLastFullWeekOfYear: LOCALE_ENTRY,
+      ruleWeekOfMonth: LOCALE_ENTRY,
+      ruleFullWeekOfMonth: LOCALE_ENTRY,
+      ruleWeekspanOfMonth: LOCALE_ENTRY,
+      ruleLastFullWeekOfMonth: LOCALE_ENTRY,
+      ruleLastWeekspanOfMonth: LOCALE_ENTRY,
+      ruleAnd: LOCALE_ENTRY,
+      ruleAny: LOCALE_ENTRY,
+      ruleEvery: LOCALE_ENTRY,
+      ruleIn: LOCALE_ENTRY,
+      ruleOn: LOCALE_ENTRY,
+      ruleStarts: LOCALE_ENTRY,
+      ruleThe: LOCALE_ENTRY,
+      summaryFormat: LOCALE_ENTRY,
+      times: LOCALE_ENTRY,
+      weekdays: [LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY, LOCALE_ENTRY]
+    },
+    
+    formats: {
+      day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+      week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+      month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
+      year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
+    },
+
+    suffix: {
+      get: Suffix.get
     },
 
     colors: Colors,
@@ -198,6 +443,16 @@ export default {
 
     addPatterns()
     {
+      PatternMap.none.describe = (day) => this.patterns.none(day);
+      PatternMap.daily.describe = (day) => this.patterns.daily(day);
+      PatternMap.weekly.describe = (day) => this.patterns.weekly(day);
+      PatternMap.monthlyWeek.describe = (day) => this.patterns.monthlyWeek(day);
+      PatternMap.annually.describe = (day) => this.patterns.annually(day);
+      PatternMap.annuallyMonthWeek.describe = (day) => this.patterns.annuallyMonthWeek(day);
+      PatternMap.weekday.describe = (day) => this.patterns.weekday(day);
+      PatternMap.monthly.describe = (day) => this.patterns.monthly(day);
+      PatternMap.custom.describe = (day) => this.patterns.custom(day);
+
       Patterns.unshift(PatternMap.lastDay = new Pattern(
         'lastDay', false,
         (day) => this.patterns.lastDay(day),
@@ -283,7 +538,7 @@ export default {
 
     getScheduleDescription(schedule)
     {
-      return schedule.describe('event', false, false, false, false)
+      return schedule.describe(component.data.event, false, false, false, false)
     },
 
     getEventOccurrence(schedule, start, labels, formats)
@@ -616,3 +871,5 @@ export default {
     }
   }
 };
+
+export default component;

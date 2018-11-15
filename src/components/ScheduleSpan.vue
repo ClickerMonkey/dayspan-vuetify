@@ -32,7 +32,7 @@
 
     </v-menu>
 
-    &nbsp;&nbsp;to&nbsp;&nbsp;
+    &nbsp;&nbsp;{{ labels.to }}&nbsp;&nbsp;
 
     <v-menu offset-y
       :close-on-content-click="false"

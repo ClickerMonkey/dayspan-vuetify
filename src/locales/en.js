@@ -1,5 +1,8 @@
+import { Suffix } from 'dayspan';
+
 
 export default {
+  event: 'event',
   promptLabels: {
     actionRemove:       'Are you sure you want to remove this event?',
     actionExclude:      'Are you sure you want to remove this event occurrence?',
@@ -19,8 +22,60 @@ export default {
   patterns: {
     lastDay:        (day) => 'Last day of the month',
     lastDayOfMonth: (day) => 'Last day of ' + day.format('MMMM'),
-    lastWeekday:    (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM')
+    lastWeekday:    (day) => 'Last ' + day.format('dddd') + ' in ' + day.format('MMMM'),
+    none: () => 'Does not repeat',
+    daily: () => 'Daily',
+    weekly: (day) => 'Weekly on ' + day.format('dddd'),
+    monthlyWeek: (day) => 'Monthly on the ' + Suffix.CACHE[day.weekspanOfMonth + 1] + ' ' + day.format('dddd'),
+    annually: (day) => 'Annually on ' + day.format('MMMM Do'),
+    annuallyMonthWeek: (day) => 'Annually on the ' + Suffix.CACHE[day.weekspanOfMonth + 1] + ' ' + day.format('dddd') + ' of ' + day.format('MMMM'),
+    weekday: (day) => 'Every weekday (Monday to Friday)',
+    monthly: (day) => 'Monthly on the ' + day.format('Do') + ' day',
+    custom: () => 'Custom...'
   },
+  schedule: {
+    cancels: 'with cancellations on',
+    duration: 'lasting',
+    exclude: 'excluding',
+    including: 'including',
+    months: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+    range: 'Starting on {:start} and ending on {:end}',
+    rangeNoEnd: 'From {:start} unward',
+    rangeNoStart: 'Up until {:end}',
+    ruleDayOfWeek: 'day of the week',
+    ruleLastDayOfMonth: 'last day of the month',
+    ruleDayOfMonth: 'day of the month',
+    ruleDayOfYear: 'day of the year',
+    ruleYear: 'year',
+    ruleMonth: 'month',
+    ruleWeekOfYear: 'week of the year',
+    ruleWeekspanOfYear: 'weekspan of the year',
+    ruleFullWeekOfYear: 'full week of the year',
+    ruleLastWeekspanOfYear: 'last weekspan of the year',
+    ruleLastFullWeekOfYear: 'last full week of the year',
+    ruleWeekOfMonth: 'week of the month',
+    ruleFullWeekOfMonth: 'full week of the month',
+    ruleWeekspanOfMonth: 'weekspan of the month',
+    ruleLastFullWeekOfMonth: 'last full week of the month',
+    ruleLastWeekspanOfMonth: 'last weekspan of the month',
+    ruleAnd: 'and',
+    ruleAny: 'any',
+    ruleEvery: 'every',
+    ruleIn: 'in',
+    ruleOn: 'on',
+    ruleStarts: 'starting at',
+    ruleThe: 'the',
+    summaryFormat: '{:range}the {:thing} will occur{:rules}{:times}{:duration}{:excludes}{:includes}{:cancels}',
+    times: 'at',
+    weekdays: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+  },
+  formats: {
+    day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+    week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd, ' : 'dddd, ') : '') + (short ? 'MMM ' : 'MMMM ') + 'Do' + (year ? ' YYYY' : ''),
+    month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
+    year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
+  },
+
   colors: [
     { text: 'Red' },
     { text: 'Pink' },
@@ -313,7 +368,8 @@ export default {
     dsScheduleSpan: {
       labels: {
         startless:  'Beginning of Time',
-        endless:    'End of Time'
+        endless:    'End of Time',
+        to: 'to'
       },
       formats: {
         start:      'MMMM Do, YYYY',

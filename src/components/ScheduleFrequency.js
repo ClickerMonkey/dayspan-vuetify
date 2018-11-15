@@ -143,7 +143,7 @@ export default {
 
       for (var i = min; i < max; i++) {
         offsets.push({
-          text: array[ i ],
+          text: this.$dayspan.suffix(i, true),
           value: i + offset
         });
       }
