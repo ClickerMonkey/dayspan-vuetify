@@ -1,6 +1,7 @@
-
+var suffix = (value, prepend) => (prepend ? value : '') + 'e';
 
 export default {
+  event: 'evenement',
   promptLabels: {
     actionRemove:       'Weet je zeker dat je dit evenement wilt verwijderen?',
     actionExclude:      'Weet je zeker dat je deze instantie van het evenement wilt verwijderen?',
@@ -19,8 +20,53 @@ export default {
   },
   patterns: {
     lastDay:        (day) => 'Laatste dag van de maand',
-    lastDayOfMonth: (day) => 'Laaste dag van ' + day.format('MMMM'),
-    lastWeekday:    (day) => 'Laatste ' + day.format('dddd') + ' in ' + day.format('MMMM')
+    lastDayOfMonth: (day) => 'Laaste dag van ' + day.toMoment().locale('nl').format('MMMM'),
+    lastWeekday:    (day) => 'Laatste ' + day.toMoment().locale('nl').format('dddd') + ' in ' + day.toMoment().locale('nl').format('MMMM'),
+    none: () => 'Geen herhaling',
+    daily: () => 'Dagelijks',
+    weekly: (day) => 'Wekelijks op ' + day.toMoment().locale('nl').format('dddd'),
+    monthlyWeek: (day) => 'Maandelijks op de ' + suffix(day.weekspanOfMonth + 1, true) + ' ' + day.toMoment().locale('nl').format('dddd'),
+    annually: (day) => 'Jaalijks op ' + day.format('D MMMM'),
+    annuallyMonthWeek: (day) => 'Jaarlijks op de ' + suffix(day.weekspanOfMonth + 1, true) + ' ' + day.toMoment().locale('nl').format('dddd') + ' van ' + day.toMoment().locale('nl').format('MMMM'),
+    weekday: (day) => 'Iedere werkdag (maandag tot vrijdag)',
+    monthly: (day) => 'Maandelijks op de ' + day.toMoment().locale('nl').format('Do') + ' dag',
+    custom: () => 'Aangepast..'
+  },
+  schedule: {
+    cancels: 'met annulering op',
+    duration: 'gedurende',
+    exclude: 'exclusief',
+    including: 'inclusief',
+    months: ['januari', 'februari', 'maart', 'april', 'mei', 'juni', 'juli', 'augustus', 'september', 'oktober', 'november', 'december'],
+    range: 'Van op {:start} tot {:end}',
+    rangeNoEnd: 'Vanaf {:start}',
+    rangeNoStart: 'Tot {:end}',
+    ruleDayOfWeek: 'dag van de week',
+    ruleLastDayOfMonth: 'laatste dag van de maand',
+    ruleDayOfMonth: 'dag van de maand',
+    ruleDayOfYear: 'dag van het jaar',
+    ruleYear: 'jaar',
+    ruleMonth: 'maand',
+    ruleWeekOfYear: 'week van het jaar',
+    ruleWeekspanOfYear: 'weekspanne van het jaar',
+    ruleFullWeekOfYear: 'volledige week van het jaar',
+    ruleLastWeekspanOfYear: 'laatste weekspanne van het jaar',
+    ruleLastFullWeekOfYear: 'laatste volledige week van het jaar',
+    ruleWeekOfMonth: 'week van de maand',
+    ruleFullWeekOfMonth: 'volledige week van de maand',
+    ruleWeekspanOfMonth: 'weekspanne van de maand',
+    ruleLastFullWeekOfMonth: 'laatste volledige week van de maand',
+    ruleLastWeekspanOfMonth: 'laatste weekspanne van de maand',
+    ruleAnd: 'en',
+    ruleAny: 'een',
+    ruleEvery: 'iedere',
+    ruleIn: 'in',
+    ruleOn: 'op',
+    ruleStarts: 'vanaf',
+    ruleThe: 'de',
+    summaryFormat: '{:range}het {:thing} vindt plaats{:rules}{:times}{:duration}{:excludes}{:includes}{:cancels}',
+    times: 'om',
+    weekdays: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
   },
   formats: {
     day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
@@ -28,6 +74,7 @@ export default {
     month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
     year: (short, dayOfWeek, year) => (year ? 'YYYY' : '')
   },
+  suffix,
   colors: [
     { text: 'Rood' },
     { text: 'Roze' },
@@ -198,7 +245,7 @@ export default {
         description:  'Voeg een beschrijving toe',
         calendar:     'Categorie',
         tabs: {
-          details:    'Details evenement',
+          details:    'Evenement',
           forecast:   'Vooruitblik',
           removed:    'Verwijderd',
           added:      'Toegevoegd',
@@ -313,19 +360,21 @@ export default {
       options: [
         { text: 'Ieder jaar' },
         { text: 'In de volgende jaren...' },
-        { text: 'Iedere _ jaar beginnende op de _' }
+        { text: 'Iedere _ jaar beginnende in _' }
       ]
     },
 
     dsScheduleSpan: {
       labels: {
         startless:  'Begin der tijden',
-        endless:    'Einde der tijden'
+        endless:    'Einde der tijden',
+        to: 'tot'
       },
       formats: {
         start:      'D MMMM YYYY',
         end:        'D MMMM YYYY'
-      }
+      },
+      suffix
     },
 
     dsScheduleTime: {
