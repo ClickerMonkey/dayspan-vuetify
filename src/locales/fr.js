@@ -77,7 +77,7 @@ export default {
         { label: '4 jours' }
       ],
       formats: {
-        today: 'dddd, MMMM D',
+        today: 'dddd D MMMM',
         xs: 'MMM'
       },
       labels: {
@@ -97,7 +97,7 @@ export default {
       formats: {
         firstLine:  'ddd',
         secondLine: 'MMM Do',
-        start:      'dddd, MMMM D',
+        start:      'dddd D MMMM',
         time:       'h:mm a'
       },
       labels: {
@@ -126,7 +126,7 @@ export default {
     },
     dsCalendarEventPopover: {
       formats: {
-        start:    'dddd, MMMM D',
+        start:    'dddd D MMMM',
         time:     'h:mm a'
       },
       labels: {
@@ -149,7 +149,7 @@ export default {
     },
     dsCalendarEventCreatePopover: {
       formats: {
-        start:    'dddd, MMMM D',
+        start:    'dddd D MMMM',
         time:     'h:mm a'
       },
       labels: {
