@@ -185,6 +185,7 @@ export default {
     },
     dsEvent: {
       labels: {
+        moreActions:  'Autres actions',
         cancel:       "Annuler les changements d'événement",
         save:         'Sauvegarder',
         title:        'Titre',
