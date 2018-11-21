@@ -234,6 +234,7 @@ export default {
     },
     dsEvent: {
       labels: {
+        moreActions:  'Meer acties...',
         cancel:       'Wijzigingen annuleren',
         save:         'Opslaan',
         title:        'Titel',

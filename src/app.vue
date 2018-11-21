@@ -91,7 +91,9 @@ export default {
     currentLocale: vm.$dayspan.currentLocale,
     locales: [
       { value: 'en', text: 'English' },
-      { value: 'fr', text: 'French' }
+      { value: 'fr', text: 'French' },
+      { value: 'nl', text: 'Dutch' },
+      { value: 'ca', text: 'Catalan' }
     ],
     defaultEvents: [
       {

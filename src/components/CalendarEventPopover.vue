@@ -337,7 +337,7 @@ export default {
     }
   }
 
-  /deep/ .v-toolbar__extension {
+  .v-toolbar__extension {
     padding: 0 16px !important;
 
     .v-toolbar__title {

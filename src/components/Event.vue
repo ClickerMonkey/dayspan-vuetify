@@ -116,7 +116,7 @@
           <slot name="eventTabsExtra" v-bind="slotData"></slot>
 
           <!-- Details -->
-          <v-tab-item id="details" v-if="hasDetails">
+          <v-tab-item value="details" v-if="hasDetails">
             <v-card flat>
               <v-card-text>
 
@@ -207,7 +207,7 @@
           </v-tab-item>
 
           <!-- Forecast -->
-          <v-tab-item id="forecast" lazy v-if="showForecast">
+          <v-tab-item value="forecast" lazy v-if="showForecast">
             <v-card flat>
               <v-card-text>
                 <slot name="eventForecast" v-bind="slotData">
@@ -224,7 +224,7 @@
           </v-tab-item>
 
           <!-- Exclusions -->
-          <v-tab-item id="exclusions" lazy v-if="showExclusions">
+          <v-tab-item value="exclusions" lazy v-if="showExclusions">
             <v-card flat>
               <v-card-text>
                 <slot name="eventExclusions" v-bind="slotData">
@@ -241,7 +241,7 @@
           </v-tab-item>
 
           <!-- Inclusions -->
-          <v-tab-item id="inclusions" lazy v-if="showInclusions">
+          <v-tab-item value="inclusions" lazy v-if="showInclusions">
             <v-card flat>
               <v-card-text>
                 <slot name="eventInclusions" v-bind="slotData">
@@ -258,7 +258,7 @@
           </v-tab-item>
 
           <!-- Cancelled -->
-          <v-tab-item id="cancelled" lazy v-if="showCancels">
+          <v-tab-item value="cancelled" lazy v-if="showCancels">
             <v-card flat>
               <v-card-text>
                 <slot name="eventCancels" v-bind="slotData">
@@ -622,7 +622,7 @@ export default {
 }
 </script>
 
-<style lang="scss">
+<style scoped lang="scss">
 
 .ds-calendar-event-title {
   font-size: 18px;
@@ -693,6 +693,10 @@ export default {
   .ds-event-cancel {
     position: absolute;
     left: -60px;
+  }
+
+  .v-input {
+    margin-bottom: 8px;
   }
 }
 

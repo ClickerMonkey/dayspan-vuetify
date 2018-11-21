@@ -252,6 +252,7 @@ export default {
     hasInclusions: true,
     hasCancelled: true,
     labels: {
+      moreActions:  LOCALE_ENTRY,
       cancel:       LOCALE_ENTRY,
       save:         LOCALE_ENTRY,
       title:        LOCALE_ENTRY,

@@ -114,31 +114,29 @@ export default {
 
 .ds-agenda-day {
 
-  /deep/ tr:first-child td {
+  tr:first-child td {
     padding-top: 6px;
   }
 
-  /deep/ tr:last-child td {
+  tr:last-child td {
     padding-bottom: 6px;
   }
 }
 
 .ds-day-today {
 
-  /deep/ .ds-agenda-lines {
+  .ds-agenda-lines {
     color: #4285f4;
     font-weight: bold;
   }
 }
 
 .ds-day-past {
-  /deep/ {
 
-    .ds-agenda-lines,
-    .ds-agenda-when,
-    .ds-agenda-details {
-      color: #9e9e9e;
-    }
+  .ds-agenda-lines,
+  .ds-agenda-when,
+  .ds-agenda-details {
+    color: #9e9e9e;
   }
 }
 

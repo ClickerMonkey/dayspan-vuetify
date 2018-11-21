@@ -214,6 +214,7 @@ export default {
   .ds-time-cell {
     padding-right: 8px;
     flex: 1 0 0px;
+    margin-bottom: 8px;
 
     &:last-child {
       margin-right: -8px;

@@ -133,9 +133,19 @@ export default {
 
   methods:
   {
+    normalizeLocaleName(name)
+    {
+      return name.toLowerCase();
+    },
+
+    getLocale(name)
+    {
+      return this.locales[this.normalizeLocaleName(name)];
+    },
+
     setLocale(name, strict)
     {
-      const locale = this.locales[name];
+      const locale = this.getLocale(name);
 
       if (!locale && strict)
       {
@@ -151,12 +161,17 @@ export default {
 
     addLocale(name, locale)
     {
-      this.locales[name] = locale;
+      this.locales[this.normalizeLocaleName(name)] = locale;
+    },
+
+    addLocales(names, locale)
+    {
+      names.forEach(n => this.addLocale(n, locale));
     },
 
     updateLocale(name, update, strict = true)
     {
-      const locale = this.locales[name];
+      const locale = this.getLocale(name);
 
       if (!locale)
       {

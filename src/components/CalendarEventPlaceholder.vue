@@ -145,7 +145,7 @@ export default {
   width: 100%;
   height: 18px;
 
-  /deep/ .ds-calendar-event {
+  .ds-calendar-event {
     height: 100%;
   }
 }

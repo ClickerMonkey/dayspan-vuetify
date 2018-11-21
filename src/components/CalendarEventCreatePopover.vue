@@ -450,7 +450,7 @@ export default {
 
 .ds-calendar-event-popover-card {
 
-  /deep/ .v-toolbar__extension {
+  .v-toolbar__extension {
     padding: 0 16px !important;
     height: 60px !important;
     align-items: start;
@@ -460,7 +460,7 @@ export default {
       margin-left: 56px;
       margin-right: 0px;
 
-      /deep/ .v-input__slot {
+      .v-input__slot {
         background-color: rgba(255,255,255,0.2) !important;
 
         input {
@@ -485,7 +485,7 @@ export default {
       margin-bottom: 1em;
     }
 
-    /deep/ .v-list__tile {
+    .v-list__tile {
       height: auto !important;
     }
   }
@@ -499,6 +499,10 @@ export default {
   width: 100%;
   color: white;
   padding: 4px;
+}
+
+.v-input {
+  margin-bottom: 8px !important;
 }
 
 </style>

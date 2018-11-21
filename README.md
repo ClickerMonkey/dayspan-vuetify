@@ -157,9 +157,7 @@ $dayspan.updateLocale('en', {
 import fr from 'dayspan-vuetify/src/locales/fr';
 import Vue from 'vue';
 // dayspan-vuetify should already be loaded at this point
-Vue.$dayspan.addLocale('fr', fr);
-Vue.$dayspan.addLocale('fr-FR', fr);
-Vue.$dayspan.addLocale('fr-BE', fr);
+Vue.$dayspan.addLocales(['fr', 'fr-CA', 'fr-BE', 'fr-CH', 'fr-FR', 'fr-LU', 'fr-MC'], fr);
 ```
 
 #### Dutch Locale
@@ -168,9 +166,16 @@ Vue.$dayspan.addLocale('fr-BE', fr);
 import nl from 'dayspan-vuetify/src/locales/nl';
 import Vue from 'vue';
 // dayspan-vuetify should already be loaded at this point
-Vue.$dayspan.addLocale('nl', nl);
-Vue.$dayspan.addLocale('nl-NL', nl);
-Vue.$dayspan.addLocale('nl-BE', nl);
+Vue.$dayspan.addLocales(['nl', 'nl-NL', 'nl-BE'], nl);
+```
+
+#### Catalan Locale
+
+```javascript
+import ca from 'dayspan-vuetify/src/locales/ca';
+import Vue from 'vue';
+// dayspan-vuetify should already be loaded at this point
+Vue.$dayspan.addLocales(['ca', 'ca-ES'], ca);
 ```
 
 ## Build Setup

@@ -249,7 +249,7 @@ export default {
   border-radius: 2px;
   pointer-events: none;
 
-  /deep/ .v-menu__activator {
+  .v-menu__activator {
     align-items: end;
   }
 

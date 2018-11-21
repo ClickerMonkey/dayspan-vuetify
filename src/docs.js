@@ -9,8 +9,12 @@ import './styles/app.scss'
 
 import fr from './locales/fr'
 import en from './locales/en'
+import ca from './locales/ca'
+import nl from './locales/nl'
 
 import 'moment/lang/fr'
+import 'moment/lang/ca'
+import 'moment/lang/nl'
 import * as moment from 'moment'
 moment.lang('en')
 
@@ -22,7 +26,7 @@ Vue.use(DaySpanVuetify,
 {
   data:
   {
-    locales: { en, fr }
+    locales: { en, fr, nl, ca }
   },
   methods:
   {
