@@ -125,7 +125,7 @@ body, html, #app, #dayspan {
 
 ### Locales
 
-This library supports multiple locales but comes only with [en-us/en](https://github.com/ClickerMonkey/dayspan-vuetify/blob/master/src/locales/en.js). The following code shows you how to add locales, changing the current locale, and updating a given locale:
+This library supports multiple locales but the build only comes with [en-us/en](https://github.com/ClickerMonkey/dayspan-vuetify/blob/master/src/locales/en.js). The following code shows you how to add locales, changing the current locale, and updating a given locale:
 
 ```javascript
 // You can access $dayspan via Vue.$dayspan or this.$dayspan inside a component.
@@ -149,6 +149,28 @@ $dayspan.updateLocale('en', {
     lastDay: (day) => 'Final day of the month'
   }
 });
+```
+
+#### French Locale
+
+```javascript
+import fr from 'dayspan-vuetify/src/locales/fr';
+import Vue from 'vue';
+// dayspan-vuetify should already be loaded at this point
+Vue.$dayspan.addLocale('fr', fr);
+Vue.$dayspan.addLocale('fr-FR', fr);
+Vue.$dayspan.addLocale('fr-BE', fr);
+```
+
+#### Dutch Locale
+
+```javascript
+import nl from 'dayspan-vuetify/src/locales/nl';
+import Vue from 'vue';
+// dayspan-vuetify should already be loaded at this point
+Vue.$dayspan.addLocale('nl', nl);
+Vue.$dayspan.addLocale('nl-NL', nl);
+Vue.$dayspan.addLocale('nl-BE', nl);
 ```
 
 ## Build Setup
