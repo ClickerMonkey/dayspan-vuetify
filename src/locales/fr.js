@@ -1,9 +1,9 @@
 
 export default {
   promptLabels: {
-    actionRemove:       'Êtes vous sûr de vouloir supprimer cet evènement ?',
+    actionRemove:       'Êtes vous sûr de vouloir supprimer cet événement ?',
     actionExclude:      "Êtes-vous sûr de vouloir supprimer cette occurrence d'événement ?",
-    actionCancel:       'Êtes-vous sûr de vouloir annuler cet evènement ?',
+    actionCancel:       'Êtes-vous sûr de vouloir annuler cet événement ?',
     actionUncancel:     "Êtes-vous sûr de vouloir annuler l'annulation de cette événement",
     actionSetStart:     'Êtes-vous sûr de vouloir définir cette occurrence comme la première ?',
     actionSetEnd:       'Êtes-vous sûr de vouloir définir cette occurrence comme la dernière ?',
@@ -73,7 +73,7 @@ export default {
         { label: 'Semaine' },
         { label: 'Mois' },
         { label: 'Année' },
-        { label: 'Planning' },
+        { label: 'Planning' },
         { label: '4 jours' }
       ],
       formats: {
@@ -192,15 +192,15 @@ export default {
         inclusions:   "Ce sont des événements ou des périodes de temps qui ont été ajoutés en dehors du calendrier. Les événements sont ajoutés ici si une occurrence d'événement est déplacée.",
         cancelled:    'Ce sont des événements ou des périodes de temps qui ont été annulés.',
         edit:         "Modifier l'événement",
-        add:          'Ajouter un évènement',
+        add:          'Ajouter un événement',
         location:     'Ajouter un emplacement',
         description:  'Ajouter une description',
         calendar:     'Calendrier',
         tabs: {
-          details:    "Détails de l'évènement",
+          details:    "Détails de l'événement",
           forecast:   'Prévoir',
           removed:    'Enlevé',
-          added:      'Ajoutée',
+          added:      'Ajouté',
           cancelled:  'Annulé'
         }
       },
@@ -225,8 +225,8 @@ export default {
     },
     dsScheduleForecast: {
       labels: {
-        prefix:     'Afficher les préisions précédent et suivant',
-        suffix:     "événements se produisent au cours d'une année"
+        prefix:     'Afficher les',
+        suffix:     "prochaines occurences de l'événement pour les années à venir"
       }
     },
     dsScheduleFrequencyDay: {
@@ -250,7 +250,7 @@ export default {
         type: 'Jours de la semaine'
       },
       options: [
-        { text: "n'importe quel jour de la semaine" },
+        { text: "N'importe quel jour de la semaine" },
         { text: 'Les jours suivants de la semaine...' },
         { text: 'Chaque _ semaine à partir du _' },
         { text: 'Weekends' },
@@ -273,7 +273,7 @@ export default {
         'Septembre',
         'Octobre',
         'Novembre',
-        'Decembre'
+        'Décembre'
       ],
       options: [
         { text: "N'importe quel mois" },
@@ -289,7 +289,7 @@ export default {
       options: [
         { text: 'Toutes les semaines' },
         { text: 'Les semaines suivantes...' },
-        { text: 'chaque _ semaines à partir du _' }
+        { text: 'Chaque _ semaines à partir du _' }
       ],
       types: [
         { text: 'Semaine du mois (la première semaine à avoir un jeudi)' },
@@ -310,15 +310,15 @@ export default {
         type: 'Années'
       },
       options: [
-        { text: 'Toutes les années' },
+        { text: 'Tous les ans' },
         { text: 'Les années suivantes...' },
-        { text: 'chaque _ années à partir de _' }
+        { text: 'Chaque _ années à partir de _' }
       ]
     },
 
     dsScheduleSpan: {
       labels: {
-        startless:  'Débuts des temps',
+        startless:  'Début des temps',
         endless:    'Fin des temps'
       },
       formats: {
