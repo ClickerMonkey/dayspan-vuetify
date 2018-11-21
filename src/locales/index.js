@@ -4,10 +4,7 @@ import nl from './nl'
 
 export default {
   'en': en,
-  'en-US': en,
-  'nl': nl,
-  'nl-NL': nl,
-  'nl-BE': nl
+  'en-US': en
 }
 
 export const defaultLocale = 'en'
