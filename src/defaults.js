@@ -190,6 +190,10 @@ export default {
     busyOptions: [
       {value: true, text: LOCALE_ENTRY},
       {value: false, text: LOCALE_ENTRY}
+    ],
+    newOptions: [
+      {value: true, text: LOCALE_ENTRY},
+      {value: false, text: LOCALE_ENTRY}
     ]
   },
 
@@ -273,6 +277,10 @@ export default {
       }
     },
     busyOptions: [
+      {value: true, text: LOCALE_ENTRY},
+      {value: false, text: LOCALE_ENTRY}
+    ],
+    newOptions: [
       {value: true, text: LOCALE_ENTRY},
       {value: false, text: LOCALE_ENTRY}
     ]

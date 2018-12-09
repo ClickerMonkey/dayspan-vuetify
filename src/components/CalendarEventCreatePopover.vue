@@ -192,6 +192,23 @@
          </v-list-tile-content>
        </v-list-tile>
 
+      <v-list-tile v-if="prompts.busy && $dayspan.supports.busy">
+         <v-list-tile-avatar>
+           <v-icon>work</v-icon>
+         </v-list-tile-avatar>
+         <v-list-tile-content>
+           <slot name="eventCreatePopoverBusy" v-bind="slotData">
+
+             <v-select
+              single-line hide-details solo flat full-width
+              :items="newOptions"
+              v-model="details.busy"
+            ></v-select>
+
+           </slot>
+         </v-list-tile-content>
+       </v-list-tile>
+
      </v-list>
 
      <slot name="eventCreatePopoverBodyBottom" v-bind="slotData"></slot>
@@ -276,6 +293,14 @@ export default {
       type: Array,
       default() {
         return this.$dsDefaults().busyOptions;
+      }
+    },
+
+    newOptions:
+    {
+      type: Array,
+      default() {
+        return this.$dsDefaults().newOptions;
       }
     }
   },

@@ -176,6 +176,10 @@ export default {
       busyOptions: [
         {text: 'Busy'},
         {text: 'Free'}
+      ],
+      newOptions: [
+        {text: 'new'},
+        {text: 'old'}
       ]
     },
     dsSchedule: {
