@@ -253,6 +253,7 @@ export default {
   width: 100%;
   height: 18px;
   pointer-events: none;
+  position: relative;
 }
 
 .ds-calendar-event {

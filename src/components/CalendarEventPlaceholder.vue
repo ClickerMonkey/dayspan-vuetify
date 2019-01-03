@@ -144,6 +144,7 @@ export default {
 .ds-calendar-event-menu {
   width: 100%;
   height: 18px;
+  position: relative;
 
   .ds-calendar-event {
     height: 100%;
