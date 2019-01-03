@@ -14,6 +14,10 @@ This library is nearing functional completion (documentation on every component,
 
 [Current documentation](docs/README.md)
 
+### Notice
+
+- This library uses v-html in a few places (to display event details for example) so you must sanitize your own data against XSS vulnerabilities.
+
 ## Usage
 
 Install with `npm install --save dayspan-vuetify`
