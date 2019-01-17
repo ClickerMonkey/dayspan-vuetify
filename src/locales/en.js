@@ -1,4 +1,3 @@
-
 export default {
   promptLabels: {
     actionRemove:       'Are you sure you want to remove this event?',
@@ -28,7 +27,7 @@ export default {
     { text: 'Deep Purple' },
     { text: 'Indigo' },
     { text: 'Blue' },
-    { text: 'Glue' },
+    { text: 'Deep Blue' },
     { text: 'Light Blue' },
     { text: 'Cyan' },
     { text: 'Teal' },
@@ -293,16 +292,16 @@ export default {
         { text: 'Every _ weeks starting on _' }
       ],
       types: [
-        { text: 'Week of the month (first week has a Thursday)' },
-        { text: 'Weekspan of the month (starts on first day of month)' },
-        { text: 'Full week of the month (0th = the week before if any)' },
-        { text: 'Last weekspan of the month (starts on last day of month)' },
-        { text: 'Last full week of the month (0th = the week after if any)' },
-        { text: 'Week of the year (first week has a Thursday)' },
-        { text: 'Weekspan of the year (starts on first day of year)' },
-        { text: 'Full week of the year (0th = the week before if any)' },
-        { text: 'Last weekspan of the year (starts on last day of year)' },
-        { text: 'Last full week of the year (0th = the week after if any)' }
+        { text: 'Week of the month (first week that has a Thursday)' },
+        { text: 'Weekspan of the month (includes first day of month)' },
+        { text: 'Full week of the month (0th = the week before the first full week, if any)' },
+        { text: 'Last weekspan of the month (includes last day of month)' },
+        { text: 'Last full week of the month (0th = the week after the last full week, if any)' },
+        { text: 'Week of the year (first week that has a Thursday)' },
+        { text: 'Weekspan of the year (includes first day of year)' },
+        { text: 'Full week of the year (0th = the week before the first full week, if any)' },
+        { text: 'Last weekspan of the year (includes the last day of year)' },
+        { text: 'Last full week of the year (0th = the week after the last full week, if any)' }
       ]
     },
 
