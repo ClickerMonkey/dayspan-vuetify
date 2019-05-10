@@ -173,6 +173,15 @@ import Vue from 'vue';
 Vue.$dayspan.addLocales(['nl', 'nl-NL', 'nl-BE'], nl);
 ```
 
+#### German Locale
+
+```javascript
+import de from 'dayspan-vuetify/src/locales/de';
+import Vue from 'vue';
+// dayspan-vuetify should already be loaded at this point
+Vue.$dayspan.addLocales(['de', 'de-DE', 'de-CH', 'de-AT', 'de-BE', 'de-IT', 'de-LI', 'de-LU'], de);
+```
+
 #### Catalan Locale
 
 ```javascript
