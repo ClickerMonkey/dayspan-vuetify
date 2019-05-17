@@ -2,27 +2,25 @@ export default {
   promptLabels: {
     actionRemove: "Bu etkinliği silmek istediğinize emin misiniz?",
     actionExclude: "Are you sure you want to remove this event occurrence?",
-    actionCancel: "Are you sure you want to cancel this event?",
-    actionUncancel: "Are you sure you want to uncancel this event?",
-    actionSetStart:
-      "Are you sure you want to set this occurrence as the first?",
-    actionSetEnd: "Are you sure you want to set this occurrence as the last?",
-    actionMove: "Are you sure you want to move this event?",
-    actionInclude: "Are you sure you want to add an event occurrence?",
-    move: "Are you sure you want to move this event?",
-    toggleAllDay:
-      "Are you sure you want to change whether this event occurs all day?",
+    actionCancel: "Bu etkinliği iptal etmek istediğinize emin misiniz?",
+    actionUncancel: "Bu etkinliği iptal etmek istediğinize emin misiniz?",
+    actionSetStart: "Bu olayı ilk olarak tanımlamak istediğinize emin misiniz?",
+    actionSetEnd: "Bu olayı son olarak tanımlamak istediğinize emin misiniz?",
+    actionMove: "Bu etkinliği taşımak istediğinize emin misiniz?",
+    actionInclude: "Bu etkinliği tekrarlamak istediğinize emin misiniz?",
+    move: "Bu etkinliği taşımak istediğinize emin misiniz?",
+    toggleAllDay: "Bu etkinliği tüm güne çevirmek istediğinize emin misiniz?",
     removeExistingTime:
-      "Are you sure you want to remove all event occurrences at this time?"
+      "Bu aralıkta tanımlanan tüm etkinlikleri silmek istediğinize emin misiniz?"
   },
   placeholder: {
-    noTitle: "(no title)"
+    noTitle: "(başlık eklenmemiş)"
   },
   patterns: {
-    lastDay: day => "Last day of the month",
-    lastDayOfMonth: day => "Last day of " + day.format("MMMM"),
+    lastDay: day => "Ayın son günü",
+    lastDayOfMonth: day => "Ayın son günü " + day.format("MMMM"),
     lastWeekday: day =>
-      "Last " + day.format("dddd") + " in " + day.format("MMMM")
+      "Son " + day.format("dddd") + " in " + day.format("MMMM")
   },
   colors: [
     { text: "Red" },
@@ -72,12 +70,12 @@ export default {
     },
     dsCalendarApp: {
       types: [
-        { label: "Day" },
-        { label: "Week" },
-        { label: "Month" },
-        { label: "Year" },
-        { label: "Schedule" },
-        { label: "4 days" }
+        { label: "Gün" },
+        { label: "Hafta" },
+        { label: "Ay" },
+        { label: "Yıl" },
+        { label: "Plan" },
+        { label: "4 Gün" }
       ],
       formats: {
         today: "dddd, MMMM D",
@@ -85,16 +83,15 @@ export default {
       },
       labels: {
         next: type => (type ? "Next " + type.label.toLowerCase() : "Next"),
-        prev: type =>
-          type ? "Previous " + type.label.toLowerCase() : "Previous",
-        moveCancel: "Cancel move",
-        moveSingleEvent: "Move event",
-        moveOccurrence: "Move just this event occurrence",
-        moveAll: "Move all event occurrences",
-        moveDuplicate: "Add event occurrence",
-        promptConfirm: "Yes",
-        promptCancel: "No",
-        today: "TODAY"
+        prev: type => (type ? "Önceki " + type.label.toLowerCase() : "Önceki"),
+        moveCancel: "Taşıma iptal",
+        moveSingleEvent: "Etkinliği Taşı",
+        moveOccurrence: "Sadece bu tekrarı taşı",
+        moveAll: "Tekrarlayan tüm etkinlikleri taşı",
+        moveDuplicate: "Tekrarlayan etkinlik ekle",
+        promptConfirm: "Evet",
+        promptCancel: "Hayır",
+        today: "BUGÜN"
       }
     },
     dsAgendaEvent: {
@@ -105,21 +102,21 @@ export default {
         time: "h:mm a"
       },
       labels: {
-        allDay: "All day",
-        options: "Options",
-        close: "Close",
-        day: ["day", "days"],
-        days: ["day", "days"],
-        minute: ["minute", "minutes"],
-        minutes: ["minute", "minutes"],
-        hour: ["hour", "hours"],
-        hours: ["hour", "hours"],
-        week: ["week", "weeks"],
-        weeks: ["week", "weeks"],
-        second: ["second", "seconds"],
-        seconds: ["second", "seconds"],
-        busy: "Busy",
-        free: "Free"
+        allDay: "Tüm gün",
+        options: "Ayarlar",
+        close: "Kapat",
+        day: ["gün", "gün"],
+        days: ["gün", "gün"],
+        minute: ["dakika", "dakika"],
+        minutes: ["dakika", "dakika"],
+        hour: ["saat", "saat"],
+        hours: ["saat", "saat"],
+        week: ["hafta", "hafta"],
+        weeks: ["hafta", "hafta"],
+        second: ["saniye", "saniye"],
+        seconds: ["saniye", "saniye"],
+        busy: "Meşgul",
+        free: "Uygun"
       }
     },
     dsCalendarEventChip: {
@@ -134,21 +131,21 @@ export default {
         time: "h:mm a"
       },
       labels: {
-        allDay: "All day",
-        options: "Options",
-        close: "Close",
-        day: ["day", "days"],
-        days: ["day", "days"],
-        minute: ["minute", "minutes"],
-        minutes: ["minute", "minutes"],
-        hour: ["hour", "hours"],
-        hours: ["hour", "hours"],
-        week: ["week", "weeks"],
-        weeks: ["week", "weeks"],
-        second: ["second", "seconds"],
-        seconds: ["second", "seconds"],
-        busy: "Busy",
-        free: "Free"
+        allDay: "Tüm gün",
+        options: "Ayarlar",
+        close: "Kapat",
+        day: ["gün", "gün"],
+        days: ["gün", "gün"],
+        minute: ["dakika", "dakika"],
+        minutes: ["dakika", "dakika"],
+        hour: ["saat", "saat"],
+        hours: ["saat", "saat"],
+        week: ["hafta", "hafta"],
+        weeks: ["hafta", "hafta"],
+        second: ["saniye", "saniye"],
+        seconds: ["saniye", "saniye"],
+        busy: "Meşgul",
+        free: "Uygun"
       }
     },
     dsCalendarEventCreatePopover: {
@@ -157,72 +154,71 @@ export default {
         time: "h:mm a"
       },
       labels: {
-        title: "Add title",
-        allDay: "All day",
-        close: "Close",
-        save: "Save",
-        day: ["day", "days"],
-        days: ["day", "days"],
-        minute: ["minute", "minutes"],
-        minutes: ["minute", "minutes"],
-        hour: ["hour", "hours"],
-        hours: ["hour", "hours"],
-        week: ["week", "weeks"],
-        weeks: ["week", "weeks"],
-        second: ["second", "seconds"],
-        seconds: ["second", "seconds"],
-        busy: "Busy",
-        free: "Free",
-        location: "Add location",
-        description: "Add description",
-        calendar: "Calendar"
+        allDay: "Tüm gün",
+        options: "Ayarlar",
+        close: "Kapat",
+        day: ["gün", "gün"],
+        days: ["gün", "gün"],
+        minute: ["dakika", "dakika"],
+        minutes: ["dakika", "dakika"],
+        hour: ["saat", "saat"],
+        hours: ["saat", "saat"],
+        week: ["hafta", "hafta"],
+        weeks: ["hafta", "hafta"],
+        second: ["saniye", "saniye"],
+        seconds: ["saniye", "saniye"],
+        busy: "Meşgul",
+        free: "Uygun",
+        location: "Konum Ekle",
+        description: "Açıklama Ekle",
+        calendar: "Takvim"
       },
-      busyOptions: [{ text: "Busy" }, { text: "Free" }]
+      busyOptions: [{ text: "Meşgul" }, { text: "Uygun" }]
     },
     dsSchedule: {
       labels: {
-        editCustom: "Edit"
+        editCustom: "Düzenle"
       }
     },
     dsEvent: {
       labels: {
-        moreActions: "More actions...",
-        cancel: "Cancel event changes",
-        save: "Save",
-        title: "Title",
+        moreActions: "Daha fazla...",
+        cancel: "Etkinlik değişiklikleri iptal",
+        save: "Kaydet",
+        title: "Başlık",
         exclusions:
           "These are events or spans of time where a normally occurring event was excluded from the schedule. Events are excluded here if an event occurrence is moved.",
         inclusions:
           "These are events or spans of time where events were added outside the normally occurring schedule. Events are added here if an event occurrence is moved.",
         cancelled:
           "These are events or spans of time where events were cancelled.",
-        edit: "Edit event",
-        add: "Add event",
-        location: "Add location",
-        description: "Add description",
-        calendar: "Calendar",
+        edit: "Etkinliği Düzenle",
+        add: "Etkinlik Ekle",
+        location: "Konum Ekle",
+        description: "Açıklama Ekle",
+        calendar: "Takvim",
         tabs: {
-          details: "Event Details",
-          forecast: "Forecast",
-          removed: "Removed",
-          added: "Added",
-          cancelled: "Cancelled"
+          details: "Etkinlik Detayları",
+          forecast: "Tahmin",
+          removed: "Silinen",
+          added: "Eklenen",
+          cancelled: "İptaller"
         }
       },
-      busyOptions: [{ text: "Busy" }, { text: "Free" }]
+      busyOptions: [{ text: "Meşgul" }, { text: "Ücretsiz" }]
     },
     dsScheduleActions: {
       labels: {
-        remove: "Remove this event",
-        exclude: "Remove this occurrence",
-        cancel: "Cancel this occurrence",
-        uncancel: "Undo cancellation",
-        move: "Move this occurrence",
-        include: "Add new occurrence",
-        setStart: "Set as first occurrence",
-        setEnd: "Set as last occurrence",
-        pickerOk: "OK",
-        pickerCancel: "Cancel"
+        remove: "Bu etkinliği sil",
+        exclude: "Bu olayı kaldır",
+        cancel: "Bu olayı iptal et",
+        uncancel: "İptal etmekten vazgeç",
+        move: "Bu olayı taşı",
+        include: "Yeni olay ekle",
+        setStart: "Ilk olay olarak ekle",
+        setEnd: "Son olay olarak ekle",
+        pickerOk: "TAMAM",
+        pickerCancel: "İptal"
       }
     },
     dsScheduleForecast: {
@@ -233,7 +229,7 @@ export default {
     },
     dsScheduleFrequencyDay: {
       labels: {
-        type: "Days"
+        type: "Günler"
       },
       options: [
         { text: "Any day" },
@@ -248,46 +244,46 @@ export default {
     },
     dsScheduleFrequencyDayOfWeek: {
       weekdays: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
+        "Pazar",
+        "Pazartesi",
+        "Salı",
+        "Çarşamba",
+        "Perşembe",
+        "Cuma",
+        "Cumartesi"
       ],
       labels: {
-        type: "Days of week"
+        type: "Haftanın günleri"
       },
       options: [
-        { text: "Any day of the week" },
-        { text: "On the following days of the week..." },
+        { text: "Haftanın herhangi bir günü" },
+        { text: "Haftanın takip eden günleri.." },
         { text: "Every _ weekday starting on _" },
-        { text: "Weekends" },
-        { text: "Weekdays" }
+        { text: "Haftaiçi" },
+        { text: "Haftasonu" }
       ]
     },
     dsScheduleFrequencyMonth: {
       labels: {
-        type: "Months"
+        type: "Aylar"
       },
       months: [
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
+        "Ocak",
+        "Şubat",
+        "Mart",
+        "Nisan",
+        "Mayıs",
+        "Haziran",
+        "Temmuz",
+        "Ağustos",
+        "Eylül",
+        "Ekim",
+        "Kasım",
+        "Aralık"
       ],
       options: [
-        { text: "Any month" },
-        { text: "On the following months..." },
+        { text: "Herhangi ay" },
+        { text: "Ayın herhangi bir günü" },
         { text: "Every _ months starting on _" }
       ]
     },
@@ -382,7 +378,7 @@ export default {
     },
 
     dsWeeksView: {
-      weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"]
+      weekdays: ["Paz", "Pzt", "Sal", "Çar", "Per", "Cum", "Cts"]
     },
 
     dsDaysView: {
@@ -416,17 +412,17 @@ export default {
 
     dsDayPicker: {
       weekdays: [
-        "Sunday",
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday"
+        "Pazar",
+        "Pazartesi",
+        "Salı",
+        "Çarşamba",
+        "Perşembe",
+        "Cuma",
+        "Cumartesi"
       ],
       labels: {
-        prevMonth: "Previous month",
-        nextMonth: "Next month"
+        prevMonth: "Önceki ay",
+        nextMonth: "Sonraki ay"
       }
     }
   }
