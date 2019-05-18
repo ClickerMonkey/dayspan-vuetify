@@ -92,6 +92,7 @@ export default {
     locales: [
       { value: 'en', text: 'English' },
       { value: 'fr', text: 'French' },
+      { value: 'de', text: 'German' },
       { value: 'nl', text: 'Dutch' },
       { value: 'ca', text: 'Catalan' }
     ],
