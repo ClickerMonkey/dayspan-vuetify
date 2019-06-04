@@ -46,11 +46,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarEvent, Calendar, Day, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEvent',
 
@@ -78,7 +79,7 @@ export default {
 
     popoverProps:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'popoverProps');
       },
       default() {
@@ -108,7 +109,7 @@ export default {
 
     sameDayEvents()
     {
-      return this.calendarEvent.event.schedule.iterateSpans(this.calendarEvent.day, true).list();
+      return this.calendarEvent.event.schedule.iterateSpans(this.calendarEvent.day, true).array();
     },
 
     hasPrefix()
@@ -244,7 +245,7 @@ export default {
       }, extra);
     }
   }
-}
+})
 </script>
 
 <style scoped lang="scss">

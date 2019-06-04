@@ -26,7 +26,7 @@
         ></ds-calendar-event-popover>
       </template>
 
-      <template slot="eventCreatePopover" slot-scope="{placeholder, calendar, close}">
+      <template slot="eventCreatePopover" slot-scope="{placeholder, calendar}">
         <ds-calendar-event-create-popover
           :calendar-event="placeholder"
           :calendar="calendar"
@@ -75,26 +75,28 @@
   </v-app>
 </template>
 
-<script>
-import { dsMerge } from './functions';
-import { Calendar, Weekday, Month, Sorts } from 'dayspan';
-import * as moment from 'moment';
+<script lang="ts">
+import Vue from 'vue';
+import { Calendar, Weekday, Month } from 'dayspan';
 
-export default {
+import { dsMerge } from './functions';
+import { VCalendar } from './types';
+
+
+export default Vue.extend({
 
   name: 'dayspan',
 
-  data: vm => ({
+  data: (vm: Vue) => ({
     storeKey: 'dayspanState',
-    calendar: Calendar.months(),
+    calendar: Calendar.months() as VCalendar,
     readOnly: false,
     currentLocale: vm.$dayspan.currentLocale,
     locales: [
       { value: 'en', text: 'English' },
       { value: 'fr', text: 'French' },
       { value: 'de', text: 'German' },
-      { value: 'nl', text: 'Dutch' },
-      { value: 'ca', text: 'Catalan' }
+      { value: 'nl', text: 'Dutch' }
     ],
     defaultEvents: [
       {
@@ -276,7 +278,7 @@ export default {
 
   mounted()
   {
-    window.app = this.$refs.app;
+    (window as any).app = this.$refs.app;
 
     this.loadState();
   },
@@ -305,8 +307,6 @@ export default {
 
     setLocale(code)
     {
-      moment.lang(code);
-
       this.$dayspan.setLocale(code);
       this.$dayspan.refreshTimes();
 
@@ -355,7 +355,7 @@ export default {
       this.$refs.app.setState( state );
     }
   }
-}
+});
 </script>
 
 <style>

@@ -154,11 +154,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarEvent, Calendar, Pattern } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEventPopover',
 
@@ -202,7 +203,7 @@ export default {
 
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -212,7 +213,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -306,7 +307,7 @@ export default {
   {
 
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

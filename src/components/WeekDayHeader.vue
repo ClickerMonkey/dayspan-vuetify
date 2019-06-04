@@ -55,11 +55,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarDay, Calendar, CalendarEvent, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsWeekDayHeader',
 
@@ -90,7 +91,7 @@ export default {
 
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -204,7 +205,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

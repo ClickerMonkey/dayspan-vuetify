@@ -27,11 +27,12 @@
 
 </template>
 
-<script>
-import { Calendar, CalendarEvent, Functions as fn } from 'dayspan';
+<script lang="ts">
+import Vue from 'vue';
+import { VCalendar, VCalendarDay, VCalendarEvent } from '../types';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsAgenda',
 
@@ -40,7 +41,7 @@ export default {
     calendar:
     {
       required: true,
-      type: Calendar
+      type: Object as () => VCalendar
     },
 
     readOnly:
@@ -50,14 +51,14 @@ export default {
     }
   },
 
-  data: vm => ({
-    placeholder: null,
-    placeholderForCreate: false
+  data: () => ({
+    placeholder: null as VCalendarEvent,
+    placeholderForCreate: false as boolean
   }),
 
   computed:
   {
-    eventDays()
+    eventDays(): VCalendarDay[]
     {
       return this.calendar.days.filter( this.hasEvents );
     }
@@ -65,12 +66,12 @@ export default {
 
   methods:
   {
-    hasEvents(day)
+    hasEvents(day: VCalendarDay)
     {
       return day.events.length > 0;
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

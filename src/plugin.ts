@@ -1,11 +1,13 @@
 
+import Vue, { VueConstructor } from 'vue';
 import { dsMergeOptions, dsMergeValidate, dsValidate, dsDefaults, dsBind } from './functions';
 import { default as Component } from './component';
 import * as ComponentMap from './components'
 
+
 export default {
 
-  install(Vue, options)
+  install(Vue: VueConstructor, options: any)
   {
     // register all components globally
     for (var componentName in ComponentMap)

@@ -14,10 +14,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Schedule, Pattern, Patterns } from 'dayspan';
 
-export default {
+
+export default Vue.extend({
 
   name: 'dsScheduleType',
 
@@ -43,7 +45,7 @@ export default {
 
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -165,7 +167,7 @@ export default {
       return pattern ? pattern.name : 'custom';
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

@@ -64,11 +64,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { DaySpan, Calendar, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsDayPicker',
 
@@ -96,7 +97,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -200,7 +201,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

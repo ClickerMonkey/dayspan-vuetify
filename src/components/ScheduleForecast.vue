@@ -32,11 +32,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Schedule, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleForecast',
 
@@ -93,7 +94,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -129,10 +130,8 @@ export default {
     forecast()
     {
       return this.schedule.forecast( this.aroundDay, false, this.size )
-        .map(function(spanDayId) {
-          return spanDayId[1];
-        })
-        .list()
+        .transform(([span, day, id]) => day)
+        .array()
       ;
     },
 
@@ -186,7 +185,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

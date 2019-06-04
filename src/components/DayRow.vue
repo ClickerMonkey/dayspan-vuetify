@@ -20,11 +20,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Calendar, CalendarEvent } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsDayRow',
 
@@ -57,7 +58,7 @@ export default {
   methods:
   {
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

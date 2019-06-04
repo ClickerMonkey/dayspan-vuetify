@@ -72,11 +72,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Schedule, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsSchedule',
 
@@ -101,7 +102,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -154,7 +155,7 @@ export default {
       this.$emit('type', type);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

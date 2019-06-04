@@ -231,10 +231,11 @@
 </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op } from 'dayspan';
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarApp',
 
@@ -272,7 +273,7 @@ export default {
     },
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -281,7 +282,7 @@ export default {
     },
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -290,7 +291,7 @@ export default {
     },
     styles:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'styles');
       },
       default() {
@@ -299,7 +300,7 @@ export default {
     },
     optionsDialog:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'optionsDialog');
       },
       default() {
@@ -308,7 +309,7 @@ export default {
     },
     promptDialog:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'promptDialog');
       },
       default() {
@@ -745,7 +746,7 @@ export default {
       });
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

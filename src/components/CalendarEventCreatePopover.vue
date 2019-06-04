@@ -204,11 +204,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarEvent, Calendar, Pattern, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEventCreatePopover',
 
@@ -233,7 +234,7 @@ export default {
 
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -243,7 +244,7 @@ export default {
 
     icons:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'icons');
       },
       default() {
@@ -253,7 +254,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -263,7 +264,7 @@ export default {
 
     prompts:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'prompts');
       },
       default() {
@@ -435,7 +436,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

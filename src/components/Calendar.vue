@@ -61,11 +61,13 @@
   </div>
 </template>
 
-<script>
-import { Calendar, Schedule, CalendarEvent, Units, DaySpan, Day, Op, Functions as fn } from 'dayspan';
+<script lang="ts">
+import Vue from 'vue';
+import { Schedule, Units, Day, Op, Functions as fn } from 'dayspan';
+import { VCalendar, VCalendarEvent, VComponentEvent } from '../types';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendar',
 
@@ -73,7 +75,7 @@ export default {
   {
     calendar:
     {
-      type: Calendar
+      type: Object as () => VCalendar
     },
 
     handleAdd:
@@ -99,10 +101,10 @@ export default {
     }
   },
 
-  data: vm => ({
-    placeholder: null,
-    placeholderForCreate: false,
-    addStart: null
+  data: () => ({
+    placeholder: null as VCalendarEvent,
+    placeholderForCreate: false as boolean,
+    addStart: null as Day
   }),
 
   watch:
@@ -112,47 +114,47 @@ export default {
 
   computed:
   {
-    type()
+    type(): number
     {
       return this.calendar ? this.calendar.type : null;
     },
 
-    size()
+    size(): number
     {
       return this.calendar ? this.calendar.size : null;
     },
 
-    isDay()
+    isDay(): boolean
     {
       return this.type === Units.DAY;
     },
 
-    isWeek()
+    isWeek(): boolean
     {
       return this.type === Units.WEEK;
     },
 
-    isMonth()
+    isMonth(): boolean
     {
       return this.type === Units.MONTH;
     },
 
-    isYear()
+    isYear(): boolean
     {
       return this.type === Units.YEAR;
     },
 
-    adding()
+    adding(): boolean
     {
       return !!(this.addStart && this.placeholder);
     },
 
-    canAdd()
+    canAdd(): boolean
     {
       return this.$dayspan.features.drag && this.handleAdd && !this.readOnly && !this.$dayspan.readOnly;
     },
 
-    canMove()
+    canMove(): boolean
     {
       return this.$dayspan.features.move && this.handleMove && !this.readOnly && !this.$dayspan.readOnly;
     }
@@ -165,7 +167,7 @@ export default {
       this.calendar.refreshCurrent( this.$dayspan.today );
     },
 
-    mouseDown(mouseEvent)
+    mouseDown(mouseEvent: VComponentEvent)
     {
       if (this.canAdd && mouseEvent.left)
       {
@@ -188,7 +190,7 @@ export default {
       }
     },
 
-    mouseDownDay(mouseEvent)
+    mouseDownDay (mouseEvent: VComponentEvent)
     {
       if (this.canAdd && mouseEvent.left)
       {
@@ -211,7 +213,7 @@ export default {
       }
     },
 
-    mouseUp(mouseEvent)
+    mouseUp (mouseEvent: VComponentEvent)
     {
       if (this.addEnd)
       {
@@ -226,7 +228,7 @@ export default {
       this.readyToMove = false;
     },
 
-    finishAdd(mouseEvent)
+    finishAdd(mouseEvent: VComponentEvent)
     {
       var ev = this.getEvent('added', {
         mouseEvent: mouseEvent,
@@ -244,7 +246,7 @@ export default {
       this.endAdd();
     },
 
-    finishMove(mouseEvent)
+    finishMove(mouseEvent: VComponentEvent)
     {
       let target = this.placeholder.time;
       let source = this.movingEvent.calendarEvent.time;
@@ -285,9 +287,9 @@ export default {
         var min = this.addStart.min( this.addEnd );
         var max = this.addStart.max( this.addEnd );
 
-        this.placeholder.day = min.start();
+        this.placeholder.day = min.startOf('day');
         this.placeholder.time.start = min;
-        this.placeholder.time.end = max.end();
+        this.placeholder.time.end = max.endOf('day');
         this.placeholder.event.schedule = Schedule.forDay(
           this.placeholder.start,
           this.placeholder.time.days(Op.UP)
@@ -304,7 +306,7 @@ export default {
 
         this.placeholder.day = day;
         this.placeholder.time.start = day;
-        this.placeholder.time.end = day.next( this.placeholder.schedule.durationInDays ).end();
+        this.placeholder.time.end = day.next( this.placeholder.schedule.durationInDays ).endOf('day');
 
         this.updatePlaceholderRow( this.placeholder );
       }
@@ -321,7 +323,7 @@ export default {
         var min = this.addStart.min( this.addEnd );
         var max = this.addStart.max( this.addEnd );
 
-        this.placeholder.day = min.start();
+        this.placeholder.day = min.startOf('day');
         this.placeholder.time.start = min;
         this.placeholder.time.end = max;
         this.placeholder.event.schedule = Schedule.forSpan( this.placeholder.time );
@@ -335,7 +337,7 @@ export default {
         time = time.relative(-this.movingEvent.offset);
         time = this.$dayspan.roundTime( time, this.$dayspan.rounding.drag );
 
-        this.placeholder.day = time.start();
+        this.placeholder.day = time.startOf('day');
         this.placeholder.time.start = time;
         this.placeholder.time.end = time.relative( this.movingDuration );
       }
@@ -410,15 +412,13 @@ export default {
     {
       let row = 0;
 
-      this.calendar.iterateDays().iterate((day) =>
+      this.calendar.iterateDays().each((day) =>
       {
         if (placeholder.time.matchesDay( day ))
         {
-          row = day.iterateEvents().reduce(
-            row,
-            (calendarEvent, maxRow) => Math.max( calendarEvent.row + 1, maxRow ),
-            (calendarEvent) => calendarEvent.event !== placeholder.event
-          );
+          row = day.iterateEvents()
+            .where((calendarEvent) => calendarEvent.event !== placeholder.event)
+            .reduce(row, (calendarEvent, maxRow) => Math.max( calendarEvent.row + 1, maxRow ));
         }
       });
 
@@ -432,7 +432,7 @@ export default {
 
       if (fullDay)
       {
-        time.end = time.end.end();
+        time.end = time.end.endOf('day');
 
         placeholder.event.schedule = Schedule.forDay( time.start );
         placeholder.fullDay = true;
@@ -457,7 +457,7 @@ export default {
       this.placeholderForCreate = false;
     },
 
-    getEvent(type, extra = {})
+    getEvent (type: string, extra: Partial<VComponentEvent> = {}): VComponentEvent
     {
       return fn.extend({
 
@@ -471,7 +471,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

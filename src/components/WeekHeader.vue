@@ -21,10 +21,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarDay, Calendar, CalendarEvent } from 'dayspan';
 
-export default {
+
+export default Vue.extend({
 
   name: 'dsWeekHeader',
 
@@ -73,7 +75,7 @@ export default {
   methods:
   {
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

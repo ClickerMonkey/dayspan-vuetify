@@ -10,11 +10,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Schedule, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEventChip',
 
@@ -41,7 +42,7 @@ export default {
 
     colors:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'colors');
       },
       default() {
@@ -51,7 +52,7 @@ export default {
 
     formats:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'formats');
       },
       default() {
@@ -95,7 +96,7 @@ export default {
       this.$emit('exclude', this.time);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

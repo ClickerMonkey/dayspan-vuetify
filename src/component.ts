@@ -1,11 +1,13 @@
 
+import * as ds from 'dayspan';
+import Vue from 'vue';
+
 import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
 import { default as Locales, defaultLocale } from './locales'
 import { dsMerge, dsMergeLocale } from './functions';
-import Vue from 'vue';
 
 const LOCALE_ENTRY = 0;
 
@@ -157,6 +159,8 @@ export default {
 
         this.currentLocale = name;
       }
+
+      ds.Locales.set(name);
     },
 
     addLocale(name, locale)
@@ -213,32 +217,9 @@ export default {
 
     addPatterns()
     {
-      Patterns.unshift(PatternMap.lastDay = new Pattern(
-        'lastDay', false,
-        (day) => this.patterns.lastDay(day),
-        {
-          lastDayOfMonth: [1]
-        }
-      ));
-
-      Patterns.unshift(PatternMap.lastDayOfMonth = new Pattern(
-        'lastDayOfMonth', false,
-        (day) => this.patterns.lastDayOfMonth(day),
-        {
-          month: 1,
-          lastDayOfMonth: [1]
-        }
-      ));
-
-      Patterns.unshift(PatternMap.lastWeekday = new Pattern(
-        'lastWeekday', false,
-        (day) => this.patterns.lastWeekday(day),
-        {
-          lastWeekspanOfMonth: [0],
-          dayOfWeek: 1,
-          month: 1
-        }
-      ));
+      PatternMap.lastDayOfMonth.listed = true;
+      PatternMap.lastDay.listed = true;
+      PatternMap.lastWeekday.listed = true;
     },
 
     getDefaultEventDetails()
@@ -396,7 +377,7 @@ export default {
       let id = time.timeIdentifier;
       let event = this.createEvent( details, schedule, true );
       let span = DaySpan.point( time );
-      let day = time.start();
+      let day = time.startOf('day');
 
       return new CalendarEvent( id, event, span, day );
     },

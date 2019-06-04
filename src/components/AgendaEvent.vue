@@ -66,11 +66,13 @@
 
 </template>
 
-<script>
-import { CalendarEvent, Calendar, Day, Functions as fn } from 'dayspan';
+<script lang="ts">
+import Vue from 'vue';
+import { Functions as fn } from 'dayspan';
+import { VCalendar, VCalendarEvent, VComponentEvent, VEvent } from '../types';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsAgendaEvent',
 
@@ -79,13 +81,13 @@ export default {
     calendarEvent:
     {
       required: true,
-      type: CalendarEvent
+      type: Object as () => VCalendarEvent
     },
 
     calendar:
     {
       required: true,
-      type: Calendar
+      type: Object as () => VCalendar
     },
 
     readOnly:
@@ -108,7 +110,13 @@ export default {
 
     formats:
     {
-      validate(x) {
+      type: Object as () => { 
+        firstLine: string,
+        secondLine: string,
+        start: string,
+        time: string
+      },
+      validator(x) {
         return this.$dsValidate( x, 'formats' );
       },
       default() {
@@ -118,7 +126,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate( x, 'labels' );
       },
       default() {
@@ -128,7 +136,7 @@ export default {
 
     popoverProps:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'popoverProps');
       },
       default() {
@@ -139,7 +147,7 @@ export default {
 
   computed:
   {
-    slotData()
+    slotData(): any
     {
       return {
         readOnly: this.readOnly,
@@ -157,45 +165,45 @@ export default {
       };
     },
 
-    contentClass()
+    contentClass(): string
     {
       return this.$dayspan.fullscreenPopovers ? 'ds-fullscreen' : '';
     },
 
-    hasPopover()
+    hasPopover(): boolean
     {
       return !!this.$scopedSlots.eventPopover;
     },
 
-    classes()
+    classes(): object
     {
       return {
         'ds-first-event': this.first
       };
     },
 
-    details()
+    details(): VEvent
     {
       return this.calendarEvent.event.data;
     },
 
-    firstLine()
+    firstLine(): string
     {
       return this.calendarEvent.day.format( this.formats.firstLine );
     },
 
-    secondLine()
+    secondLine(): string
     {
       return this.calendarEvent.day.format( this.formats.secondLine );
     },
 
-    when()
+    when(): string
     {
       return this.$dayspan.getEventAgendaWhen( this.calendarEvent, this.labels, this.formats );
     }
   },
 
-  data: vm => ({
+  data: () => ({
     menu: false
   }),
 
@@ -211,7 +219,7 @@ export default {
       this.$emit('edit', this.calendarEvent);
     },
 
-    editCheck($event)
+    editCheck ($event: any)
     {
       if (!this.hasPopover)
       {
@@ -228,7 +236,7 @@ export default {
       this.$emit('view-day', this.calendarEvent.day);
     },
 
-    getEvent(type, $event, extra = {})
+    getEvent (type: string, $event: Event, extra: Partial<VComponentEvent> = {})
     {
       return fn.extend({
 
@@ -246,7 +254,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

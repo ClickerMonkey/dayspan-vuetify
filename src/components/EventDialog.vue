@@ -33,11 +33,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Calendar, Schedule, Identifier, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsEventDialog',
 
@@ -50,7 +51,7 @@ export default {
 
     dialogProps:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'dialogProps');
       },
       default() {
@@ -201,7 +202,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

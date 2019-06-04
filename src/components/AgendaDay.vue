@@ -23,11 +23,13 @@
 
 </template>
 
-<script>
-import { Calendar, CalendarEvent, CalendarDay, Functions as fn } from 'dayspan';
+<script lang="ts">
+import Vue from 'vue';
+import { VCalendar, VCalendarDay, VCalendarEvent } from '../types';
 
 
-export default {
+
+export default Vue.extend({
 
   name: 'dsAgendaDay',
 
@@ -36,13 +38,13 @@ export default {
     day:
     {
       required: true,
-      type: CalendarDay
+      type: Object as () => VCalendarDay
     },
 
     calendar:
     {
       required: true,
-      type: Calendar
+      type: Object as () => VCalendar
     },
 
     readOnly:
@@ -53,7 +55,7 @@ export default {
 
     placeholder:
     {
-      type: CalendarEvent
+      type: Object as () => VCalendarEvent
     },
 
     placeholderForCreate:
@@ -90,7 +92,7 @@ export default {
 
   methods:
   {
-    isVisible(calendarEvent)
+    isVisible(calendarEvent: VCalendarEvent)
     {
       if (this.$dayspan.features.hideOnMove &&
           this.placeholder &&
@@ -107,7 +109,7 @@ export default {
       this.$emit('add', this.day);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

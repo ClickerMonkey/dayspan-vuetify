@@ -41,12 +41,13 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Weekday, Functions as fn } from 'dayspan';
 import { default as ScheduleFrequency } from './ScheduleFrequency';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleFrequencyDayOfWeek',
 
@@ -63,7 +64,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate( x, 'labels' );
       },
       default() {
@@ -127,7 +128,7 @@ export default {
       }
     },
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

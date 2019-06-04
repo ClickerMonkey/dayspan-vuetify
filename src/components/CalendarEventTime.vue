@@ -44,10 +44,11 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Constants, CalendarEvent, Calendar, Functions as fn } from 'dayspan';
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEventTime',
 
@@ -67,7 +68,7 @@ export default {
 
     popoverProps:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'popoverProps');
       },
       default() {
@@ -225,7 +226,7 @@ export default {
       return millis;
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

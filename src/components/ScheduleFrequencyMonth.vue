@@ -41,11 +41,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { default as ScheduleFrequency } from './ScheduleFrequency';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleFrequencyMonth',
 
@@ -70,7 +71,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -100,7 +101,7 @@ export default {
       return this.getOffsets( this.frequency.every, this.months );
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

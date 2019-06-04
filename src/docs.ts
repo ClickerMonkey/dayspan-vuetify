@@ -7,17 +7,16 @@ import 'vuetify/dist/vuetify.min.css'
 import 'material-design-icons-iconfont/dist/material-design-icons.css'
 import './styles/app.scss'
 
-import fr from './locales/fr'
-import en from './locales/en'
-import de from './locales/de'
-import ca from './locales/ca'
-import nl from './locales/nl'
+import fr from './locales/fr';
+import en from './locales/en';
+import de from './locales/de';
+import nl from './locales/nl';
 
-import 'moment/lang/fr'
-import 'moment/lang/ca'
-import 'moment/lang/nl'
-import * as moment from 'moment'
-moment.lang('en')
+import { 
+  en as ds_en, 
+  fr as ds_fr, 
+  nl as ds_nl 
+} from 'dayspan';
 
 Vue.config.productionTip = false
 
@@ -27,7 +26,7 @@ Vue.use(DaySpanVuetify,
 {
   data:
   {
-    locales: { en, fr, de, nl, ca }
+    locales: { en, fr, de, nl }
   },
   methods:
   {

@@ -50,12 +50,13 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Suffix } from 'dayspan';
 import { default as ScheduleFrequency } from './ScheduleFrequency';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleFrequencyDay',
 
@@ -79,7 +80,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -130,7 +131,7 @@ export default {
       this.property = newType.property;
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

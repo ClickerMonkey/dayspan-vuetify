@@ -21,11 +21,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { CalendarEvent, Calendar, Day } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsCalendarEventTimePlaceholder',
 
@@ -56,7 +57,7 @@ export default {
 
     popoverProps:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'popoverProps');
       },
       default() {
@@ -129,7 +130,7 @@ export default {
       }
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

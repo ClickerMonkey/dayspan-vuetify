@@ -19,11 +19,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { ScheduleModifier, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleModifier',
 
@@ -66,7 +67,7 @@ export default {
   {
     identifiers()
     {
-      return this.modifier.identifiers(x => x).list();
+      return this.modifier.identifiers(x => x).array();
     },
 
     isReadOnly()
@@ -103,7 +104,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

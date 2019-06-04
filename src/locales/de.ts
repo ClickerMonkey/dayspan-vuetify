@@ -77,7 +77,7 @@ export default {
         { label: '4 Tage' }
       ],
       formats: {
-        today: 'd. MMMM y',
+        today: 'D. MMMM Y',
         xs: 'MMM'
       },
       labels: {
@@ -96,8 +96,8 @@ export default {
     dsAgendaEvent: {
       formats: {
         firstLine:  'ddd',
-        secondLine: 'd. MMM',
-        start:      'd. MMMM y',
+        secondLine: 'D. MMM',
+        start:      'D. MMMM Y',
         time:       'hh:mm'
       },
       labels: {
@@ -120,13 +120,13 @@ export default {
     },
     dsCalendarEventChip: {
       formats: {
-        fullDay:          'EEEE, d. MMMM y',
-        timed:            'EEEE, d. MMMM y'
+        fullDay:          'dddd, D. MMMM Y',
+        timed:            'dddd, D. MMMM Y'
       }
     },
     dsCalendarEventPopover: {
       formats: {
-        start:    'd. MMMM y',
+        start:    'D. MMMM Y',
         time:     'hh:mm'
       },
       labels: {
@@ -149,7 +149,7 @@ export default {
     },
     dsCalendarEventCreatePopover: {
       formats: {
-        start:    'd. MMMM y',
+        start:    'D. MMMM Y',
         time:     'hh:mm'
       },
       labels: {
@@ -323,8 +323,8 @@ export default {
         endless:    'Ende'
       },
       formats: {
-        start:      'd. MMMM y',
-        end:        'd. MMMM y'
+        start:      'D. MMMM Y',
+        end:        'D. MMMM Y'
       }
     },
 

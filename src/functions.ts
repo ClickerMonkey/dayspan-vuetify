@@ -2,7 +2,7 @@
 import { Functions as fn } from 'dayspan';
 
 
-export function dsMerge(target, source)
+export function dsMerge(target: any, source: any): any
 {
   if (!fn.isObject(target))
   {
@@ -29,7 +29,7 @@ export function dsMerge(target, source)
   return target;
 }
 
-export function dsMergeOptions(options, defaults)
+export function dsMergeOptions(options: any, defaults: any): any
 {
   let out = {
     data: {},

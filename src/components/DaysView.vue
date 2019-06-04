@@ -24,7 +24,8 @@
 
               <div class="ds-hour"
                 v-for="(hour, i) in hours"
-                :class="hourClasses[ i ]">
+                :class="hourClasses[ i ]"
+                :key="i">
 
                 <div class="ds-hour-text">{{ hour }}</div>
 
@@ -58,11 +59,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Calendar, CalendarEvent, Constants } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsDaysView',
 
@@ -158,9 +160,10 @@ export default {
         let first = this.calendar
           .iterateDays()
           .reduce( last,
-            (day, first) => day.iterateEvents().reduce( first,
-              (event, first) => Math.min( first, event.start.hour * Constants.MINUTES_IN_HOUR + event.start.minute ),
-              (event) => !event.fullDay
+            (day, first) => 
+              day.iterateEvents()
+                .where((event) => !event.fullDay)
+                .reduce(first, (event, first) => Math.min( first, event.start.hour * Constants.MINUTES_IN_HOUR + event.start.minute )
             )
           );
 
@@ -182,7 +185,7 @@ export default {
     }
   }
 
-}
+});
 </script>
 
 <style scoped lang="scss">
@@ -256,5 +259,4 @@ export default {
     }
   }
 }
-
 </style>

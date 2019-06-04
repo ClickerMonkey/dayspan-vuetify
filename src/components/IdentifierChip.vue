@@ -7,11 +7,12 @@
   </v-chip>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Identifier } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsIdentifierChip',
 
@@ -63,7 +64,7 @@ export default {
       this.$emit('remove', this.identifier);
     }
   }
-}
+});
 </script>
 
 <style lang="scss">

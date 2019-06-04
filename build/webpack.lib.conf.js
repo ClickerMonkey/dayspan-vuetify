@@ -10,7 +10,7 @@ var OptimizeCSSPlugin = require('optimize-css-assets-webpack-plugin')
 var env = config.lib.env
 
 baseWebpackConfig.entry = {
-  'dayspan-vuetify': './src/lib.js'
+  'dayspan-vuetify': './src/lib.ts'
 }
 
 var webpackConfig = merge(baseWebpackConfig, {

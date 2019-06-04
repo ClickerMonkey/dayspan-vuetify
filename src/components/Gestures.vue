@@ -11,8 +11,10 @@
 
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import Vue from 'vue';
+
+export default Vue.extend({
 
   name: 'dsGestures',
 
@@ -133,7 +135,7 @@ export default {
     }
   }
 
-}
+});
 </script>
 
 <style scoped lang="scss">

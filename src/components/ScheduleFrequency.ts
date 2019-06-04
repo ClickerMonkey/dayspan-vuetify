@@ -1,9 +1,10 @@
 
+import Vue from 'vue';
 import { Schedule, Functions as fn } from 'dayspan';
 
 // required: property
 
-export default {
+export default Vue.extend({
 
   props:
   {
@@ -167,4 +168,4 @@ export default {
     }
   }
 
-}
+});

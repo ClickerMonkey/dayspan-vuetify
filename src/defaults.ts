@@ -3,7 +3,7 @@ import { Units } from 'dayspan';
 
 const LOCALE_ENTRY = 0;
 
-export default {
+export const defaultOptions = {
 
   dsCalendar: {
     handleAdd: true,
@@ -502,3 +502,5 @@ export default {
   }
 
 };
+
+export default defaultOptions;

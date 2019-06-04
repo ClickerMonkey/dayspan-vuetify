@@ -43,11 +43,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Time, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleTime',
 
@@ -99,7 +100,7 @@ export default {
 
     labels:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'labels');
       },
       default() {
@@ -109,7 +110,7 @@ export default {
 
     colors:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'colors');
       },
       default() {
@@ -119,7 +120,7 @@ export default {
 
     icons:
     {
-      validate(x) {
+      validator(x) {
         return this.$dsValidate(x, 'icons');
       },
       default() {
@@ -203,7 +204,7 @@ export default {
       }, extra);
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">

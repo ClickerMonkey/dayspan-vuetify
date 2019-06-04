@@ -29,11 +29,12 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Day, Schedule } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsScheduleTypeCustom',
 
@@ -67,7 +68,7 @@ export default {
   methods:
   {
   }
-}
+});
 </script>
 
 <style lang="scss">

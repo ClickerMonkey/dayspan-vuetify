@@ -46,11 +46,12 @@
 
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { Constants, CalendarDay, CalendarEvent, Calendar, DaySpan, Functions as fn } from 'dayspan';
 
 
-export default {
+export default Vue.extend({
 
   name: 'dsDayTimes',
 
@@ -196,7 +197,7 @@ export default {
       return time;
     }
   }
-}
+});
 </script>
 
 <style scoped lang="scss">
