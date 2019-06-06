@@ -1,10 +1,12 @@
 
 import en from './en'
-import nl from './nl'
+import { VLocaleInput } from '../types';
 
 export default {
   'en': en,
   'en-US': en
-}
+} as {
+  [locale: string]: VLocaleInput
+};
 
-export const defaultLocale = 'en'
+export const defaultLocale: string = 'en'

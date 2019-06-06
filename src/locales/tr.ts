@@ -1,3 +1,6 @@
+import { VCalendarType, VLocaleInput } from '../types';
+
+
 export default {
   promptLabels: {
     actionRemove: "Bu etkinliği silmek istediğinize emin misiniz?",
@@ -15,12 +18,6 @@ export default {
   },
   placeholder: {
     noTitle: "(başlık eklenmemiş)"
-  },
-  patterns: {
-    lastDay: day => "Ayın son günü",
-    lastDayOfMonth: day => "Ayın son günü " + day.format("MMMM"),
-    lastWeekday: day =>
-      "Son " + day.format("dddd") + " in " + day.format("MMMM")
   },
   colors: [
     { text: "Red" },
@@ -82,8 +79,8 @@ export default {
         xs: "MMM"
       },
       labels: {
-        next: type => (type ? "Next " + type.label.toLowerCase() : "Next"),
-        prev: type => (type ? "Önceki " + type.label.toLowerCase() : "Önceki"),
+        next: (type: VCalendarType) => (type ? "Next " + (type.label as string).toLowerCase() : "Next"),
+        prev: (type: VCalendarType) => (type ? "Önceki " + (type.label as string).toLowerCase() : "Önceki"),
         moveCancel: "Taşıma iptal",
         moveSingleEvent: "Etkinliği Taşı",
         moveOccurrence: "Sadece bu tekrarı taşı",
@@ -426,4 +423,4 @@ export default {
       }
     }
   }
-};
+} as VLocaleInput;

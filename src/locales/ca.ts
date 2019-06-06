@@ -1,3 +1,5 @@
+import { VLocaleInput, VCalendarType } from '../types';
+
 
 export default {
   promptLabels: {
@@ -15,11 +17,6 @@ export default {
   },
   placeholder: {
     noTitle: '(sense títol)'
-  },
-  patterns: {
-    lastDay:        (day) => 'Últim dia del mes',
-    lastDayOfMonth: (day) => 'Últim dia de ' + day.format('MMMM'),
-    lastWeekday:    (day) => 'Últim ' + day.format('dddd') + ' en ' + day.format('MMMM')
   },
   colors: [
     { text: 'Vermell' },
@@ -81,8 +78,8 @@ export default {
         xs: 'MMM'
       },
       labels: {
-        next: (type) => type ? 'Següent ' + type.label.toLowerCase() : 'Següent',
-        prev: (type) => type ? 'Anterior ' + type.label.toLowerCase() : 'Anterior',
+        next: (type: VCalendarType) => type ? 'Següent ' + (type.label as string).toLowerCase() : 'Següent',
+        prev: (type: VCalendarType) => type ? 'Anterior ' + (type.label as string).toLowerCase() : 'Anterior',
         moveCancel: 'Cancel·lar moviment',
         moveSingleEvent: 'Moure esdeveniment',
         moveOccurrence: 'Moure només aquesta repetició de l\'esdeveniment',
@@ -391,4 +388,4 @@ export default {
       }
     }
   }
-}
+} as VLocaleInput;

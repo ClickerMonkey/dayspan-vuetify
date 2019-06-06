@@ -1,13 +1,16 @@
 
 import * as ds from 'dayspan';
 import Vue from 'vue';
+import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Functions as fn } from 'dayspan';
+import { Unit } from 'dayspan/typings/DayFunctions';
 
-import { Day, Constants, Parse, Schedule, DaySpan, CalendarEvent, Pattern, Patterns, PatternMap, Functions as fn } from 'dayspan';
 import { default as Defaults } from './defaults';
 import { default as Colors } from './colors';
 import { default as Icons } from './icons';
 import { default as Locales, defaultLocale } from './locales'
 import { dsMerge, dsMergeLocale } from './functions';
+import { VPluginData, VPluginMethods, VPlugin, VLocaleOptions, VSchedule, VCalendarEvent, VDetails, VEvent, VPromptTypes, VColor, VLocaleInput } from './types';
+
 
 const LOCALE_ENTRY = 0;
 
@@ -118,16 +121,17 @@ export default {
     locales: Locales,
 
     currentLocale: defaultLocale
-  },
+
+  } as Partial<VPluginData>,
 
   computed:
   {
-    fullscreenPopovers()
+    fullscreenPopovers(this: VPlugin): boolean
     {
       return this.$vuetify.breakpoint.xs;
     },
 
-    fullscreenDialogs()
+    fullscreenDialogs(this: VPlugin): boolean
     {
       return this.$vuetify.breakpoint.xs;
     }
@@ -135,17 +139,17 @@ export default {
 
   methods:
   {
-    normalizeLocaleName(name)
+    normalizeLocaleName(this: VPlugin, name: string): string
     {
       return name.toLowerCase();
     },
 
-    getLocale(name)
+    getLocale(this: VPlugin, name: string): VLocaleInput
     {
       return this.locales[this.normalizeLocaleName(name)];
     },
 
-    setLocale(name, strict)
+    setLocale(this: VPlugin, name: string, strict: boolean): void
     {
       const locale = this.getLocale(name);
 
@@ -163,17 +167,17 @@ export default {
       ds.Locales.set(name);
     },
 
-    addLocale(name, locale)
+    addLocale(this: VPlugin, name: string, locale: VLocaleInput): void
     {
       this.locales[this.normalizeLocaleName(name)] = locale;
     },
 
-    addLocales(names, locale)
+    addLocales(this: VPlugin, names: string[], locale: VLocaleInput): void
     {
       names.forEach(n => this.addLocale(n, locale));
     },
 
-    updateLocale(name, update, strict = true)
+    updateLocale(this: VPlugin, name: string, update: VLocaleInput, strict: boolean = true): void
     {
       const locale = this.getLocale(name);
 
@@ -185,29 +189,29 @@ export default {
       dsMergeLocale(locale, update, '', strict);
     },
 
-    init()
+    init(this: VPlugin): void
     {
       this.setLocale(this.currentLocale, true);
       this.startRefreshTimes();
-      this.addPatterns();
     },
 
-    setEventDetails(details, data, event, calendarEvent)
+    setEventDetails(this: VPlugin, details: VDetails, data: VDetails, event: VEvent, calendarEvent: VCalendarEvent): void
     {
-      event.data = Vue.util.extend( data, details );
+      // TODO use something else
+      event.data = (Vue as any).util.extend( data, details );
     },
 
-    copyEventDetails(details)
+    copyEventDetails(this: VPlugin, details: VDetails): VDetails
     {
       return dsMerge( {}, details );
     },
 
-    createEventData(details, schedule)
+    createEventData(this: VPlugin, details: VDetails, schedule: VSchedule): VDetails
     {
       return dsMerge( {}, details );;
     },
 
-    createEvent(details, schedule, forPlaceholder)
+    createEvent(this: VPlugin, details: VDetails, schedule: VSchedule, forPlaceholder: boolean): VEvent
     {
       return Parse.event({
         schedule: schedule,
@@ -215,14 +219,7 @@ export default {
       });
     },
 
-    addPatterns()
-    {
-      PatternMap.lastDayOfMonth.listed = true;
-      PatternMap.lastDay.listed = true;
-      PatternMap.lastWeekday.listed = true;
-    },
-
-    getDefaultEventDetails()
+    getDefaultEventDetails(this: VPlugin): VDetails
     {
       return {
         title: '',
@@ -236,22 +233,22 @@ export default {
       };
     },
 
-    getDefaultEventColor()
+    getDefaultEventColor(this: VPlugin): string
     {
       return this.colors[Math.floor(this.colors.length * Math.random())].value;
     },
 
-    isValidEvent(details, schedule, calendarEvent)
+    isValidEvent(this: VPlugin, details: VDetails, schedule: VSchedule, calendarEvent: VCalendarEvent): boolean
     {
       return !!details.title;
     },
 
-    requiresPermission(type)
+    requiresPermission(this: VPlugin, type: VPromptTypes): boolean
     {
       return !!(this.prompt[ type ] && this.promptLabels[ type ] && this.promptOpen);
     },
 
-    getPermission(type, granted, denied)
+    getPermission(this: VPlugin, type: VPromptTypes, granted: (granted: boolean) => any, denied: () => any): void
     {
       let prompt = this.prompt[ type ];
       let promptLabel = this.promptLabels[ type ];
@@ -272,17 +269,17 @@ export default {
       }
     },
 
-    getPrefix(calendarEvent, sameDay)
+    getPrefix(this: VPlugin, calendarEvent: VCalendarEvent, sameDay: DaySpan[]): string
     {
       return sameDay.length === 1 ? sameDay[0].start.format('ha') : '(' + sameDay.length + ')';
     },
 
-    getScheduleDescription(schedule)
+    getScheduleDescription(this: VPlugin, schedule: VSchedule): string
     {
       return schedule.describe('event', false, false, false, false)
     },
 
-    getEventOccurrence(schedule, start, labels, formats)
+    getEventOccurrence(this: VPlugin, schedule: VSchedule, start: Day, labels: { [key: string]: string }, formats: { [key: string]: string }): string
     {
       let duration = this.getEventDuration(schedule, labels);
 
@@ -316,7 +313,7 @@ export default {
             description += ' at ';
           }
 
-          description += schedule.describeArray( schedule.times, x => x.format( formats.time ) );
+          description += ds.Locales.current.list(schedule.times.map(x => x.format(formats.time)));
         }
 
         description += ' (' + duration + ')';
@@ -329,7 +326,7 @@ export default {
       return described.substring( 20 ) + ' (' + duration + ')';
     },
 
-    getEventAgendaWhen(calendarEvent, labels, formats)
+    getEventAgendaWhen(this: VPlugin, calendarEvent: VCalendarEvent, labels: { [key: string]: string }, formats: { [key: string]: string }): string
     {
       let when = '';
       let schedule = calendarEvent.schedule;
@@ -340,7 +337,7 @@ export default {
       }
       else
       {
-        when += schedule.describeArray( schedule.times, x => x.format( formats.time ) );
+        when += ds.Locales.current.list(schedule.times.map(x => x.format(formats.time)));
       }
 
       if (schedule.duration !== 1 && this.$vuetify.breakpoint.smAndUp)
@@ -351,7 +348,7 @@ export default {
       return when;
     },
 
-    getEventDuration(schedule, labels)
+    getEventDuration(this: VPlugin, schedule: VSchedule, labels: { [P in Unit]?: string }): string
     {
       let units = labels[ schedule.durationUnit ];
       let length = schedule.duration;
@@ -361,16 +358,16 @@ export default {
       return duration;
     },
 
-    getPlaceholderEventDetails()
+    getPlaceholderEventDetails(this: VPlugin): VDetails
     {
       let details = this.getDefaultEventDetails();
 
-      details.title = this.placeholder.noTitle;
+      details.title = this.placeholder.noTitle as string;
 
       return details;
     },
 
-    getPlaceholderEventForAdd(time)
+    getPlaceholderEventForAdd(this: VPlugin, time: Day): VCalendarEvent
     {
       let details = this.getPlaceholderEventDetails();
       let schedule = new Schedule({});
@@ -379,10 +376,10 @@ export default {
       let span = DaySpan.point( time );
       let day = time.startOf('day');
 
-      return new CalendarEvent( id, event, span, day );
+      return new CalendarEvent( parseInt(id as string), event, span, day );
     },
 
-    getPlaceholderEventForMove(original)
+    getPlaceholderEventForMove(this: VPlugin, original: VCalendarEvent): VCalendarEvent
     {
       let placeholder = new CalendarEvent(
         original.id,
@@ -398,7 +395,7 @@ export default {
       return placeholder;
     },
 
-    getStyleFull(details, calendarEvent, index)
+    getStyleFull(this: VPlugin, details: VDetails, calendarEvent: VCalendarEvent, index: number): object
     {
       let past = calendarEvent.time.start.isBefore( this.today );
       let cancelled = calendarEvent.cancelled;
@@ -417,13 +414,13 @@ export default {
       };
     },
 
-    getStyleTimed(details, calendarEvent)
+    getStyleTimed(this: VPlugin, details: VDetails, calendarEvent: VCalendarEvent): object
     {
       let past = calendarEvent.time.end.isBefore( this.now );
       let cancelled = calendarEvent.cancelled;
       let bounds = calendarEvent.getTimeBounds( this.dayHeight, 1, this.columnOffset );
 
-      let color = this.getStyleColor( details, calendarEvent );
+      // let color = this.getStyleColor( details, calendarEvent );
       let stateColor = this.getStyleColor( details, calendarEvent, past, cancelled );
 
       return {
@@ -439,17 +436,17 @@ export default {
       };
     },
 
-    getStylePopover(details, calendarEvent)
+    getStylePopover(this: VPlugin, details: VDetails, calendarEvent: VCalendarEvent): object
     {
-
+      return undefined as object;
     },
 
-    getStyleNowBorder()
+    getStyleNowBorder(this: VPlugin): string
     {
       return 'black solid 3px';
     },
 
-    getStyleNow()
+    getStyleNow(this: VPlugin): object
     {
       let now = this.now.asTime().toMilliseconds();
       let delta = now / Constants.MILLIS_IN_DAY;
@@ -464,7 +461,7 @@ export default {
       };
     },
 
-    getStyleColor(details, calendarEvent, past, cancelled)
+    getStyleColor(this: VPlugin, details: VDetails, calendarEvent: VCalendarEvent, past: boolean = false, cancelled: boolean = false): string
     {
       let color = details.color;
 
@@ -475,7 +472,7 @@ export default {
       return color;
     },
 
-    getStylePlaceholderTimed(details, placeholder, forDay)
+    getStylePlaceholderTimed(this: VPlugin, details: VDetails, placeholder: VCalendarEvent, forDay: Day): object
     {
       let bounds = placeholder.time.getBounds( forDay, this.dayHeight );
       let stateColor = this.getStyleColor( details, placeholder );
@@ -490,9 +487,9 @@ export default {
       };
     },
 
-    getStylePlaceholderFull(details, calendarEvent, index, forDay)
+    getStylePlaceholderFull(this: VPlugin, details: VDetails, calendarEvent: VCalendarEvent, index: number, forDay: Day): object
     {
-      let color = this.getStyleColor( details, calendarEvent );
+      // let color = this.getStyleColor( details, calendarEvent );
       let stateColor = this.getStyleColor( details, calendarEvent );
       let starting = calendarEvent.time.start.sameDay( forDay );
       let ending = calendarEvent.time.end.sameDay( forDay );
@@ -506,10 +503,10 @@ export default {
       };
     },
 
-    parseColor(color)
+    parseColor(this: VPlugin, color: VColor | string): VColor
     {
       if (fn.isObject(color)) {
-        return color;
+        return color as VColor;
       }
 
       let match = /#(\w\w)(\w\w)(\w\w)/.exec(color);
@@ -525,12 +522,12 @@ export default {
       };
     },
 
-    clampComponent(c)
+    clampComponent(this: VPlugin, c: number): number
     {
       return Math.max( 0, Math.min( 255, Math.floor( c ) ) );
     },
 
-    clampColor(color, out)
+    clampColor(this: VPlugin, color: VColor, out?: VColor): VColor
     {
       let target = out || color;
       target.r = this.clampComponent( color.r );
@@ -539,13 +536,13 @@ export default {
       return target;
     },
 
-    formatComponent(c)
+    formatComponent(this: VPlugin, c: number): string
     {
       let x = c.toString( 16 );
       return x.length === 1 ? '0' + x : x;
     },
 
-    formatColor(color)
+    formatColor(this: VPlugin, color: VColor): string
     {
       return '#' +
         this.formatComponent( color.r ) +
@@ -553,7 +550,7 @@ export default {
         this.formatComponent( color.b );
     },
 
-    blend(from, delta, to)
+    blend(this: VPlugin, from: VColor | string, delta: number, to: VColor | string): string
     {
       let parsedFrom = this.parseColor( from );
       let parsedTo = this.parseColor( to );
@@ -569,7 +566,7 @@ export default {
       return this.formatColor( blended );
     },
 
-    roundTime(day, millis, up)
+    roundTime(this: VPlugin, day: Day, millis: number, up: boolean): Day
     {
       let time = day.time;
       let over = time % millis;
@@ -582,7 +579,7 @@ export default {
       return day.relative( relative );
     },
 
-    startRefreshTimes()
+    startRefreshTimes(this: VPlugin): void
     {
       let $dayspan = this;
 
@@ -596,14 +593,14 @@ export default {
       );
     },
 
-    stopRefreshTimes()
+    stopRefreshTimes(this: VPlugin): void
     {
       clearTimeout( this.timeout );
 
       this.timeout = null;
     },
 
-    refreshTimes(force = false)
+    refreshTimes(this: VPlugin, force: boolean = false): void
     {
       let today = Day.today();
 
@@ -615,5 +612,5 @@ export default {
 
       this.now = Day.now();
     }
-  }
+  } as VPluginMethods
 };

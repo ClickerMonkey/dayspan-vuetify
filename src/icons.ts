@@ -1,3 +1,4 @@
+import { VIconOption } from './types';
 
 const LOCALE_ENTRY = 0;
 
@@ -17,4 +18,4 @@ export default [
   { text: LOCALE_ENTRY, value: 'insert_chart' },
   { text: LOCALE_ENTRY, value: 'directions_bike' },
   { text: LOCALE_ENTRY, value: 'card_travel' }
-];
+] as VIconOption[];

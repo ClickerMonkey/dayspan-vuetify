@@ -1,8 +1,9 @@
 
-import Vue, { VueConstructor } from 'vue';
-import { dsMergeOptions, dsMergeValidate, dsValidate, dsDefaults, dsBind } from './functions';
+import { VueConstructor } from 'vue';
+import { dsMergeOptions, dsMergeValidate, dsDefaults, dsBind } from './functions';
 import { default as Component } from './component';
 import * as ComponentMap from './components'
+import { VPlugin } from './types';
 
 
 export default {
@@ -18,7 +19,7 @@ export default {
     // $dayspan is just another reactive component
     var $dayspan = new Vue( options
       ? dsMergeOptions( options, Component )
-      : Component );
+      : Component ) as VPlugin;
 
     // allow directives to access $dayspan
     Vue.$dayspan = $dayspan;

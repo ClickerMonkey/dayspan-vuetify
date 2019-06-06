@@ -233,7 +233,8 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import { Constants, Sorts, Calendar, Day, Units, Weekday, Month, DaySpan, PatternMap, Time, Op } from 'dayspan';
+import { Sorts, Calendar, Op } from 'dayspan';
+import { VCalendar, VCalendarInput } from '../types';
 
 export default Vue.extend({
 
@@ -247,7 +248,7 @@ export default Vue.extend({
     },
     calendar:
     {
-      type: Calendar,
+      type: Object as () => VCalendar,
       default() {
         return Calendar.months();
       }
@@ -261,7 +262,7 @@ export default Vue.extend({
     {
       type: Array,
       default() {
-        return this.$dsDefaults().types;
+        return (this as any).$dsDefaults().types;
       }
     },
     allowsAddToday:
@@ -318,7 +319,7 @@ export default Vue.extend({
     }
   },
 
-  data: vm => ({
+  data: () => ({
     drawer: null,
     optionsVisible: false,
     options: [],
@@ -337,7 +338,7 @@ export default Vue.extend({
   {
     currentType:
     {
-      get()
+      get(): number
       {
         return this.types.find((type) =>
           type.type === this.calendar.type &&
@@ -417,7 +418,7 @@ export default Vue.extend({
 
   methods:
   {
-    setState(state)
+    setState(state: VCalendarInput)
     {
       state.eventSorter = state.listTimes
         ? Sorts.List([Sorts.FullDay, Sorts.Start])

@@ -1,10 +1,6 @@
+import { VColorOption } from './types';
 
 const LOCALE_ENTRY = 0;
-
-export interface ColorOption {
-  text: string | 0;
-  value: string;
-}
 
 export default [
   { text: LOCALE_ENTRY, value: '#F44336' },
@@ -28,4 +24,4 @@ export default [
   { text: LOCALE_ENTRY, value: '#607D8B' },
   { text: LOCALE_ENTRY, value: '#9E9E9E' },
   { text: LOCALE_ENTRY, value: '#000000' }
-] as ColorOption[];
+] as VColorOption[];

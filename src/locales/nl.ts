@@ -1,4 +1,5 @@
-var suffix = (value, prepend) => (prepend ? value : '') + 'e';
+import { VCalendarType, VLocaleInput } from '../types';
+
 
 export default {
   event: 'evenement',
@@ -17,20 +18,6 @@ export default {
   },
   placeholder: {
     noTitle: '(geen titel)'
-  },
-  patterns: {
-    lastDay:        (day) => 'Laatste dag van de maand',
-    lastDayOfMonth: (day) => 'Laaste dag van ' + day.toMoment().locale('nl').format('MMMM'),
-    lastWeekday:    (day) => 'Laatste ' + day.toMoment().locale('nl').format('dddd') + ' in ' + day.toMoment().locale('nl').format('MMMM'),
-    none: () => 'Geen herhaling',
-    daily: () => 'Dagelijks',
-    weekly: (day) => 'Wekelijks op ' + day.toMoment().locale('nl').format('dddd'),
-    monthlyWeek: (day) => 'Maandelijks op de ' + suffix(day.weekspanOfMonth + 1, true) + ' ' + day.toMoment().locale('nl').format('dddd'),
-    annually: (day) => 'Jaalijks op ' + day.format('D MMMM'),
-    annuallyMonthWeek: (day) => 'Jaarlijks op de ' + suffix(day.weekspanOfMonth + 1, true) + ' ' + day.toMoment().locale('nl').format('dddd') + ' van ' + day.toMoment().locale('nl').format('MMMM'),
-    weekday: (day) => 'Iedere werkdag (maandag tot vrijdag)',
-    monthly: (day) => 'Maandelijks op de ' + day.toMoment().locale('nl').format('Do') + ' dag',
-    custom: () => 'Aangepast..'
   },
   schedule: {
     cancels: 'met annulering op',
@@ -68,14 +55,6 @@ export default {
     times: 'om',
     weekdays: ['zondag', 'maandag', 'dinsdag', 'woensdag', 'donderdag', 'vrijdag', 'zaterdag'],
   },
-  formats: {
-    day: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
-    week: (short, dayOfWeek, year) => (dayOfWeek ? (short ? 'ddd ' : 'dddd ') : '') + 'D ' + (short ? 'MMM ' : 'MMMM ') + (year ? ' YYYY' : ''),
-    month: (short, dayOfWeek, year) => (short ? 'MMM' : 'MMMM') + (year ? ' YYYY' : ''),
-    year: (short, dayOfWeek, year) => (year ? 'YYYY' : ''),
-    timeShort: 'H:mm'
-  },
-  suffix,
   colors: [
     { text: 'Rood' },
     { text: 'Roze' },
@@ -136,8 +115,8 @@ export default {
         xs: 'MMM'
       },
       labels: {
-        next: (type) => type ? 'Volgend(e) ' + type.label.toLowerCase() : 'Volgende',
-        prev: (type) => type ? 'Vorig(e) ' + type.label.toLowerCase() : 'Vorig',
+        next: (type: VCalendarType) => type ? 'Volgend(e) ' + (type.label as string).toLowerCase() : 'Volgende',
+        prev: (type: VCalendarType) => type ? 'Vorig(e) ' + (type.label as string).toLowerCase() : 'Vorig',
         moveCancel: 'Verplaatsen annuleren',
         moveSingleEvent: 'Evenement verplaatsen',
         moveOccurrence: 'Verplaats alleen deze instantie van dit evenement',
@@ -375,8 +354,7 @@ export default {
       formats: {
         start:      'D MMMM YYYY',
         end:        'D MMMM YYYY'
-      },
-      suffix
+      }
     },
 
     dsScheduleTime: {
@@ -440,5 +418,5 @@ export default {
       }
     }
   }
-}
+} as VLocaleInput;
 

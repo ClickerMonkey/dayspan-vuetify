@@ -1,9 +1,10 @@
 
 import { Units } from 'dayspan';
+import { VComponentDefaults } from './types';
 
 const LOCALE_ENTRY = 0;
 
-export const defaultOptions = {
+export const defaultOptions: VComponentDefaults = {
 
   dsCalendar: {
     handleAdd: true,
@@ -31,8 +32,8 @@ export const defaultOptions = {
       xs: LOCALE_ENTRY
     },
     labels: {
-      next: LOCALE_ENTRY,
-      prev: LOCALE_ENTRY,
+      next: () => LOCALE_ENTRY,
+      prev: () => LOCALE_ENTRY,
       moveCancel: LOCALE_ENTRY,
       moveSingleEvent: LOCALE_ENTRY,
       moveOccurrence: LOCALE_ENTRY,

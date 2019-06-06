@@ -67,7 +67,7 @@ export default Vue.extend({
 
   computed:
   {
-    classes()
+    classes(): object
     {
       return {
         'ds-day-today': this.day.currentDay,
@@ -78,13 +78,13 @@ export default Vue.extend({
       };
     },
 
-    hasPlaceholder()
+    hasPlaceholder(): boolean
     {
       return this.placeholder &&
         this.placeholder.time.matchesDay( this.day );
     },
 
-    visibleEvents()
+    visibleEvents(): VCalendarEvent[]
     {
       return this.day.events.filter( this.isVisible );
     }

@@ -1,3 +1,6 @@
+import { VCalendarType, VLocaleInput } from '../types';
+
+
 export default {
   promptLabels: {
     actionRemove: "¿Está seguro de que quiere eliminar este evento?",
@@ -20,12 +23,6 @@ export default {
   },
   placeholder: {
     noTitle: "(sin título)"
-  },
-  patterns: {
-    lastDay: day => "Último día del mes",
-    lastDayOfMonth: day => "Último día de " + day.format("MMMM"),
-    lastWeekday: day =>
-      "Último " + day.format("dddd") + " de " + day.format("MMMM")
   },
   colors: [
     { text: "Rojo" },
@@ -89,10 +86,10 @@ export default {
         xs: "MMM"
       },
       labels: {
-        next: type =>
-          type ? "Siguiente " + type.label.toLowerCase() : "Siguiente",
-        prev: type =>
-          type ? "Anterior " + type.label.toLowerCase() : "Anterior",
+        next: (type: VCalendarType) =>
+          type ? "Siguiente " + (type.label as string).toLowerCase() : "Siguiente",
+        prev: (type: VCalendarType) =>
+          type ? "Anterior " + (type.label as string).toLowerCase() : "Anterior",
         moveCancel: "Cancelar mover",
         moveSingleEvent: "Mover evento",
         moveOccurrence: "Mover solo esta repetición del evento",
@@ -448,4 +445,4 @@ export default {
       }
     }
   }
-};
+} as VLocaleInput;
