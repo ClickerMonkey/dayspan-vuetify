@@ -1,5 +1,7 @@
 # dayspan-vuetify
 
+Added support vuetify2
+
 > A collection of components for Schedules and Calendars in DaySpan using Vuetify
 
 This library strives to offer all the functionality any modern calendar app could support, and more. Not only can this be used for calendar apps, but any application where the user wishes to control when events should occur within a system.
