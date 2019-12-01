@@ -1,70 +1,68 @@
 <template>
 
-  <div class="ds-week">
+    <div class="ds-week">
 
-    <template v-for="(day, i) in days">
+        <template v-for="(day, i) in days">
 
-      <ds-day
-        v-bind="{$scopedSlots}"
-        v-on="$listeners"
-        :key="i"
-        :day="day"
-        :calendar="calendar"
-        :placeholder="placeholder"
-        :placeholder-for-create="placeholderForCreate"
-      ></ds-day>
+            <ds-day
+                    v-bind="{$scopedSlots}"
+                    v-on="$listeners"
+                    :key="i"
+                    :day="day"
+                    :calendar="calendar"
+                    :placeholder="placeholder"
+                    :placeholder-for-create="placeholderForCreate"
+            ></ds-day>
 
-    </template>
+        </template>
 
-  </div>
+    </div>
 
 </template>
 
 <script>
-import { Calendar, CalendarEvent } from 'dayspan';
-
+import { Calendar, CalendarEvent } from 'dayspan'
 
 export default {
 
-  name: 'dsDayRow',
+    name: 'dsDayRow',
 
-  props:
-  {
-    days:
-    {
-      required: true,
-      type: Array
-    },
+    props:
+        {
+            days:
+                {
+                    required: true,
+                    type: Array
+                },
 
-    calendar:
-    {
-      required: true,
-      type: Calendar
-    },
+            calendar:
+                {
+                    required: true,
+                    type: Calendar
+                },
 
-    placeholder:
-    {
-      type: CalendarEvent
-    },
+            placeholder:
+                {
+                    type: CalendarEvent
+                },
 
-    placeholderForCreate:
-    {
-      type: Boolean,
-      default: false
-    }
-  },
+            placeholderForCreate:
+                {
+                    type: Boolean,
+                    default: false
+                }
+        },
 
-  methods:
-  {
-  }
+    methods:
+        {}
 }
 </script>
 
 <style scoped lang="scss">
 
-.ds-week {
-  display: flex;
-  flex: 1;
-}
+    .ds-week {
+        display: flex;
+        flex: 1;
+    }
 
 </style>

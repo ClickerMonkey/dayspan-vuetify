@@ -1,8 +1,7 @@
-
 import './styles/lib.scss'
 
 import DaySpanVuetify from './plugin'
 
-export * from './components';
+export * from './components'
 
-export default DaySpanVuetify;
+export default DaySpanVuetify

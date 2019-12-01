@@ -1,134 +1,129 @@
 <template>
 
-  <v-layout row wrap>
+    <v-layout row wrap>
 
-    <v-flex xs7>
-      <v-select
-        hide-details solo flat
-        v-model="type"
-        :label="labels.type"
-        :items="options"
-      ></v-select>
-    </v-flex>
+        <v-flex xs7>
+            <v-select
+                    hide-details solo flat
+                    v-model="type"
+                    :label="labels.type"
+                    :items="options"
+            ></v-select>
+        </v-flex>
 
-    <v-flex xs5 v-if="isAny"></v-flex>
+        <v-flex xs5 v-if="isAny"></v-flex>
 
-    <v-flex xs5 v-if="!isAny" class="pl-1">
-      <v-select
-        hide-details solo flat return-object
-        v-model="chosenType"
-        :items="types"
-      ></v-select>
-    </v-flex>
+        <v-flex xs5 v-if="!isAny" class="pl-1">
+            <v-select
+                    hide-details solo flat return-object
+                    v-model="chosenType"
+                    :items="types"
+            ></v-select>
+        </v-flex>
 
-    <v-flex xs5 offset-xs7 v-if="isOneOf" class="pl-1">
-      <v-select
-        hide-details solo flat multiple
-        v-model="frequency"
-        :items="oneOfs"
-      ></v-select>
-    </v-flex>
+        <v-flex xs5 offset-xs7 v-if="isOneOf" class="pl-1">
+            <v-select
+                    hide-details solo flat multiple
+                    v-model="frequency"
+                    :items="oneOfs"
+            ></v-select>
+        </v-flex>
 
-    <v-flex xs2 offset-xs7 v-if="isEvery" class="pl-1">
-      <v-text-field
-        type="number"
-        hide-details solo flat
-        v-model.number="frequency.every"
-      ></v-text-field>
-    </v-flex>
+        <v-flex xs2 offset-xs7 v-if="isEvery" class="pl-1">
+            <v-text-field
+                    type="number"
+                    hide-details solo flat
+                    v-model.number="frequency.every"
+            ></v-text-field>
+        </v-flex>
 
-    <v-flex xs3 v-if="isEvery" class="pl-1">
-      <v-select
-        hide-details solo flat
-        v-model.number="frequency.offset"
-        :items="offsets"
-      ></v-select>
-    </v-flex>
+        <v-flex xs3 v-if="isEvery" class="pl-1">
+            <v-select
+                    hide-details solo flat
+                    v-model.number="frequency.offset"
+                    :items="offsets"
+            ></v-select>
+        </v-flex>
 
-  </v-layout>
+    </v-layout>
 
 </template>
 
 <script>
-import { Suffix } from 'dayspan';
-import { default as ScheduleFrequency } from './ScheduleFrequency';
-
+import { Suffix } from 'dayspan'
+import { default as ScheduleFrequency } from './ScheduleFrequency'
 
 export default {
 
-  name: 'dsScheduleFrequencyWeek',
+    name: 'dsScheduleFrequencyWeek',
 
-  mixins: [ ScheduleFrequency ],
+    mixins: [ScheduleFrequency],
 
-  props:
-  {
-    options:
-    {
-      default() {
-        return this.$dsDefaults().options;
-      }
-    },
-    
-    types:
-    {
-      default() {
-        return this.$dsDefaults().types;
-      }
-    },
+    props:
+        {
+            options:
+                {
+                    default () {
+                        return this.$dsDefaults().options
+                    }
+                },
 
-    labels:
-    {
-      validate(x) {
-        return this.$dsValidate(x, 'labels');
-      },
-      default() {
-        return this.$dsDefaults().labels;
-      }
-    }
-  },
+            types:
+                {
+                    default () {
+                        return this.$dsDefaults().types
+                    }
+                },
 
-  data: vm => ({
-    chosenType: null,
-    property: 'weekspanOfMonth'
-  }),
+            labels:
+                {
+                    validate (x) {
+                        return this.$dsValidate(x, 'labels')
+                    },
+                    default () {
+                        return this.$dsDefaults().labels
+                    }
+                }
+        },
 
-  watch:
-  {
-    schedule:
-    {
-      immediate: true,
-      deep: true,
-      handler: 'updateProperty'
-    },
+    data: vm => ({
+        chosenType: null,
+        property: 'weekspanOfMonth'
+    }),
 
-    chosenType: 'onTypeChange'
-  },
+    watch:
+        {
+            schedule:
+                {
+                    immediate: true,
+                    deep: true,
+                    handler: 'updateProperty'
+                },
 
-  computed:
-  {
-    oneOfs()
-    {
-      return this.getOffsets( this.chosenType.max, Suffix.CACHE, this.chosenType.min, this.chosenType.offset );
-    },
+            chosenType: 'onTypeChange'
+        },
 
-    offsets()
-    {
-      return this.getOffsets( this.frequency.every + 1, Suffix.CACHE );
-    }
-  },
+    computed:
+        {
+            oneOfs () {
+                return this.getOffsets(this.chosenType.max, Suffix.CACHE, this.chosenType.min, this.chosenType.offset)
+            },
 
-  methods:
-  {
-    updateProperty()
-    {
-      this.chosenType = this.findType( this.types );
-    },
+            offsets () {
+                return this.getOffsets(this.frequency.every + 1, Suffix.CACHE)
+            }
+        },
 
-    onTypeChange(newType, oldType)
-    {
-      this.property = newType.property;
-    }
-  }
+    methods:
+        {
+            updateProperty () {
+                this.chosenType = this.findType(this.types)
+            },
+
+            onTypeChange (newType, oldType) {
+                this.property = newType.property
+            }
+        }
 }
 </script>
 

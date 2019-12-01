@@ -1,154 +1,142 @@
 <template>
 
-  <v-menu
-    class="ds-calendar-event-menu"
-    :content-class="contentClass"
-    :disabled="!hasPopover"
-    v-model="menu"
-    v-bind="popoverProps">
+    <v-menu
+            class="ds-calendar-event-menu"
+            :content-class="contentClass"
+            :disabled="!hasPopover"
+            v-model="menu"
+            v-bind="popoverProps">
+        <template v-slot:activator="{ on }">
+            <ds-calendar-event v-on="on"
+                               v-bind="{$scopedSlots}"
+                               :is-placeholder-with-day="day"
+                               :calendar-event="placeholder"
+                               :calendar="calendar"
+                               :index="index"
+            ></ds-calendar-event>
+        </template>
 
-    <ds-calendar-event
-      slot="activator"
-      v-bind="{$scopedSlots}"
-      :is-placeholder-with-day="day"
-      :calendar-event="placeholder"
-      :calendar="calendar"
-      :index="index"
-    ></ds-calendar-event>
+        <slot name="eventCreatePopover" v-bind="{placeholder, calendar, day, index, close}"></slot>
 
-    <slot name="eventCreatePopover" v-bind="{placeholder, calendar, day, index, close}"></slot>
-
-  </v-menu>
+    </v-menu>
 
 </template>
 
 <script>
-import { CalendarEvent, Calendar, Day } from 'dayspan';
-
+import { CalendarEvent, Calendar, Day } from 'dayspan'
 
 export default {
 
-  name: 'dsCalendarEventPlaceholder',
+    name: 'dsCalendarEventPlaceholder',
 
-  props:
-  {
-    placeholder:
-    {
-      required: true,
-      type: CalendarEvent
+    props:
+        {
+            placeholder:
+                {
+                    required: true,
+                    type: CalendarEvent
+                },
+
+            placeholderForCreate:
+                {
+                    type: Boolean,
+                    default: false
+                },
+
+            calendar:
+                {
+                    required: true,
+                    type: Calendar
+                },
+
+            day:
+                {
+                    type: Day
+                },
+
+            index:
+                {
+                    type: Number,
+                    default: 0
+                },
+
+            popoverProps:
+                {
+                    validate (x) {
+                        return this.$dsValidate(x, 'popoverProps')
+                    },
+                    default () {
+                        return this.$dsDefaults().popoverProps
+                    }
+                }
+        },
+
+    computed:
+        {
+            hasPopover () {
+                return !!this.$scopedSlots.eventCreatePopover
+            },
+
+            contentClass () {
+                return this.$dayspan.fullscreenPopovers ? 'ds-fullscreen' : ''
+            },
+
+            isStart () {
+                return this.placeholder.day.sameDay(this.day)
+            },
+
+            autoOpen () {
+                return this.hasPopover && this.placeholderForCreate && this.isStart
+            }
+        },
+
+    data: vm => ({
+        menu: false
+    }),
+
+    watch:
+        {
+            menu: 'triggerClearPlaceholder',
+            placeholderForCreate: 'openPopover'
+        },
+
+    mounted () {
+        if (this.autoOpen) {
+            this.menu = true
+        }
     },
 
-    placeholderForCreate:
-    {
-      type: Boolean,
-      default: false
-    },
+    methods:
+        {
+            close () {
+                this.menu = false
+            },
 
-    calendar:
-    {
-      required: true,
-      type: Calendar
-    },
+            openPopover (open) {
+                if (this.isStart) {
+                    this.menu = open
+                }
+            },
 
-    day:
-    {
-      type: Day
-    },
-
-    index:
-    {
-      type: Number,
-      default: 0
-    },
-
-    popoverProps:
-    {
-      validate(x) {
-        return this.$dsValidate(x, 'popoverProps');
-      },
-      default() {
-        return this.$dsDefaults().popoverProps;
-      }
-    }
-  },
-
-  computed:
-  {
-    hasPopover()
-    {
-      return !!this.$scopedSlots.eventCreatePopover;
-    },
-
-    contentClass()
-    {
-      return this.$dayspan.fullscreenPopovers ? 'ds-fullscreen' : '';
-    },
-
-    isStart()
-    {
-      return this.placeholder.day.sameDay( this.day );
-    },
-
-    autoOpen()
-    {
-      return this.hasPopover && this.placeholderForCreate && this.isStart;
-    }
-  },
-
-  data: vm => ({
-    menu: false
-  }),
-
-  watch:
-  {
-    menu: 'triggerClearPlaceholder',
-    placeholderForCreate: 'openPopover'
-  },
-
-  mounted()
-  {
-    if (this.autoOpen)
-    {
-      this.menu = true;
-    }
-  },
-
-  methods:
-  {
-    close()
-    {
-      this.menu = false;
-    },
-
-    openPopover(open)
-    {
-      if (this.isStart)
-      {
-        this.menu = open;
-      }
-    },
-
-    triggerClearPlaceholder(open)
-    {
-      if (!open)
-      {
-        this.$emit('clear-placeholder');
-      }
-    }
-  }
+            triggerClearPlaceholder (open) {
+                if (!open) {
+                    this.$emit('clear-placeholder')
+                }
+            }
+        }
 }
 </script>
 
 <style scoped lang="scss">
 
-.ds-calendar-event-menu {
-  width: 100%;
-  height: 18px;
-  position: relative;
+    .ds-calendar-event-menu {
+        width: 100%;
+        height: 18px;
+        position: relative;
 
-  .ds-calendar-event {
-    height: 100%;
-  }
-}
+        .ds-calendar-event {
+            height: 100%;
+        }
+    }
 
 </style>
