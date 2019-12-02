@@ -5,6 +5,7 @@
             :content-class="contentClass"
             :disabled="!hasPopover"
             v-model="menu"
+            :close-on-click="false"
             v-bind="popoverProps">
         <template v-slot:activator="{ on }">
             <ds-calendar-event v-on="on"
