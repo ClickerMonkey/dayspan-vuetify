@@ -251,6 +251,10 @@ export default {
     events: {
       type: Array
     },
+    navDrawer: {
+      type: Boolean,
+      default: false
+    },
     calendar: {
       type: Calendar,
       default() {
@@ -316,7 +320,7 @@ export default {
   },
 
   data: vm => ({
-    drawer: null,
+    drawer: false,
     optionsVisible: false,
     options: [],
     promptVisible: false,
@@ -325,6 +329,9 @@ export default {
   }),
 
   watch: {
+    navDrawer: function(val) {
+      this.drawer = val;
+    },
     events: "applyEvents",
     calendar: "applyEvents"
   },
