@@ -94,7 +94,8 @@ export default {
       { value: 'fr', text: 'French' },
       { value: 'de', text: 'German' },
       { value: 'nl', text: 'Dutch' },
-      { value: 'ca', text: 'Catalan' }
+      { value: 'ca', text: 'Catalan' },
+      { value: 'it', text: 'Italian' }
     ],
     defaultEvents: [
       {
