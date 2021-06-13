@@ -352,15 +352,14 @@ export default {
     summary()
     {
       let small = this.$vuetify.breakpoint.xs;
+      let isYear = this.calendar.type == Units.YEAR;
 
-      if (small)
-      {
+      if (small && !isYear) {
         return this.calendar.start.format( this.formats.xs );
       }
 
       let large = this.$vuetify.breakpoint.mdAndUp;
-
-      return this.calendar.summary(false, !large, false, !large);
+      return this.calendar.summary(false, !large, false, isYear ? false : !large);
     },
 
     todayDate()
