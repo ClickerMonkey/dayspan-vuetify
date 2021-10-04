@@ -1,6 +1,6 @@
 {
   "name": "dayspan-vuetify-2",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "private": false,
   "main": "src/plugin.js",
   "scripts": {

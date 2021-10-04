@@ -14,7 +14,7 @@
                     <v-btn small icon depressed
                            @click="prev"
                            class="ds-light-forecolor ma-0" v-on="on">
-                        <v-icon>keyboard_arrow_left</v-icon>
+                        <v-icon>mdi-keyboard-arrow-left</v-icon>
                     </v-btn>
                 </template>
                 <span>{{ labels.prevMonth }}</span>
@@ -27,7 +27,7 @@
                     <v-btn small icon depressed
                            class="ds-light-forecolor ma-0"
                            @click="next" v-on="on">
-                        <v-icon>keyboard_arrow_right</v-icon>
+                        <v-icon>mdi-keyboard-arrow-right</v-icon>
                     </v-btn>
                 </template>
                 <span>{{ labels.nextMonth }}</span>
