@@ -60,7 +60,7 @@
               class="ds-light-forecolor ds-skinny-button"
               @click="prev"
             >
-              <v-icon>mdi-keyboard-arrow-left</v-icon>
+              <v-icon>mdi-chevron-left</v-icon>
             </v-btn>
           </template>
           <span>{{ prevLabel }}</span>
@@ -77,7 +77,7 @@
               class="ds-light-forecolor ds-skinny-button"
               @click="next"
             >
-              <v-icon>mdi-keyboard-arrow-right</v-icon>
+              <v-icon>mdi-chevron-right</v-icon>
             </v-btn>
           </template>
           <span>{{ nextLabel }}</span>
