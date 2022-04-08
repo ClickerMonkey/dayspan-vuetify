@@ -65,7 +65,7 @@
     "webpack-dev-middleware": "^1.10.0",
     "webpack-hot-middleware": "^2.18.0",
     "webpack-merge": "^4.1.0",
-    "moment": "2.7.0"
+    "moment": "2.29.2"
   },
   "engines": {
     "node": ">= 4.0.0",
